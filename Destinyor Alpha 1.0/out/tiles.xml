@@ -1,0 +1,16 @@
+<tiles>
+
+	<tile name = "GroundTile" sprite = "3,0" solid = "0" id = "0" />
+	
+	<tile name = "BlueWallTile" sprite = "0,0" solid = "1" id = "1" />
+	<tile name = "BrownWallTile" sprite = "1,0" solid = "1" id = "2" />
+	<tile name = "GrayWallTile" sprite = "2,0" solid = "1" id = "3" />
+	
+	
+	<tile name = "AbyssTile" sprite = "0,1" solid = "1" id = "4" />
+	<tile name = "LavaTile" sprite = "1,1" solid = "1" id = "5" />
+	
+	<tile name = "BlackTile" sprite = "0,7" solid = "1" id = "10" />
+
+
+</tiles>
