@@ -13,4 +13,16 @@ public class KeyChanger {
 		}
 	}
 	
+	public static void changeKey(int keyID, String effect) {
+		for(Key key : Key.keys.values()) {
+			if(key.kevent == keyID) {
+				key.setEffect(effect);
+			}
+		}
+	}
+	
+	public static void changeKey(Key key, String effect) {
+		key.setEffect(effect);
+	}
+	
 }
