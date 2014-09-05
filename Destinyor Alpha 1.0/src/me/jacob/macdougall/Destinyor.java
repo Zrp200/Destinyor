@@ -1,6 +1,7 @@
 // http://www.youtube.com/watch?v=psWSGP7qrN4&list=PLE2vW4kTRjCDqxFSI0QqzigRwpdS-gMH6&index=1
 
 // 3 year project, been working on it for around 2 years.
+// Made by me.jacob.macdougall@gmail.com
 
 /* To Do:
  * Fix Destinyor game code to make it look pretty and easier to find and change methods and variables // this.setMinPriority(); // HAHA GOOD JOKE!
@@ -173,9 +174,6 @@ public class Destinyor extends Canvas implements Runnable {
     music1 = new Sound(Destinyor.class.getResource("/Lady Java.wav").getPath().replace("%20", " "), true);
     
     Key.setKeys();
-    
-    System.out.println(KeyEvent.VK_RIGHT);
-    System.exit(0);
                 
         
         //System.out.println(Options.Resolutions.length);
@@ -189,6 +187,7 @@ public class Destinyor extends Canvas implements Runnable {
    	 input = new InputHandler(this);	
         battle = new Battles(input);   
         menus = new Menus(this, input);
+        System.exit(0);
         Thread_Controller.init(screen, battle, input);
         Thread_Controller.startAudio();
         //try {
@@ -606,7 +605,7 @@ public class Destinyor extends Canvas implements Runnable {
     }
 	
 	public static void main(String[] args){
-        
+        System.exit(0);
 		FileLoader.CreateFile(DestinyorSettings);
 		FileLoader.ReadFromFiles(DestinyorSettings);
 		Override = FileLoader.Override();
@@ -694,6 +693,7 @@ public class Destinyor extends Canvas implements Runnable {
                 
 		Dimension Res = new Dimension(Resolution.width(), Resolution.height());
 		Destinyor game = new Destinyor();
+		System.exit(0);
 		
 		FileLoader.CreateFolder(DestinyorDialougesFolder);
     	FileLoader.CreateFolder(DestinyorCutsceneFolder);
