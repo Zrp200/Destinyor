@@ -17,6 +17,14 @@ public class Keys {
 	private static final String PAGE_DOWN = "Page Down";
 	private static final String ENTER = "Enter";
 	
+	private static final ONE = "1";
+	private static final TWO = "2";
+	private static final THREE = "3";
+	private static final FOUR = "4";
+	private static final FIVE = "5";
+	
+	private static final String ENEMY = "Enemy";
+	
 	
 	public static boolean MoveLeft() {
 		//boolean move = false;
@@ -121,6 +129,61 @@ public class Keys {
 		//boolean move = false;
 		for(Key key : Key.keys.values()) {
 			if(key.getEffect().equals(ENTER)) {
+				if(key.down) return true;
+				//return (key.down) ? true : false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean Enemy1() {
+		//boolean move = false;
+		for(Key key : Key.keys.values()) {
+			if(key.getEffect().equals(ENEMY + ONE)) {
+				if(key.down) return true;
+				//return (key.down) ? true : false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean Enemy2() {
+		//boolean move = false;
+		for(Key key : Key.keys.values()) {
+			if(key.getEffect().equals(ENEMY + TWO)) {
+				if(key.down) return true;
+				//return (key.down) ? true : false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean Enemy3() {
+		//boolean move = false;
+		for(Key key : Key.keys.values()) {
+			if(key.getEffect().equals(ENEMY + THREE)) {
+				if(key.down) return true;
+				//return (key.down) ? true : false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean Enemy4() {
+		//boolean move = false;
+		for(Key key : Key.keys.values()) {
+			if(key.getEffect().equals(ENEMY + FOUR)) {
+				if(key.down) return true;
+				//return (key.down) ? true : false;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean Enemy5() {
+		//boolean move = false;
+		for(Key key : Key.keys.values()) {
+			if(key.getEffect().equals(ENEMY + FIVE)) {
 				if(key.down) return true;
 				//return (key.down) ? true : false;
 			}
