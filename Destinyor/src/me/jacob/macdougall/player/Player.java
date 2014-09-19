@@ -333,7 +333,8 @@ public class Player {
 			for(Equipment equip : equipped.values()) {
 				if(equip.isWeapon()) {
 					if(canDamage(enemy, equip)) {
-						damage = (int) (random.nextInt((damage())) + equip.damage + (damage() * skillcheck(enemy)));
+						int d = (int) (((damage() + equip.damage) / enemy.Def) * skillcheck(enemy));
+						damage = (int) (random.nextInt(d));
 						enemy.HP -= damage;
 						temp = damage;
 						attacked = true;
@@ -344,7 +345,8 @@ public class Player {
 			
 		}
 		if(canDamage(enemy)) {
-			damage = (int) (random.nextInt((damage())) + (damage() * skillcheck(enemy)));
+			int d = (int) ((damage() / enemy.Def) * skillcheck(enemy));
+			damage = (int) (random.nextInt(d));
 			enemy.HP -= damage;
 			temp = damage;
 		}
