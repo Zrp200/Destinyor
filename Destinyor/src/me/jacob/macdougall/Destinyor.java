@@ -197,10 +197,17 @@ public class Destinyor extends Canvas implements Runnable {
     //Sound music1 = new Sound(Destinyor.class.getResource("/Lady Java.wav").getPath().replace("%20", " "), true);
     Sound music2 = new Sound(Destinyor.class.getResource("/Orc March.wav").getPath().replace("%20", " "), true);
     
+<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
     @SuppressWarnings("unused")
 	Playlist playlist = new Playlist(1, music2);
             //Key.setKeys();
             //System.out.println(Options.Resolutions.length);
+=======
+    Key.setKeys();
+                
+        
+        //System.out.println(Options.Resolutions.length);
+>>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
             //System.exit(0);
         
 	}
@@ -212,11 +219,15 @@ public class Destinyor extends Canvas implements Runnable {
    	 input = new InputHandler(this);	
         battle = new Battles(input);   
         menus = new Menus(this, input);
+<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
         //shadow = new Shadows(Art.getSpritesheet()[3][0]);
 //        shadow1 = new Shadows(Art.getSpritesheet()[0][0]);
 //        shadow2 = new Shadows(Art.getSpritesheet()[0][0]);
 //        shadow3 = new Shadows(Art.getSpritesheet()[0][0]);
         //System.exit(0);
+=======
+        System.exit(0);
+>>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
         Thread_Controller.init(screen, battle, input);
         Thread_Controller.startAudio();
         //String Name, int[] frameStart, int frameEnd[], String Gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int gold, Element resistance, Spells[] spells, int[] pos, String npc)
@@ -726,7 +737,11 @@ public class Destinyor extends Canvas implements Runnable {
     }
 	
 	public static void main(String[] args){
+<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
         //System.exit(0);
+=======
+        System.exit(0);
+>>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
 		FileLoader.CreateFile(DestinyorSettings);
 		FileLoader.ReadFromFiles(DestinyorSettings);
 		Override = FileLoader.Override();
@@ -814,12 +829,16 @@ public class Destinyor extends Canvas implements Runnable {
                 
 		Dimension Res = new Dimension(Resolution.width(), Resolution.height());
 		Destinyor game = new Destinyor();
+<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
                 Art.setSpritesheet("/icon0.png", 32, 32, game);
                 Art.setFont("/8fontTest.png", 8, 8, game);
                 Art.setButtons("/button.png", 120, 20, game);
                 Art.setMap("/map.png", 512, 512, game);
                 DynamicsLoader.init();
 		//System.exit(0);
+=======
+		System.exit(0);
+>>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
 		
 		FileLoader.CreateFolder(DestinyorDialougesFolder);
     	FileLoader.CreateFolder(DestinyorCutsceneFolder);
