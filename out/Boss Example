@@ -1,0 +1,19 @@
+Boss
+
+Name = null
+FrameStart = x, y
+FrameEnd = x1, y1 
+Gender = null
+Level = null
+Experience = null
+Health = null
+Strength = null
+Skill = null
+Speed = null
+Luck = null
+Defense = null
+Gold = null
+Resistance = null
+Spells = null
+X&Y = x, y
+Npc = null / Npc = Quest.name

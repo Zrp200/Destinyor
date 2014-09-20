@@ -1,0 +1,129 @@
+	private static int[] WIDTH34 = {768};
+	private static int[] WIDTH43 = {800, 1024, 1152, 1280, 1400, 1600};
+	private static int[] WIDTH53 = {1280};
+	private static int[] WIDTH54 = {1280};
+	private static int[] WIDTH169 = {1093, 1280, 1311, 1360, 1366, 1600, 1920, 2048, 2560};
+	private static int[] WIDTH1610 = {1280, 1440, 1680, 1920, 2560};
+	private static int[] WIDTH1710 = {1024};
+
+        // Keeping Width variables for Reference
+
+	private static int[] WIDTH34 = {768};
+	private static int[] WIDTH43 = {800, 1024, 1152, 1280, 1400, 1600};
+	private static int[] WIDTH53 = {1280};
+	private static int[] WIDTH54 = {1280};
+	private static int[] WIDTH169 = {1093, 1280, 1311, 1360, 1366, 1600, 1920, 2048, 2560};
+	private static int[] WIDTH1610 = {1280, 1440, 1680, 1920, 2560};
+       	private static int[] WIDTH1710 = {1024};
+
+        // Old Move Method in Destinyor.java
+
+	public void Movement(){
+		Tick();
+		if(input.left.down == true){
+			if(!canMove) return;
+			MoveLeft();
+			return;
+		}
+		if(input.right.down == true){
+			if(!canMove) return;
+			MoveRight();
+			return;
+		}
+		if(input.up.down == true){
+			if(!canMove) return;
+			MoveUp();
+			return;
+		}
+		if(input.down.down == true){
+			if(!canMove) return;
+			MoveDown();
+			return;
+		}
+		if(System.currentTimeMillis() - player.frameTick >= 100) {
+			for(int i = 0; i < System.currentTimeMillis() - player.frameTick; i++) {
+				player.frame = 0;	
+			}
+		}
+	}
+
+	
+	public void Tick(){
+		long movementCounter = System.currentTimeMillis();
+		while(canMove == false){
+		if(canMove == false && collision == false){
+				if(System.currentTimeMillis() - movementCounter > 400){
+					canMove = true;
+					HasMoved = false;
+				}
+			}
+		}
+	}
+	
+	@SuppressWarnings("static-access")
+	public void MoveLeft(){
+					Camera.X -= 1;
+					Player.X -= 1;
+					Player.dir = Player.Direction_Left;
+					//wait(100);
+					canMove = false;
+					HasMoved = true;
+	}
+	
+	@SuppressWarnings("static-access")
+	public void MoveRight(){
+		
+				//Player.frameTick = System.currentTimeMillis();
+				//Player.frame = 1;
+				
+					Camera.X += 1;
+					Player.X += 1;
+					Player.dir = Player.Direction_Right;
+					//wait(100);
+					//Player.frame = 0;
+					canMove = false;
+					HasMoved = true;
+	}
+	
+	@SuppressWarnings("static-access")
+	public void MoveUp(){
+					Camera.Y -= 1;
+					Player.Y -= 1;
+					Player.dir = Player.Direction_Up;
+					//wait(100);
+					canMove = false;
+					HasMoved = true;
+	}
+	
+	@SuppressWarnings("static-access")
+	public void MoveDown(){
+					Camera.Y += 1;
+					Player.Y += 1;
+					Player.dir = Player.Direction_Down;
+					//wait(100);
+					canMove = false;
+					HasMoved = true;
+	}
+
+        // Old Window Making Code
+//			game.setPreferredSize(ResChange);
+//			game.setSize(ResChange);
+//				
+//				
+//			// Frame
+//			JFrame frame = new JFrame(title);
+//				
+//			frame.setResizable(false);
+//			if(Resolution.Fullscreen == "Fullscreen") {
+//				frame.setUndecorated(true);
+//				frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//			}
+//			if(Resolution.Fullscreen == "Borderless Window") {
+//				frame.setUndecorated(true);
+//			}
+//			frame.add(game);
+//			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			frame.pack();
+//			frame.setLocationRelativeTo(null);
+//			frame.setAlwaysOnTop(true);
+//			frame.setVisible(true);
