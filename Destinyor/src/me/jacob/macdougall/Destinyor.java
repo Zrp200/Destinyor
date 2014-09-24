@@ -163,8 +163,8 @@ public class Destinyor extends Canvas implements Runnable {
 	private Screen screen;
 	
 	// Entities Objects
-	private Player player;
-    private Player[] players;
+	//private Player player;
+    //private Player[] players;
     public static Enemy[] enemies;
     
     // Other Objects
@@ -400,12 +400,18 @@ public class Destinyor extends Canvas implements Runnable {
             
     }
         
-    private void RenderSpellBook(Player player) {
+    private void RenderSpellBook() {
         UI.renderInventory(screen);
         
         if(!player.spells.isEmpty() || player.spells.size() >= 1) {
         	//return;
         //} else {
+        
+        Player player;
+        if(UI.menu - 10 < 0 || UI.menu - 10 > 3) {
+        	UI.menu = UI.Spell1;
+        }
+        player = Player.getActualPlayers()[UI.menu - 10];
         	for(int i = 1; i < player.spells.size(); i++) {
         		Spells spell = player.spells.get(i);
         		GameFont.render(spell.name + ", " + spell.damage + ", " + spell.cost, screen, 12, 8);
@@ -427,12 +433,12 @@ public class Destinyor extends Canvas implements Runnable {
             
         UI.renderInventory(screen);
             
-        if(UI.menu >= 6 && UI.menu <= 9) {
+        if(UI.menu >= 6 && UI.menu <= Player.getActualPlayers().length + 6) {
         	for(int i = 0; i < Equipment.items.size(); i++) {
-                GameFont.render(players[p - 6].Name, screen, px, py);
-                players[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
+                GameFont.render(Player.getActualPlayers()[p - 6].Name, screen, px, py);
+                Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
                     
-                if(!players[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
+                if(!Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
                 	//continue;
                 //} else {
                 	y += 6;
