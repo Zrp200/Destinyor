@@ -11,7 +11,8 @@ public class UI {
         //public static boolean EquipmentOn = false;
         
 	
-	public static final int Map = 0, Fight = 1, Minimap = 2, Inventory = 3, Equipment = 4, Spellbook = 5, Player1 = 6, Player2 = 7, Player3 = 8, Player4 = 9;
+	public static final int Map = 0, Fight = 1, Minimap = 2, Inventory = 3, Equipment = 4, Spellbook = 5,
+	Player1 = 6, Player2 = 7, Player3 = 8, Player4 = 9, Spell1 = 10, Spell2 = 11, Spell3 = 12, Spell4 = 13;
 	
     // 0 map, 1, fight, 2, minimap, 3 inv, 4 equip, 5 spellbook, 6 Kryo equip, 7 Karen equip, 8 Player 3 Equip,  8 Player 4 Equip
     public static int menu = 0;
