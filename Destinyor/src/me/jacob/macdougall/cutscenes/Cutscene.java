@@ -297,6 +297,7 @@ public class Cutscene {
     }
     
     public void startCutscene(Move move) {
+    	if(!Destinyor.Override && !Destinyor.Debug)
         if(Player.X == x && Player.Y == y && LevelMap.level == level && !finished) {
         	
             if(!playing) {
