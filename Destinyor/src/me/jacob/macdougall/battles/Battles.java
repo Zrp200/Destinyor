@@ -364,6 +364,14 @@ public class Battles {
 		for(Enemy enemy : entities) {
 			if(spells.name.equals("Attack") && enemy.attacking) {
 				Damage = randomGen.nextInt(enemy.Str);
+				
+//				switch(Destinyor.difficulty) {
+//				case Destinyor.EASY: break;
+//				case Destinyor.NORMAL: int[] p = new int[players.length]; for(int i = 0; i < players.length; i++) {
+//					p[i] = players[i].Hp;
+//				} break;
+//				}
+				
 					if(enemy.Str - players[eTargets].Def < 0) {
 						random = randomGen.nextInt(2);
 						players[eTargets].Hp -= random;

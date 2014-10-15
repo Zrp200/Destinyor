@@ -121,17 +121,19 @@ public class Shadows {
 	}
 	
 	private Bitmap LEFT(Bitmap bitmaps) {
-		for(int i = 0; i != 8; i++) {
-			for(int j = 0; j < 996 + i; j += 32) {
-				if(j >= 996 + i) {
-					i++;
-					break;
-				}
+		int i = 0;
+		int j = 0;
+		while(j != 7) {
+			if(i >= 996 + j) {
+				j++;
+				i = 0;
+			}
 			
 			Color colour = new Color(bitmaps.pixels[i + j], true);
 			colour = new Color(colour.getRed() / 2, colour.getGreen() / 2, colour.getBlue() / 2);
 			bitmaps.pixels[i + j] = colour.getRGB();
-			}
+			
+			i += 32;
 		}
 		return bitmaps;
 	}

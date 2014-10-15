@@ -28,9 +28,10 @@ public class Spells implements Cloneable {
         public boolean inUse = false;
 
 	public int[] condition;
+	public Effect effects;
 	
 	//																																										// Heals, Statboosts
-	public static final int Normal = 0, Requires_Sword = 1, Requires_Shield = 2, Requires_Combo = 3, Requires_Two_Hands = 4, UseAbleOutside = 5, AoE = 6, Ignore_Defense = 7, Helpful = 8;
+	public static final int Normal = 0, Requires_Sword = 1, Requires_Shield = 2, Requires_Combo = 3, Requires_Two_Hands = 4, UseAbleOutside = 5, AoE = 6, Ignore_Defense = 7, Helpful = 8, Relative = 9;
 	
 	// 0 normal spell, 1 requires sword, 2 requires sheild, 3 requires combo, 4 reuqires two handed, 
 	int conditions = 0;
@@ -43,6 +44,12 @@ public class Spells implements Cloneable {
 		this.damage = damage;
 		this.targets = targets;
 		this.cost = cost;
+		if(damage > 0)
+			effects = Effect.getEffect("Damage", "HP", damage, "Damage the target by " + damage + " points");
+		else if(damage < 0)
+			effects = Effect.getEffect("Healing", "HP", -damage, "Heals the target by " + -damage + " points");
+		else
+			effects = null; // for relative values
 		
 		if(Condition.contains(",")) {
 		String[] temp = Condition.split(",");
@@ -59,6 +66,36 @@ public class Spells implements Cloneable {
                 names.put(spells.size() + 1, name);
                 //System.out.println(name);
 	}
+	
+//	public Spells(String name, Element element, float damage,  int targets, int cost, String Condition) {
+//		System.out.println(name);
+//		this.name = name;
+//		this.element = element;
+//		this.damage = damage;
+//		this.targets = targets;
+//		this.cost = cost;
+//		if(damage > 0)
+//			effects = Effect.getEffect("Damage", "HP", damage, "Damage the target by " + damage + " points");
+//		else if(damage < 0)
+//			effects = Effect.getEffect("Healing", "HP", -damage, "Heals the target by " + -damage + " points");
+//		else
+//			effects = null; // for relative values
+//		
+//		if(Condition.contains(",")) {
+//		String[] temp = Condition.split(",");
+//		condition = new int[temp.length];
+//		for(int i = 0; i < temp.length; i++) {
+//			this.condition[i] = Integer.parseInt(temp[i]);
+//		}
+//		} else {
+//			condition = new int[1];
+//			condition[0] = Integer.parseInt(Condition);
+//		}
+//		
+//                put(name, this);
+//                names.put(spells.size() + 1, name);
+//                //System.out.println(name);
+//	}
 	
 	public static void put(String name, Spells spells) {
 		Spells.spells.put(name, spells);
@@ -95,6 +132,13 @@ public class Spells implements Cloneable {
             enemy.HP -= ((this.damage * player.Wis));
             //player.mana = -this.cost;
            // }
+        }
+        
+        public int getDamage(int relative) {
+        	if(damage == 0)
+        	return (int) Math.floor(relative * this.effects.appliedAttribute);
+        	else
+        	return (int) this.effects.appliedAttribute;
         }
 	
 }

@@ -15,6 +15,8 @@ import graphic.engine.screen.Screen;
 import graphic.engine.window.Resolution;
 
 import java.awt.Graphics;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -84,14 +86,29 @@ public class Player {
 	// Direction Controller
 	public static int dir = Direction_Down;
 	
+	//public static Destinyor game = ;
+	//public static final Bitmap[][] sprite = Art.cut(Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kyro.png", 32, 32, game);
+	//InputStream in = new InputStream();
+	public static final Bitmap[][] sprite = Art.cut(32, 32, Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kryo1.png");
+//	public static final Bitmap[][] frames = 
+//		{
+//			{ Art.getSpritesheet()[14][15], Art.getSpritesheet()[15][15] }, // Up
+//			{ Art.getSpritesheet()[14][12], Art.getSpritesheet()[15][12] }, // Down
+//			{ Art.getSpritesheet()[14][13], Art.getSpritesheet()[15][13] }, // Left
+//			{ Art.getSpritesheet()[14][14], Art.getSpritesheet()[15][14] } // Right
+//		};
+    //private static void getPlayerSprites(Destinyor game) {
+    	//sprite = 
+    //}
+	
 	public static final Bitmap[][] frames = 
-		{
-			{ Art.getSpritesheet()[14][15], Art.getSpritesheet()[15][15] }, // Up
-			{ Art.getSpritesheet()[14][12], Art.getSpritesheet()[15][12] }, // Down
-			{ Art.getSpritesheet()[14][13], Art.getSpritesheet()[15][13] }, // Left
-			{ Art.getSpritesheet()[14][14], Art.getSpritesheet()[15][14] } // Right
-		};
-        
+	{
+		{ sprite[0][3],  sprite[1][3], sprite[2][3], sprite[3][3]}, // Up
+		{ sprite[0][0],  sprite[1][0], sprite[2][0], sprite[3][0] }, // Down
+		{ sprite[0][1],  sprite[1][1], sprite[2][1], sprite[3][1] }, // Left
+		{ sprite[0][2],  sprite[1][2], sprite[2][2], sprite[3][2] } // Right
+	};
+	
         public static int AmountOFPlayers() {
             return players.size();
         }
@@ -255,11 +272,16 @@ public class Player {
 		paused = false;
 	}
 	
-	public void render(Screen screen, int x, int y) {
-		
+	//public void render(Screen screen, int x, int y) {
+	public void render(Screen screen) {
+		int x, y;
 		x = 512 / 2;
 		y = (768 / 2) / 2;
                 
+		if(frames[Move.dir].length <= Move.frame) {
+			Move.frame = 0;
+		}
+		
 		screen.render(frames[Move.dir][Move.frame], x, y);
 		
 		if(Destinyor.Override) {
@@ -389,8 +411,17 @@ public class Player {
 	 */
 	public int damage(Enemy enemy, Equipment weapon) {
 		int damage = 0;
-		damage = Str + weapon.damage;
+		switch(Destinyor.difficulty) {
+		case Destinyor.EASY: damage = (Str + weapon.damage) * 2;
 		damage += damage * skillcheck(enemy);
+		break;
+		case Destinyor.NORMAL: damage = Str + weapon.damage;
+		damage += damage * skillcheck(enemy);
+		break;
+		case Destinyor.HARD: damage = (int) ((Str + weapon.damage) * 0.5);
+		damage += damage * skillcheck(enemy);
+		break;
+		}
 		return damage;
 	}
 	

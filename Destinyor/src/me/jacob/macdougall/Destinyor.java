@@ -122,7 +122,12 @@ public class Destinyor extends Canvas implements Runnable {
     public static final String DestinyorItems = DestinyorFolder + fileSplit + "Items" + ".destinyor";
     public static final String DestinyorDialougesFolder = DestinyorFolder + fileSplit + "Dialouges";
     public static final String DestinyorCutsceneFolder = DestinyorFolder + fileSplit + "Cutscenes";
+    
+    public static final int EASY = 0, NORMAL = 1, HARD = 2;
         
+    public static int difficulty = 0;
+    
+    
     public static boolean create = true; // Create the files
     public static boolean write = false; // Write over the files
     public static boolean read = false; // Read the files
@@ -140,7 +145,7 @@ public class Destinyor extends Canvas implements Runnable {
 	public static int RealFPS;
 	public static int RealFramesPerSecond;
 	
-	public static int fpsLimit = 120;
+	public static final int fpsLimit = 60;
 	
 	public static String Song = "";
 	
@@ -163,8 +168,8 @@ public class Destinyor extends Canvas implements Runnable {
 	private Screen screen;
 	
 	// Entities Objects
-	//private Player player;
-    //private Player[] players;
+	private Player player;
+    private Player[] players;
     public static Enemy[] enemies;
     
     // Other Objects
@@ -220,7 +225,6 @@ public class Destinyor extends Canvas implements Runnable {
 //        shadow1 = new Shadows(Art.getSpritesheet()[0][0]);
 //        shadow2 = new Shadows(Art.getSpritesheet()[0][0]);
 //        shadow3 = new Shadows(Art.getSpritesheet()[0][0]);
-        //System.exit(0);
         Thread_Controller.init(screen, battle, input);
         Thread_Controller.startAudio();
         //String Name, int[] frameStart, int frameEnd[], String Gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int gold, Element resistance, Spells[] spells, int[] pos, String npc)
@@ -400,18 +404,12 @@ public class Destinyor extends Canvas implements Runnable {
             
     }
         
-    private void RenderSpellBook() {
+    private void RenderSpellBook(Player player) {
         UI.renderInventory(screen);
         
         if(!player.spells.isEmpty() || player.spells.size() >= 1) {
         	//return;
         //} else {
-        
-        Player player;
-        if(UI.menu - 10 < 0 || UI.menu - 10 > 3) {
-        	UI.menu = UI.Spell1;
-        }
-        player = Player.getActualPlayers()[UI.menu - 10];
         	for(int i = 1; i < player.spells.size(); i++) {
         		Spells spell = player.spells.get(i);
         		GameFont.render(spell.name + ", " + spell.damage + ", " + spell.cost, screen, 12, 8);
@@ -433,12 +431,12 @@ public class Destinyor extends Canvas implements Runnable {
             
         UI.renderInventory(screen);
             
-        if(UI.menu >= 6 && UI.menu <= Player.getActualPlayers().length + 6) {
+        if(UI.menu >= 6 && UI.menu <= 9) {
         	for(int i = 0; i < Equipment.items.size(); i++) {
-                GameFont.render(Player.getActualPlayers()[p - 6].Name, screen, px, py);
-                Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
+                GameFont.render(players[p - 6].Name, screen, px, py);
+                players[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
                     
-                if(!Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
+                if(!players[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
                 	//continue;
                 //} else {
                 	y += 6;
@@ -491,7 +489,8 @@ public class Destinyor extends Canvas implements Runnable {
 			Time.getObjectTimer(30, true);
 			city1.render(screen);
 		}
-		player.render(screen, Camera.pX, Camera.pY);
+		//player.render(screen, Camera.pX, Camera.pY);
+		player.render(screen);
         //GameFont.render(GameFont.pointer, screen, 30, 30);
 	}
 	
@@ -569,7 +568,7 @@ public class Destinyor extends Canvas implements Runnable {
 			
 			g.setColor(Color.GREEN);
             g.setFont(new Font("Arial", Font.BOLD, 16));    
-			g.drawString("Fps: " + String.valueOf(RealFramesPerSecond) + ", " + "Ups: " + String.valueOf(UpdatesPerSecond), 1, 16);
+			g.drawString("Fps: " + String.valueOf(FramesPerSecond) + ", " + "Ups: " + String.valueOf(UpdatesPerSecond), 1, 16);
 			g.drawString(Song, this.getWidth() - (Song.length() * 9), 16);
 			
 			if(Debug) {
@@ -656,7 +655,7 @@ public class Destinyor extends Canvas implements Runnable {
 	
 	// Thread
 		@Override
-        @SuppressWarnings({"SleepWhileInLoop", "CallToPrintStackTrace"})
+       // @SuppressWarnings({"SleepWhileInLoop", "CallToPrintStackTrace"})
 	public void run() {
 		int fps = 0, update = 0;
         long fps_Timer = System.currentTimeMillis();
@@ -666,18 +665,20 @@ public class Destinyor extends Canvas implements Runnable {
         double then = System.nanoTime();
         double fThen = System.currentTimeMillis();
         double unprocessed = 0;
-        double fUnprocessed; //= 0;
+        double fUnprocessed = 0; //= 0;
         int j = 0;
         while(running && Thread_Controller.doneLoading) {
         	double now = System.nanoTime();
         	unprocessed += (now - then) / nsPerUpdate;
         	then = now;
+        	//System.out.println(unprocessed);
         	// Update queue
         	while(unprocessed >= 1){
         		// Update
                 update++;
                 update();
                 unprocessed--;
+                //System.out.println(unprocessed);
         	}
         	//if(fUnprocessed >= 16 || fUnprocessed == 0) {
         	
@@ -691,24 +692,29 @@ public class Destinyor extends Canvas implements Runnable {
         	//fps++;
         	if(FPSLock) {
         		double fNow = System.nanoTime();
-            	fUnprocessed = (fNow - fThen) / fsPerUpdate;
-            	if(fUnprocessed >= 1) {
+        		//fUnprocessed -= fUnprocessed;
+            	fUnprocessed += (fNow - fThen) / (fsPerUpdate);
+            	//System.out.println((fNow - fThen) / fsPerUpdate);
             	fThen = fNow;
+            	if(fUnprocessed >= 1) {
+            	fps++;
+    			render();
+    			fUnprocessed--;
+    			//System.out.println(fUnprocessed);
             	}
         		//System.out.println(fUnprocessed);
         		//while(fUnprocessed >= 1) {
-        		if(fUnprocessed >= 1) {
-        			//RealFPS++;
-        			fps++;
-        			render();
-        			
-        		}
+//        		if(fUnprocessed >= 1) {
+//        			//RealFPS++;
+//        			
+//        			
+//        		}
         		//}
         	} else {
         		fps++;
         		render();
         	}
-        	j++;
+        	//j++;
         	//}
         	//}
         	
@@ -719,8 +725,9 @@ public class Destinyor extends Canvas implements Runnable {
         		j = 0;
                 FramesPerSecond = fps;
                 UpdatesPerSecond = update;
-                RealFramesPerSecond = fps;
-                RealFPS = fps;
+                fUnprocessed = 0;
+                //RealFramesPerSecond = fps;
+                //RealFPS = fps;
                 fps = 0;
                 update = 0;
                 fps_Timer += 1000;
@@ -736,11 +743,7 @@ public class Destinyor extends Canvas implements Runnable {
     }
 	
 	public static void main(String[] args){
-<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
-        //System.exit(0);
-=======
-        System.exit(0);
->>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
+		System.out.println(System.getProperty("user.country"));
 		FileLoader.CreateFile(DestinyorSettings);
 		FileLoader.ReadFromFiles(DestinyorSettings);
 		Override = FileLoader.Override();
@@ -828,16 +831,12 @@ public class Destinyor extends Canvas implements Runnable {
                 
 		Dimension Res = new Dimension(Resolution.width(), Resolution.height());
 		Destinyor game = new Destinyor();
-<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Destinyor.java
                 Art.setSpritesheet("/icon0.png", 32, 32, game);
                 Art.setFont("/8fontTest.png", 8, 8, game);
                 Art.setButtons("/button.png", 120, 20, game);
                 Art.setMap("/map.png", 512, 512, game);
                 DynamicsLoader.init();
 		//System.exit(0);
-=======
-		System.exit(0);
->>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Destinyor.java
 		
 		FileLoader.CreateFolder(DestinyorDialougesFolder);
     	FileLoader.CreateFolder(DestinyorCutsceneFolder);
@@ -861,6 +860,8 @@ public class Destinyor extends Canvas implements Runnable {
 		 
 	        
 	    Destinyor.waitForLoading();
+	    
+	    
 	        
 		game.mouse = new Mouse();
 		
@@ -920,7 +921,7 @@ public class Destinyor extends Canvas implements Runnable {
 	
         // Testing only, in move class/file
 	public void ChangeScreenToUI(){
-		if(Keys.MoveDown()){
+		if(Keys.PageDown()){
                                         Refresh = true;
                     UI.menu = UI.Fight;
 					//UI.MapOn = false;
@@ -1001,5 +1002,63 @@ public class Destinyor extends Canvas implements Runnable {
         		return false;
         	}
         }
+        // cannot figure out how to handle 0
+//        // none crashing alternitive to Integer.ParseInt(String);
+//        public int toInt(String amount) {
+//        	int number = 0;
+//        	int letter = 0;
+//        	int j = 1;
+//        	char[] info = amount.toCharArray();
+//            int remove = 0;
+//            
+//            for (int i = 0; i < info.length; i++)
+//            {
+//                if (info[i] != '1' && info[i] != '2' && info[i] != '3' && info[i] != '4' && info[i] != '5' && info[i] != '6' && info[i] != '7' && info[i] != '8' && info[i] != '9' && info[i] != '0')
+//                {
+//                    remove++;
+//                }
+//            }
+//        	
+//            for (int i = 0; i < amount.length(); i++)
+//            {
+//                switch (info[amount.length() - i - 1])
+//                {
+//                    case '1': number += 1 * (getSize(j - remove)); break;
+//                    case '2': number += 2 * (getSize(j - remove)); break;
+//                    case '3': number += 3 * (getSize(j - remove)); break;
+//                    case '4': number += 4 * (getSize(j - remove)); break;
+//                    case '5': number += 5 * (getSize(j - remove)); break;
+//                    case '6': number += 6 * (getSize(j - remove)); break;
+//                    case '7': number += 7 * (getSize(j - remove)); break;
+//                    case '8': number += 8 * (getSize(j - remove)); break;
+//                    case '9': number += 9 * (getSize(j - remove)); break;
+//                    case '0': number += 1 * (getSize(j - remove)); break;
+//                    default: letter++; break;
+//                }
+//                j++;
+//            }
+//        	return number;
+//        }
+//        
+//        private static int getSize(int length)
+//        {
+//            int number = 0;
+//            switch (length)
+//            {
+//                case 1: number += 1; break;
+//                case 2: number += 10; break;
+//                case 3: number += 100; break;
+//                case 4: number += 1000; break;
+//                case 5: number += 10000; break;
+//                case 6: number += 100000; break;
+//                case 7: number += 1000000; break;
+//                case 8: number += 10000000; break;
+//                case 9: number += 100000000; break;
+//                //default: number += 100000000; break;
+//                default: number += 1; break;
+//
+//            }
+//            return number;
+//        }
 
 }

@@ -13,7 +13,7 @@ public class Move {
 
 	// Handles Input *yes I know the name is a lie it was originally suppose to be only movement*
 	
-	InputHandler input;
+	//InputHandler input;
 	LevelMap map;
 	Destinyor game;
 	
@@ -38,7 +38,7 @@ public class Move {
 	
 	public Move(Destinyor game, LevelMap lvlmap) {
 		this.game = game;
-		input = new InputHandler(game);
+		//input = new InputHandler(game);
 		map = lvlmap;
 	}
 	
@@ -165,18 +165,26 @@ public class Move {
 			if(!canMove) return;
 			dir = DIR_RIGHT;
 			move(DIR_RIGHT);
+		} else if(frame != 0) { // Checks the frame to reset it. Resets the frame if it is an odd number, eg 1,3,5, and only if their is no key down
+			float fPause = (frame / 2);
+			int iPause = (frame / 2);
+			if(fPause == iPause) {
+				frame = frame + 1;
+			}
 		}
+		
+		
     	}
 		
-			if(Time.frameTimer(20))
-                            if(frame >= 1)
-				frame = 0;
+			//if(Time.frameTimer(90))
+                            //if(frame >= Player.frames[dir].length)
+				//frame = 0;
 	}
 	
 	public void move(int dir) {
 		if(!canMove) return;
 		
-		if(!Time.moveTimer(13)) return;
+		if(!Time.moveTimer(20)) return;
 		
 		if(dir == DIR_LEFT) {
 			if(canMove(dir)) {
@@ -256,7 +264,7 @@ public class Move {
 		steps += 1;
 		Camera.cX -= 1 * 32;
 		Player.X -= 1;
-		frame = 1;
+		frame += 1;
 		Battles.enterCombat();
 		Destinyor.Refresh = true;
 	}
@@ -265,7 +273,7 @@ public class Move {
 		steps += 1;
 		Camera.cX += 1 * Tile.SIZE;
 		Player.X += 1;
-		frame = 1;
+		frame += 1;
 		Battles.enterCombat();
 		Destinyor.Refresh = true;
 	}
@@ -274,7 +282,7 @@ public class Move {
 		steps += 1;
 		Camera.cY -= 1 * 32;
 		Player.Y -= 1;
-		frame = 1;
+		frame += 1;
 		Battles.enterCombat();
 		Destinyor.Refresh = true;
 	}
@@ -283,7 +291,7 @@ public class Move {
 		steps += 1;
 		Camera.cY += 1 * 32;
 		Player.Y += 1;
-		frame = 1;
+		frame += 1;
 		Battles.enterCombat();
 		Destinyor.Refresh = true;
 	}

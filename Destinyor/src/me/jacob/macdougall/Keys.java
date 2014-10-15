@@ -17,7 +17,6 @@ public class Keys {
 	private static final String PAGE_DOWN = "Page Down";
 	private static final String ENTER = "Enter";
 	
-<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Keys.java
 	private static final String ONE = "1";
 	private static final String TWO = "2";
 	private static final String THREE = "3";
@@ -29,17 +28,6 @@ public class Keys {
 	private static final String INVENTORY = "Inventory";
 	private static final String EQUIPMENT = "Equipment";
 	private static final String MINIMAP = "Minimap";
-	
-=======
-	private static final ONE = "1";
-	private static final TWO = "2";
-	private static final THREE = "3";
-	private static final FOUR = "4";
-	private static final FIVE = "5";
-	
-	private static final String ENEMY = "Enemy";
-	
->>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Keys.java
 	
 	public static boolean MoveLeft() {
 		//boolean move = false;
@@ -206,7 +194,6 @@ public class Keys {
 		return false;
 	}
 	
-<<<<<<< HEAD:Destinyor/src/me/jacob/macdougall/Keys.java
 	public static boolean Inventory() {
 		//boolean move = false;
 		for(Key key : Key.keys.values()) {
@@ -239,8 +226,5 @@ public class Keys {
 		}
 		return false;
 	}
-	
-=======
->>>>>>> origin/master:Destinyor Alpha 1.0/src/me/jacob/macdougall/Keys.java
 	
 }

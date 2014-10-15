@@ -77,10 +77,7 @@ public class Tile {
 		//System.out.println(this);
 				//screen.render(this.shadow.getShadows(shadow, x, y), x, y);
 		//else
-		if(frames[shadow + cf] != null)
 			screen.render(frames[shadow + cf], x, y);
-		else
-			screen.render(frames[cf], x, y);
 		//screen.render(frames[cf], x, y);
 		//else
 			//screen.render(frames[cf], x, y);
