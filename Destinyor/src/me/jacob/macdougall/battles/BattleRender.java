@@ -38,11 +38,14 @@ public class BattleRender {
 		int count = 0;
 		int X = 10;
 		int Y = 256 + 16 + 10;
+		
+		//GameFont.render(GameFont.pointer, screen, point.ePointerX, point.PointerY);
+		point.render(screen);
 		// Player
 		for(int p = 0; p < players.length; p++) {
 			players[p].renderUI(screen, p * 64, p * 10);
 		
-		
+			
 		
 			if(players[p].TA >= battle.limit) {
 				battles.commands.get(0).render(screen);
@@ -51,6 +54,7 @@ public class BattleRender {
 				//GameFont.render("Spells", screen, 190, 325);
 				BorderY(screen, 2, 3);
                                 GameFont.render(GameFont.pointer, screen, point.PointerX, point.PointerY);
+                                
                                 if(DrawSpells && players[p].spells != null) {
                                     for(int s = 1; s < players[p].spells.size(); s++)
                                     GameFont.render(players[p].spells.get(s).name, screen, 240, 305);

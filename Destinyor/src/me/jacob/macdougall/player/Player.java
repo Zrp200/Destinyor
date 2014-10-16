@@ -2,6 +2,7 @@ package me.jacob.macdougall.player;
 
 import me.jacob.macdougall.DebugWriter;
 import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.Time;
 import me.jacob.macdougall.graphics.GraphicsGetter;
 import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.items.Items;
@@ -15,6 +16,7 @@ import graphic.engine.screen.Screen;
 import graphic.engine.window.Resolution;
 
 import java.awt.Graphics;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -60,6 +62,8 @@ public class Player {
 	public static int Gold;
 	public int chanceToMiss = 0;
 	public int rand = 0;
+	
+	public int TALimit = 500;
 	//
 	//public int temps[] = new int[10];
 	public static int temp = 0;
@@ -89,25 +93,30 @@ public class Player {
 	//public static Destinyor game = ;
 	//public static final Bitmap[][] sprite = Art.cut(Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kyro.png", 32, 32, game);
 	//InputStream in = new InputStream();
-	public static final Bitmap[][] sprite = Art.cut(32, 32, Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kryo1.png");
-//	public static final Bitmap[][] frames = 
-//		{
-//			{ Art.getSpritesheet()[14][15], Art.getSpritesheet()[15][15] }, // Up
-//			{ Art.getSpritesheet()[14][12], Art.getSpritesheet()[15][12] }, // Down
-//			{ Art.getSpritesheet()[14][13], Art.getSpritesheet()[15][13] }, // Left
-//			{ Art.getSpritesheet()[14][14], Art.getSpritesheet()[15][14] } // Right
-//		};
-    //private static void getPlayerSprites(Destinyor game) {
-    	//sprite = 
-    //}
+	// return status.get(key) == null ? 0 : status.get(key);
 	
-	public static final Bitmap[][] frames = 
-	{
-		{ sprite[0][3],  sprite[1][3], sprite[2][3], sprite[3][3]}, // Up
-		{ sprite[0][0],  sprite[1][0], sprite[2][0], sprite[3][0] }, // Down
-		{ sprite[0][1],  sprite[1][1], sprite[2][1], sprite[3][1] }, // Left
-		{ sprite[0][2],  sprite[1][2], sprite[2][2], sprite[3][2] } // Right
-	};
+//	public static final Bitmap[][] sprite = (!new File(Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kryo1.png").exists()) ? Art.getSpritesheet() : Art.cut(32, 32, Destinyor.DestinyorFolder + Destinyor.fileSplit + "Kryo1.png");
+////	public static final Bitmap[][] frames = 
+////		{
+////			{ Art.getSpritesheet()[14][15], Art.getSpritesheet()[15][15] }, // Up
+////			{ Art.getSpritesheet()[14][12], Art.getSpritesheet()[15][12] }, // Down
+////			{ Art.getSpritesheet()[14][13], Art.getSpritesheet()[15][13] }, // Left
+////			{ Art.getSpritesheet()[14][14], Art.getSpritesheet()[15][14] } // Right
+////		};
+//    //private static void getPlayerSprites(Destinyor game) {
+//    	//sprite = 
+//    //}
+//	
+//	
+	
+	
+	public static final Bitmap[][] frames = SpriteChecker.frames;
+//	{
+//		{ sprite[0][3],  sprite[1][3], sprite[2][3], sprite[3][3]}, // Up
+//		{ sprite[0][0],  sprite[1][0], sprite[2][0], sprite[3][0] }, // Down
+//		{ sprite[0][1],  sprite[1][1], sprite[2][1], sprite[3][1] }, // Left
+//		{ sprite[0][2],  sprite[1][2], sprite[2][2], sprite[3][2] } // Right
+//	};
 	
         public static int AmountOFPlayers() {
             return players.size();
@@ -326,7 +335,13 @@ public class Player {
 
 	public void renderUI(Screen screen, int co, int no) {
 		// co = "character offset", no = "name offset";
-		screen.render(frames[2][0], 448, 32 + co);
+		if(Move.frame >= frames[Direction_Down].length) {
+			Move.frame = 0;
+		}
+		screen.render(frames[Direction_Down][Move.frame], 448, 32 + co);
+		if(Time.frameTimer(10)) {
+		Move.frame++;//System.out.println("Changing frame");
+		}
 		GameFont.render(Name, screen, (448 - 18), ((32 * 10) - 18) + no);
 		//GameFont.render(String.valueOf(TA / 5), screen, 446 + 32, ((32 * 10) - 18) + no);
 		

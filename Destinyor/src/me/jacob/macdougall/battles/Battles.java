@@ -73,13 +73,15 @@ public class Battles {
 	
 	public void turn(Player[] players, Enemy[] entities) {
 		
-		for(Player player : players) {
-			if(player.TA >= limit) {
-				player.pause();
-			} else {
-				player.play();
-			}
-		}
+//		for(Player player : players) {
+//			if(player.TA >= limit) {
+//				player.pause();
+//			} else {
+//				player.play();
+//			}
+//		}
+		
+		PlayerBattle.turn();
 		
 		for(Enemy enemy : entities) {
 			if(enemy.TA >= limit * 2) {

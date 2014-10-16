@@ -1,5 +1,7 @@
 package me.jacob.macdougall.battles;
 
+import graphic.engine.screen.Art;
+import graphic.engine.screen.Screen;
 import input.engine.keyboard.InputHandler;
 import me.jacob.macdougall.Time;
 import me.jacob.macdougall.npcs.Enemy;
@@ -19,6 +21,9 @@ public class Pointer {
     public int PointerX = 178;
     public int PointerY = 305;
     
+    public int ePointerX = 20;
+    public int ePointerY = 38;
+    
     private final BattleInput bInput;
     private final Battles battle;
 	
@@ -30,6 +35,18 @@ public class Pointer {
     public void reset() {
     	PointerX = 178;
     	PointerY = 305;
+    }
+    
+    //public void enemyPoint(Enemy[] entities) {
+//    	for(Enemy enemy : entites) {
+//    		if(enemy.Focused = true) {
+//    			
+//    		}
+//    	}
+    //}
+    
+    public void render(Screen screen) {
+    	screen.render(Art.getFont()[35][1], ePointerX, ePointerY);
     }
     
     public void point(Player[] players, InputHandler input, Enemy[] enemies) {

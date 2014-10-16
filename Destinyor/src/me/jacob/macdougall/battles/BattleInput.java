@@ -67,10 +67,14 @@ public class BattleInput {
 	
 	public void assingTarget(Mouse mouse, Enemy[] entities) {
 		//for(int i = 0; i < entities.length; i++) {
+		//point.ePointerX = 20;
+		//point.ePointerY = 38;
+		
                 for(Enemy enemy : entities) {
 			if(entities.length > 0) {
 				if(Keys.Enemy1() || commands.get(2).inBox(mouse.pressedX, mouse.pressedY)) {
 					System.out.println("Targeting");
+					point.ePointerY = 38;
 					enemy.Focused = false;
 					entities[0].Focused = true;
 				}
@@ -79,6 +83,7 @@ public class BattleInput {
 			if(entities.length > 1) {
 				if(Keys.Enemy2() || commands.get(3).inBox(mouse.pressedX, mouse.pressedY)) {
 					System.out.println("Targeting");
+					point.ePointerY = (45) * 2;
 					enemy.Focused = false;
 					entities[1].Focused = true;
 				}
@@ -87,6 +92,7 @@ public class BattleInput {
 			if(entities.length > 2) {
 				if(Keys.Enemy3() || commands.get(4).inBox(mouse.pressedX, mouse.pressedY)) {
 					System.out.println("Targeting");
+					point.ePointerY = (48) * 3;
 					enemy.Focused = false;
 					entities[2].Focused = true;
 				}
@@ -95,6 +101,7 @@ public class BattleInput {
 			if(entities.length > 3) {
 				if(Keys.Enemy4() || commands.get(5).inBox(mouse.pressedX, mouse.pressedY)) {
 					System.out.println("Targeting");
+					point.ePointerY = (49) * 4;
 					enemy.Focused = false;
 					entities[3].Focused = true;
 				}
@@ -103,6 +110,7 @@ public class BattleInput {
 			if(entities.length > 4) {
 				if(Keys.Enemy5() || commands.get(6).inBox(mouse.pressedX, mouse.pressedY)) {
 					System.out.println("Targeting");
+					point.ePointerY = (49) * 5;
 					enemy.Focused = false;
 					entities[4].Focused = true;
 				}
