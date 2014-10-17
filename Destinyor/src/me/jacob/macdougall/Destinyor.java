@@ -548,7 +548,7 @@ public class Destinyor extends Canvas implements Runnable {
 			
 			//Image image = graphic.engine.screen.Art.getScaledInstance(screen.image, Resolution.width(), Resolution.height(), RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
 			//image = graphic.engine.screen.Art.getScaledInstance(screen.image, Resolution.width(), Resolution.height(), RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON, true);
-			g.drawImage(screen.image, 0, 0, frame.getWidth(), frame.getHeight(), null);//screen.image, 0, 0, Camera.width, Camera.height, null);
+			g.drawImage(screen.image, 0, 0, Resolution.Width(), Resolution.Height(), null);//screen.image, 0, 0, Camera.width, Camera.height, null);
 				//g.drawImage(screen.image, 0, 0, Resolution.width(), Resolution.height(), null);
 			
 			if(UI.menu == 1) {
@@ -905,6 +905,9 @@ public class Destinyor extends Canvas implements Runnable {
 			game.setSize(Res);
 			frame.setSize(Res);
 			frame.setLocationRelativeTo(null);
+			} else {
+				Resolution.setWidth(frame.getWidth());
+				Resolution.setHeight(frame.getHeight());
 			}
 		}
 		
