@@ -7,30 +7,30 @@ public class Time {
 	private static int mapTime = 0;
 	private static int inventoryTime = 0;
 	private static int frameTime = 0;
-        private static int playersTime = 0;
-        private static int playerTime = 0;
-        private static int entityTime = 0;
-        private static int keyTime = 0;
-        private static int objectTime = 0;
-        private static int Time = 0;
+    private static int playersTime = 0;
+    private static int playerTime = 0;
+    private static int entityTime = 0;
+    private static int keyTime = 0;
+    private static int objectTime = 0;
+    private static int Time = 0;
 	
 	public static void tick() {
 		moveTime++;
 		mapTime++;
 		inventoryTime++;
 		frameTime++;
-                playersTime++;
-                playerTime++;
-                entityTime++;
-                keyTime++;
-                cutTime++;
-                objectTime++;
-                Time++;
+        playersTime++;
+        playerTime++;
+        entityTime++;
+        keyTime++;
+        cutTime++;
+        objectTime++;
+        Time++;
 	}
 	
 	public static boolean getCutsceneTimer(int amount, boolean UseTime) {
     	if(UseTime) {
-                return cutsceneTimer(0);
+    		return cutsceneTimer(0);
     	} else {
     		if(cutTime >= amount)
     			return true;

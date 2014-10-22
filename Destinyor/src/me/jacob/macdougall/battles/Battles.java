@@ -34,7 +34,7 @@ public class Battles {
 	private final static Random randomGen = new Random();
         private static int randomBattles = randomGen.nextInt(100);
 	private int random = randomGen.nextInt(10);
-	private static int creatures = randomGen.nextInt(5);
+	private static int creatures = 0;
 	protected int eTargets = randomGen.nextInt(Player.getActualPlayers().length);
 	
 	public String Pdamager = "";
@@ -94,24 +94,49 @@ public class Battles {
 	}
 	
 	public static Enemy[] SetEnemies() {
+		creatures = randomGen.nextInt(5);
 		Enemy[] e = new Enemy[creatures + 1];
-                creatures = randomGen.nextInt(5);
+                
 		
-		int enemy;
-		
+		//int enemy;
+		int i = 0;
 		int x = 32;
 		int y = 24;
 		//int j = 16;
                 int j;
 		
-		for(int i = 0; i < e.length; i++) {
-			enemy = randomGen.nextInt(FileLoader.EKeys().size());
+		//for(int i = 0; i < e.length; i++) {
+            //for(Enemy enemies : Enemy.getEntities())
+			//enemy = randomGen.nextInt(Enemy.getEntities().length);
 			//System.out.println("Battles.SetEnemies: Enemy " + Enemy.enemies.get(FileLoader.EKeys().get(enemy)).getName() + " is attempting to be added");
-			if(Enemy.enemies.get(FileLoader.EKeys().get(enemy)).X <= Player.X && Enemy.enemies.get(FileLoader.EKeys().get(enemy)).X1 >= Player.X 
-                                && Enemy.enemies.get(FileLoader.EKeys().get(enemy)).Y <= Player.Y && Enemy.enemies.get(FileLoader.EKeys().get(enemy)).Y1 >= Player.Y) {
-				e[i] = Enemy.newInstance(FileLoader.EKeys().get(enemy));
-				e[i].SetPos(x, y);
-			
+                
+                Enemy enemy;// = Enemy.getRandomEntity();
+                boolean X;
+                boolean X1;
+                boolean Y;
+                boolean Y1;
+            while(e[creatures] == null) {
+            	enemy = Enemy.getRandomEntity();
+            	X = enemy.X <= Player.X;
+            	X1 = enemy.X1 >= Player.X;
+            	Y = enemy.Y <= Player.Y;
+            	Y1 = enemy.Y1 >= Player.Y;
+//            	if(enemy.name.equals(Enemy.names.get(0))) {
+            	System.out.println(enemy.getName());
+//            	System.out.println(X + ", " + X1 + ", " + Y + ", " + Y1);
+  //          	System.out.println(creatures);
+           	System.out.println(enemy.X);
+           	System.out.println(enemy.X1);
+         	System.out.println(enemy.Y);
+            	System.out.println(enemy.Y1);
+//            	Destinyor.wait(60);
+            	//}
+			if(X && X1 && Y && Y1) {
+				
+				e[i] = enemy;
+				e[i].setXandY(x, y);
+				i++;
+				
 				if(y == 16 + (16 * 4)) {
 					j = 16;
 				} else {
@@ -124,11 +149,11 @@ public class Battles {
 				} else {
 					y += 48 + 4;
 				}
-			} else {
-				i--;
-			}
+			//} else {
+				//i--;
+			//}
 		}
-		
+            }
 		return e;
 	}
 	
@@ -175,7 +200,7 @@ public class Battles {
 	public void Dieing(Player[] players, Enemy[] entities) {
 		for(Player player : players) {
 		for(Enemy enemy : entities)
-			player.Exp += enemy.Exp;
+			player.Exp += enemy.getExp();
 			player.levelUp();
                         player.TA = 0;
                         player.pause();
@@ -187,6 +212,8 @@ public class Battles {
                         enemiesCreated = false;
                         endBattle = true;
                         BattleRender.DrawSpells = false;
+                        point.reset();
+                        point.p = false;
 	}
 	
 	public void calculateDamage(InputHandler input, Enemy[] entities, Move move) {
@@ -194,7 +221,7 @@ public class Battles {
 		
 		
 		if(spell != null && spell.inUse) {
-			this.spellHandler(Player.getActualPlayers(), input, entities);
+			this.spellHandler(spell.player, input, entities);
 		} else {
            bInput.Combat(Player.getActualPlayers(), entities, input);
 		turn(Player.getActualPlayers(), entities);
@@ -210,30 +237,30 @@ public class Battles {
 		//}
         }
         
-        public void Attack(Player[] players, Enemy[] entities, InputHandler input) {
-            for(Player player : players) {
+        public void Attack(Player player, Enemy[] entities, InputHandler input) {
+            //for(Player player : players) {
             	if(player.TA >= limit) {
                     for(Enemy enemy : entities) {
-                    	if(enemy.Focused && enemy.HP > 0 && Time.playerTimer(20) && player.TA >= 500) {
+                    	if(enemy.Focused && enemy.alive() && Time.playerTimer(20) && player.TA >= 500) {
                     		PlayerAttack(player, player.getSpells(0), entities);
                     		//playerNum = p;
                     	}
                     }
                 }
-            }
+            //}
         }
         
-        public void spellHandler(Player[] players, InputHandler input, Enemy[] entities) {
+        public void spellHandler(Player player, InputHandler input, Enemy[] entities) {
         	boolean[] anyFocused = new boolean[entities.length + 1];
             
         	Spell: {
-            for(Player player : players) {
+            //for(Player player : players) {
             //if(input.enter.down) {
                 //if(Time.getKeyTimer(6, true)) {
-                        if(player.TA >= limit) {
+                        //if(player.TA >= limit) {
                             if(player.getSpells(point.spell) != null) {
                                 for(Enemy enemy : entities) {
-                                    if(enemy.Focused && (enemy.dead || enemy.HP < 0)) {
+                                    if(enemy.Focused && !enemy.alive()) {
                                     	if(player.getSpells(point.spell).effect == Spells.Requires_Combo)
                                     		this.spell =  player.getSpells(point.spell);
                                         player.getSpells(point.spell).attack(player, enemy);
@@ -258,8 +285,8 @@ public class Battles {
                                     }
                             }
                         }
-                    }
-                }
+                   // }
+                //}
             }
         	//return;
         }
@@ -276,11 +303,10 @@ public class Battles {
                 boolean[] dead = new boolean[entities.length];
                 
 		for(int i = 0; i < entities.length; i++) {
-			if(entities[i].HP <= 0) {
-				entities[i].dead = true;
-                                dead[i] = true;
+			if(!entities[i].alive()) {
+                dead[i] = true;
 			}
-                        if(entities[i].dead) {
+                        if(!entities[i].alive()) {
 				//continue;
 			//} //else {
                             if(areAllDead(dead))
@@ -301,7 +327,7 @@ public class Battles {
 		if(System.currentTimeMillis() - eTimer >= 2000) {
 			for(Enemy enemy : entities) {
                             enemy.attacking = false;
-				if(enemy.TA >= limit * 2 && enemy.HP > 0) {
+				if(enemy.TA >= limit * 2 && enemy.alive()) {
 					if(System.currentTimeMillis() - eTimer >= 1000) {
                                             enemy.attacking = true;
 					attack(players, Spells.Attack, entities);
@@ -365,16 +391,22 @@ public class Battles {
 	public void attack(Player[] players, Spells spells, Enemy[] entities) {
 		for(Enemy enemy : entities) {
 			if(spells.name.equals("Attack") && enemy.attacking) {
-				Damage = randomGen.nextInt(enemy.Str);
-				
+				Damage = randomGen.nextInt(enemy.getStr());
+				try {
+					Player player = AIBattle.getPlayer(enemy);
+				} catch (EndBattleException e) {
+					//throw new EndBattleException();
+					e.EndBattle();
+					return;
+				}
 //				switch(Destinyor.difficulty) {
 //				case Destinyor.EASY: break;
 //				case Destinyor.NORMAL: int[] p = new int[players.length]; for(int i = 0; i < players.length; i++) {
 //					p[i] = players[i].Hp;
 //				} break;
 //				}
-				
-					if(enemy.Str - players[eTargets].Def < 0) {
+					
+					if(enemy.getStr() - players[eTargets].Def < 0) {
 						random = randomGen.nextInt(2);
 						players[eTargets].Hp -= random;
 						tempEDamageHolder = random;

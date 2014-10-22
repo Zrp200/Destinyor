@@ -17,6 +17,8 @@ public class BattleInput {
 	public Pointer point;
 	private final Battles battles;
 	
+	public boolean targetSelected = false;
+	
 	public Map<Integer, Commands> commands = new HashMap<>();
 	
 	public BattleInput(InputHandler input, Pointer point, Battles battles) {
@@ -38,7 +40,7 @@ public class BattleInput {
 		for(int i = 0; i < commands.size(); i++) {
 			if(commands.get(i).inBox(mouse.pressedX, mouse.pressedY)) {
 				switch(i) {
-				case 0: battles.Attack(Player.getPlayers(), entities, input); break;
+				case 0: if(Player.getPlayerAttack() != null) battles.Attack(Player.getPlayerAttack(), entities, input); break;
 				case 1: break;
 				}
 			}
@@ -77,6 +79,7 @@ public class BattleInput {
 					point.ePointerY = 38;
 					enemy.Focused = false;
 					entities[0].Focused = true;
+					targetSelected = true;
 				}
 			}
 			
@@ -86,6 +89,8 @@ public class BattleInput {
 					point.ePointerY = (45) * 2;
 					enemy.Focused = false;
 					entities[1].Focused = true;
+					targetSelected = true;
+					point.ep = false;
 				}
 			}
 		
@@ -95,6 +100,8 @@ public class BattleInput {
 					point.ePointerY = (48) * 3;
 					enemy.Focused = false;
 					entities[2].Focused = true;
+					targetSelected = true;
+					point.ep = false;
 				}
 			}
 		
@@ -104,6 +111,8 @@ public class BattleInput {
 					point.ePointerY = (49) * 4;
 					enemy.Focused = false;
 					entities[3].Focused = true;
+					targetSelected = true;
+					point.ep = false;
 				}
 			}
 		
@@ -113,26 +122,32 @@ public class BattleInput {
 					point.ePointerY = (49) * 5;
 					enemy.Focused = false;
 					entities[4].Focused = true;
+					targetSelected = true;
+					point.ep = false;
 				}
 			}
 		}
+                mouse.pressedX = 0;
+				mouse.pressedY = 0;
 	}
 	
 	public void Combat(Player[] players, Enemy[] enemies, InputHandler input) {
         boolean[] canAttack = { false, false, false, false };
+		//boolean canAttack = false;
         int pl = 0;
         for(int p = 0; p < players.length; p++) {
             if(players[p].TA >= 500) {
-                canAttack[p] = true;
+            	canAttack[p] = true;
+                //canAttack = true;
                 pl = p;
             }
-        }
+       // }
         if(canAttack[pl]) {
         	//battles.
-        	point.point(players, input, enemies);
+        	point.point(players[pl], input, enemies);
         }
-
     }
+	}
 	
 	
 }

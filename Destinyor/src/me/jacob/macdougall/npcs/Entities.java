@@ -4,12 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.jacob.macdougall.GameStorage;
-
 public class Entities {
 	// Ordinal Number, http://en.wikipedia.org/wiki/Ordinal_number_(linguistics)
-	
-	public static GameStorage entities = new GameStorage();
 	
 	//public static Map<String, Entities> entities = new HashMap<>();
 	//public static Map<Integer, String> names = new HashMap<>();
@@ -66,7 +62,6 @@ public class Entities {
 //			}
 			//amount++;
 		}
-		entities.putObject(name, this);
 	}
 	
 	

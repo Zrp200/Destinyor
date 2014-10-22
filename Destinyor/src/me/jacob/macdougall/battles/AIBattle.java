@@ -16,4 +16,23 @@ public class AIBattle {
 //		}
 	}
 	
+	public static Player getPlayer(Enemy enemy) throws EndBattleException {
+		//int i = 0;
+		//do {
+		for(Player player : Player.getActualPlayers()) {
+			if(player.Hp > 0) {
+				if(player.Hp - enemy.attack(player) > 0)
+				return player;
+			}
+			//i++;
+		}
+		//} while(i <= Player.getActualPlayers().length);
+		for(Player player : Player.getActualPlayers())
+		
+		if(player.Hp > 0)
+			return player;
+		
+		throw new EndBattleException();
+	}
+	
 }

@@ -4,6 +4,7 @@ import me.jacob.macdougall.DebugWriter;
 import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.Keys;
 import me.jacob.macdougall.Time;
+import me.jacob.macdougall.files.DestinyorFiles;
 import me.jacob.macdougall.files.FileLoader;
 import me.jacob.macdougall.npcs.NPC;
 import me.jacob.macdougall.player.Move;
@@ -63,7 +64,7 @@ public class Cutscene {
     
     public Cutscene(String location, InputHandler input) {
     	
-        name = location.replace((Destinyor.DestinyorCutsceneFolder + Destinyor.fileSplit), "");
+        name = location.replace((DestinyorFiles.DestinyorCutsceneFolder + DestinyorFiles.fileSplit), "");
         textHolder = FileLoader.readCutscenes(location).replaceAll(" ", "");
         Holder = textHolder.split(":");
         
@@ -149,7 +150,7 @@ public class Cutscene {
                 	dir[j] = 2;
                     ddf++;
                     //commands[j] = stuff[i][j];
-                    nDialouge = FileLoader.readDialouges(Destinyor.DestinyorDialougesFolder + "\\" + stuff[i][j]);
+                    nDialouge = FileLoader.readDialouges(DestinyorFiles.DestinyorDialougesFolder + "\\" + stuff[i][j]);
                 }
                 
 //               if(stuff[i][j].contains("left")) {

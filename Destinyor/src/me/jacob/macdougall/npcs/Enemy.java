@@ -12,20 +12,21 @@ import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.items.Items;
 import me.jacob.macdougall.magic.Element;
 import me.jacob.macdougall.magic.Spells;
+import me.jacob.macdougall.player.Player;
 
-public class Enemy implements Cloneable {
+public class Enemy extends Dummy implements Cloneable {
 	
-	public int LVL;
-	public int Exp;
-	public int Gold;
-	public int HP;
-	public int Str;
-	public int Wis;
-	public int Skl;
-	public int Spd;
-	public int Luk;
-	public int Def;
-	public int Vit;
+//	public int LVL;
+//	public int Exp;
+//	public int Gold;
+//	public int HP;
+//	public int Str;
+//	public int Wis;
+//	public int Skl;
+//	public int Spd;
+//	public int Luk;
+//	public int Def;
+//	public int Vit;
 	
 	public int limit;
 	
@@ -35,15 +36,11 @@ public class Enemy implements Cloneable {
 	public boolean Focused = false;
 	public boolean attacking = false;
 	
-	public String Gender; // Old code from when this class used to be for players and npcs as well. To lazy to change now. May be useful for sound effects.
-	
 	public static Map<String, Enemy> enemies = new HashMap<>();
-	public Map<Integer, Spells> spells = new HashMap<>();
-	public Map<Integer, Spells> equipment = new HashMap<>();
+	public static Map<Integer, String> names = new HashMap<>();
         
 	public static boolean attackable = false;
 	public static boolean battle = false;
-	public boolean dead = false;
 	
 	public int X = 0, Y = 0, X1 = 0, Y1 = 0;
 	public int w, h;
@@ -51,7 +48,7 @@ public class Enemy implements Cloneable {
 	
 	protected long frameTimer = System.currentTimeMillis();
 	
-	protected String name;
+	//public String name;
 	
 	protected Bitmap[] frames;
 	
@@ -63,18 +60,38 @@ public class Enemy implements Cloneable {
 	
 	public boolean paused = true;
 	
-	public Enemy(String name, String frame, String gender, int LVL, int EXP, int HP, int STR, int SKL, int SPD, int LUK, int DEF, int GOLD, Element Resistance, Spells[] spells, int pos, int spawn){
-		this.name = name;
-		this.Gender = gender;
-		this.LVL = LVL;
-		this.Exp = EXP;
-		this.HP = HP;
-		this.Str = STR;
-		this.Skl = SKL;
-		this.Spd = SPD;
-		this.Luk = LUK;
-		this.Def = DEF;
-		this.Gold = GOLD;
+	public int damage = 0;
+	
+	private static Random randomEnemy = new Random();
+	
+	// For later, involing setting commands before TA and having them excuted after the TA
+	public boolean[] targeted = {
+			// p1,    p2,    p3,    p4
+			false, false, false, false
+	};
+	
+	/**
+	 * 
+	 * @param name
+	 * @param frame
+	 * @param lvl
+	 * @param exp
+	 * @param hp
+	 * @param str
+	 * @param skl
+	 * @param spd
+	 * @param luk
+	 * @param def
+	 * @param wis
+	 * @param gold
+	 * @param Resistance
+	 * @param spells
+	 * @param pos
+	 * @param spawn
+	 */
+	public Enemy(String name, String frame, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, Element Resistance, Spells[] spells, int pos, int spawn){
+		super(name, null, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, 0, 0, spells, null);
+		names.put(names.size(), name);
 		this.spells.put(0, Spells.Attack);
                 if(spells != null)
                     for(int s = 0; s < spells.length; s++)
@@ -84,8 +101,6 @@ public class Enemy implements Cloneable {
 		this.Y = pos;
 		this.X1 = spawn;
 		this.Y1 = spawn;
-                
-		//this.spells.put("Attack", new Spells("Attack", Element.get(Element.Physical), Str * 2, 1, 0, name));
 		
 		if(frame != null){
 			if(!frame.equals("")) {
@@ -103,9 +118,7 @@ public class Enemy implements Cloneable {
 				this.frames[1] = Art.getSpritesheet()[framez[0] + 1][framez[1]]; // Move over one to get next frame
 //				this.frames[2] = Art.spritesheet[framez[0]][framez[1] + 1]; // Move down one to get next frame
 			}
-		}	
-		
-		//Spells.spells.put(name, new Spells(name, type, damage, targets, cost));
+		}
 	}
 	
 	public static Enemy[] getEntities() {
@@ -137,13 +150,13 @@ public class Enemy implements Cloneable {
 		}
 	}
 	
-	public void SetPos(int x, int y) {
-		this.X = x;
-		this.Y = y;
-	}
+//	public void SetPos(int x, int y) {
+//		this.X = x;
+//		this.Y = y;
+//	}
 	
 	public void render(Screen screen){
-		screen.render(frames[fr], X, Y);
+		screen.render(frames[fr], x, y);
 	}
 	
 	public void tick(){
@@ -175,11 +188,84 @@ public class Enemy implements Cloneable {
 		return items;
 	}
 	
-	public Equipment weapons() {
-		return null;
-	};
+	public int attack(Player player) {
+		if(damage == 0) {
+		Random random = new Random();
+		if(str - player.Def <= 0) {
+			
+			damage = random.nextInt(2);
+			//players[eTargets].Hp -= random;
+			//tempEDamageHolder = random;
+			//Battles.
+			//random = randomGen.nextInt(2);
+			TA = 0;
+			return damage;
+		} else {
+			damage = random.nextInt((str - player.Def));
+			//players[eTargets].Hp -= (Damage - players[eTargets].Def);
+			TA = 0;
+		}
+		}
+		return damage;
+	}
 	
-	public Equipment armour() {
-		return null;
-	};
+	public static Enemy getRandomEntity() {
+		
+		int rand = randomEnemy.nextInt(getEntities().length);
+		//System.out.println(rand);
+		//random = null;
+		return Enemy.newInstance(names.get(rand));
+		//return enemies.get(names.get(rand));
+	}
+	
+//	public Equipment weapons() {
+//		return null;
+//	};
+//	
+//	public Equipment armour() {
+//		return null;
+//	};
+	
+	public boolean hasEquipment() {
+		return !this.equipped.isEmpty();
+//		if(this.equipment.size() > 0) {
+//			return true;
+//		}
+//		return false;
+	}
+	
+	public Equipment[] armour() {
+		Equipment[] e = new Equipment[2]; // Only two hands
+		int i = 0;
+		for(Equipment equip : equipped.values()) {
+			if(equip.isWeapon()) {
+				e[i] = equip;
+				i++;
+			}
+		}
+		return e;
+	}
+	
+	public Equipment[] returnArmour() {
+		Equipment[] equip = this.armour();
+		Equipment[] e = new Equipment[equip.length];
+		int j = 0;
+		if(equip != null && equip[0] != null) {
+			for(int i = 0; i < equip.length; i++) {
+				if(equip[i] != null) {
+					e[i] = equip[i];
+					j++;
+				}
+			}
+			equip = new Equipment[j];
+			j = 0;
+			for(int i = 0; i < e.length; i++) {
+				if(e[i] != null) {
+				equip[j] = e[i];
+				j++;
+				}
+			}
+		}
+		return equip;
+	}
 }

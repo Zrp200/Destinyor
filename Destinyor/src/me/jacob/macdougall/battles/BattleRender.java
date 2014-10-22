@@ -48,12 +48,13 @@ public class BattleRender {
 			
 		
 			if(players[p].TA >= battle.limit) {
+				point.p = true;
 				battles.commands.get(0).render(screen);
 				battles.commands.get(1).render(screen);
 				//GameFont.render(, screen, 190, 305);
 				//GameFont.render("Spells", screen, 190, 325);
 				BorderY(screen, 2, 3);
-                                GameFont.render(GameFont.pointer, screen, point.PointerX, point.PointerY);
+                                //GameFont.render(GameFont.pointer, screen, point.PointerX, point.PointerY);
                                 
                                 if(DrawSpells && players[p].spells != null) {
                                     for(int s = 1; s < players[p].spells.size(); s++)
@@ -78,7 +79,10 @@ public class BattleRender {
 //		battles.commands.get(5).render(screen);
 //		//battles.commands.get(6).y = 192 + 52;
 //		battles.commands.get(6).render(screen);
-		GameFont.render(Player.combatName + " did " + Player.temp + " to " + battle.ptarget, screen, X + 64 + 32, 256);
+		if(Player.temp > 0)
+			GameFont.render(Player.combatName + " did " + Player.temp + " to " + battle.ptarget, screen, X + 64 + 32, 256);
+		else
+			GameFont.render(Player.combatName + " missed", screen, X + 64 + 32, 256);
 		
 		if(battle.spell != null && battle.spell.inUse && battle.spell.effect == Spells.Requires_Combo) {
 			switch(battle.spell.getCombo()) {
@@ -95,7 +99,7 @@ public class BattleRender {
 		//for(int i = 0; i < entities.length; i++)
                 for(Enemy enemy : entities)
 		if(enemy != null) {
-			if(!enemy.dead) {
+			if(enemy.alive()) {
 				count++;
 				enemy.render(screen);
 				if(count >= 6) {
@@ -105,7 +109,7 @@ public class BattleRender {
 				}
 				GameFont.render(enemy.getName(), screen, X, (count * 16) + Y);
 				if(Destinyor.Debug)
-					GameFont.render(String.valueOf(enemy.HP), screen, X + 108, (count * 16) + Y );
+					GameFont.render(String.valueOf(enemy.getHp()), screen, X + 108, (count * 16) + Y );
 			}
 			
 			if(enemy.attacking) {

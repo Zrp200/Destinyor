@@ -1,18 +1,13 @@
 package me.jacob.macdougall;
 
-import input.engine.keyboard.InputHandler;
-//import me.zabuzasword3.engine.graphics.Screen;
 import graphic.engine.screen.Screen;
 
 public class ConsoleCommands {
-    //private Screen screen;
-    //private InputHandler input;
-    
+	
     public String command;
     
-    public ConsoleCommands(Screen screen, InputHandler input) {
+    public ConsoleCommands(Screen screen) {
         //this.screen = screen;
-        //this.input = input;
     }
     
     public void useText(String text) {

@@ -14,6 +14,7 @@ import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 import graphic.engine.window.Resolution;
+import me.jacob.macdougall.battles.Calculations;
 
 import java.awt.Graphics;
 import java.io.File;
@@ -180,7 +181,7 @@ public class Player {
 			Spd = 10;
 			Luk = 10;
 			Def = 10;
-                        Wis = 10;
+            Wis = 10;
 			Gold = 0;
 		}
 		
@@ -366,29 +367,35 @@ public class Player {
 	public void attack(Enemy enemy) {
 		int damage = 0;
 		if(!miss(enemy)) {
-		if(!this.equipped.isEmpty()) {
-			for(Equipment equip : equipped.values()) {
-				if(equip.isWeapon()) {
-					if(canDamage(enemy, equip)) {
-						int d = (int) (((damage() + equip.damage) / enemy.Def) * skillcheck(enemy));
-						damage = (int) (random.nextInt(d));
-						enemy.HP -= damage;
-						temp = damage;
-						attacked = true;
-						//enemy.HP -= damage(enemy, equip);
-					}
-				}
-			}
+		//if(hasEquipment()) {
+			//if(enemy.hasEquipment()) {
+				
+			//}
+//			for(Equipment equip : equipped.values()) {
+//				if(equip.isWeapon()) {
+//					if(canDamage(enemy, equip)) {
+//						int d = (int) (((damage() + equip.damage) / enemy.Def) * skillcheck(enemy));
+//						damage = (int) (random.nextInt(d));
+//						enemy.HP -= damage;
+//						temp = damage;
+//						attacked = true;
+//						//enemy.HP -= damage(enemy, equip);
+//					}
+//				}
+//			}
+//			
+//		}
+//		if(canDamage(enemy)) {
+//			int d = (int) ((damage() / enemy.getDef()) * skillcheck(enemy));
+//			damage = (int) (random.nextInt(d));
+//			enemy.HP -= damage;
+//			temp = damage;
+//		}
+//		temp = damage;
+//		//temp = -1;
+//		}
+		Calculations.pAttack(this, enemy);
 			
-		}
-		if(canDamage(enemy)) {
-			int d = (int) ((damage() / enemy.Def) * skillcheck(enemy));
-			damage = (int) (random.nextInt(d));
-			enemy.HP -= damage;
-			temp = damage;
-		}
-		temp = damage;
-		//temp = -1;
 		}
 		Player.combatName = this.Name;
 		Player.temp = damage;
@@ -396,27 +403,70 @@ public class Player {
 		attacked = false;
 	}
 	
+	public boolean hasEquipment() {
+		return !this.equipped.isEmpty();
+//		if(this.equipped.size() > 0) {
+//			return true;
+//		}
+//		return false;
+	}
+	
+	public Equipment[] weapon() {
+		Equipment[] e = new Equipment[2]; // Only two hands
+		int i = 0;
+		for(Equipment equip : equipped.values()) {
+			if(equip.isWeapon()) {
+				e[i] = equip;
+				i++;
+			}
+		}
+		return e;
+	}
+	
+	public Equipment[] returnWeapons() {
+		Equipment[] equip = this.weapon();
+		Equipment[] e = new Equipment[equip.length];
+		int j = 0;
+		if(equip != null && equip[0] != null) {
+			for(int i = 0; i < equip.length; i++) {
+				if(equip[i] != null) {
+					e[i] = equip[i];
+					j++;
+				}
+			}
+			equip = new Equipment[j];
+			j = 0;
+			for(int i = 0; i < e.length; i++) {
+				if(e[i] != null) {
+				equip[j] = e[i];
+				j++;
+				}
+			}
+		}
+		return equip;
+	}
+	
 	public void useSpell(int spell, Enemy enemy) {
 		if(!miss(enemy)) {
-			enemy.HP -= spells.get(spell).damage;
+			enemy.setHp(-spells.get(spell).damage);
 		}
 	}
 	
-	public boolean canDamage(Enemy enemy, Equipment weapon) {
-		if(enemy.Def <= Str + weapon.damage && !this.attacked) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean canDamage(Enemy enemy) {
-		if(enemy.Def <= Str && !this.attacked) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public boolean canDamage(Enemy enemy, Equipment weapon) {
+//		if(enemy.Def <= Str + weapon.damage && !this.attacked) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
+//	
+//	public boolean canDamage(Enemy enemy) {
+//		if(enemy.Def <= Str && !this.attacked) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	
 	/**
 	 * Returns the damage in int format
@@ -480,12 +530,9 @@ public class Player {
 	 */
 	public float skillcheck(Enemy enemy) {
 		int crit = 0;
-		if(this.Skl > enemy.Skl) {
-			crit = enemy.Skl % this.Skl;
+		if(this.Skl > enemy.getSkl()) {
+			crit = enemy.getSkl() % this.Skl;
 		}
-		
-		
-		
 		return crit;
 	}
 	
@@ -544,6 +591,25 @@ public class Player {
         		}
         	}
         	return inv;
+        }
+        
+        /**
+         * Returns a player with max TA
+         * @return
+         */
+        public static Player getPlayerAttack() {
+        	Player[] players = Player.getActualPlayers();
+        	Player player;
+        	// Make sure it's in chronological order
+        	for(int i = 0; i < players.length; i++) {
+        		if(players[i].TA >= 500) {
+        			player = players[i];
+        			return player;
+        		}
+        	}
+        	
+			return null;
+        	
         }
 
 }

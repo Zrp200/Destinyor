@@ -15,6 +15,8 @@ public class Buttons {
 	public int width = 120;
 	public int height = 20;
 	
+	public boolean isScrollbar = false;
+	
 	Bitmap bitmap;
 	
 	public Buttons(String name, int x, int y) {
@@ -75,6 +77,10 @@ public class Buttons {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 }

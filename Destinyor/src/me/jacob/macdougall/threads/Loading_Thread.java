@@ -1,13 +1,10 @@
 package me.jacob.macdougall.threads;
 
-import static me.jacob.macdougall.Destinyor.DestinyorEnemies;
-import static me.jacob.macdougall.Destinyor.DestinyorNpcs;
-import static me.jacob.macdougall.Destinyor.DestinyorSaves;
-import static me.jacob.macdougall.Destinyor.DestinyorSpells;
 import static me.jacob.macdougall.Destinyor.create;
 import static me.jacob.macdougall.Destinyor.read;
 import static me.jacob.macdougall.Destinyor.write;
 import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.files.DestinyorFiles;
 import me.jacob.macdougall.files.FileLoader;
 import me.jacob.macdougall.world.LevelMap;
 
@@ -56,19 +53,19 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     private void reader() {
     	System.out.println("Reading");
         switch(reader) {
-            case 0: FileLoader.ReadFromFiles(Destinyor.DestinyorSpells);
+            case 0: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorSpells);
             reader++;
             break;
             
-            case 1: FileLoader.ReadFromFiles(Destinyor.DestinyorSaves);
+            case 1: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorCharacters);
             reader++;
             break;
             
-            case 2: FileLoader.ReadFromFiles(Destinyor.DestinyorEnemies);
+            case 2: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorEnemies);
             reader++;
             break;
             
-            case 3: FileLoader.ReadFromFiles(Destinyor.DestinyorNpcs);
+            case 3: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorNpcs);
             reader++;
             break;
                 
@@ -85,19 +82,19 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     private void writer() {
     	System.out.println("Writing");
         switch(writer) {
-            case 0: FileLoader.WriteToFiles(DestinyorSaves);
+            case 0: FileLoader.WriteToFiles(DestinyorFiles.DestinyorCharacters);
             writer++;
             break;
             
-            case 1: FileLoader.WriteToFiles(DestinyorEnemies);
+            case 1: FileLoader.WriteToFiles(DestinyorFiles.DestinyorEnemies);
             writer++;
             break;
             
-            case 2: FileLoader.WriteToFiles(DestinyorSpells);
+            case 2: FileLoader.WriteToFiles(DestinyorFiles.DestinyorSpells);
             writer++;
             break;
             
-            case 3: FileLoader.WriteToFiles(DestinyorNpcs);
+            case 3: FileLoader.WriteToFiles(DestinyorFiles.DestinyorNpcs);
             writer++;
             break;
             
@@ -111,19 +108,19 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     private void creater() {
     	System.out.println("Creating");
         switch(creator) {
-            case 0: FileLoader.CreateFile(Destinyor.DestinyorSaves);
+            case 0: FileLoader.CreateFile(DestinyorFiles.DestinyorCharacters);
             creator++;
             break;
             
-            case 1: FileLoader.CreateFile(Destinyor.DestinyorEnemies);
+            case 1: FileLoader.CreateFile(DestinyorFiles.DestinyorEnemies);
             creator++;
             break;
             
-            case 2: FileLoader.CreateFile(Destinyor.DestinyorSpells);
+            case 2: FileLoader.CreateFile(DestinyorFiles.DestinyorSpells);
             creator++;
             break;
             
-            case 3: FileLoader.CreateFile(Destinyor.DestinyorNpcs);
+            case 3: FileLoader.CreateFile(DestinyorFiles.DestinyorNpcs);
             creator++;
             break;
             

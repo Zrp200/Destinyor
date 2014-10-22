@@ -182,31 +182,31 @@ public class Default {
 		
 		String[] GSlimeStats = {
 			// Name, 		Co-ord, Gender, Lvl, Exp,  Hp,  Str, Skl, Spd, Luk, Def, Gold, Resistance, Condition, null for now
-			"Green Slime", "12,12", "null", "1", "1", "10", "1", "1", "1", "1", "1", "5", "null", "null", "1, 25"
+			"Green Slime", "12,12", "1", "1", "10", "1", "1", "1", "1", "1", "1", "5", "null", "null", "1, 25"
 		};
 		
 		String[] RSlimeStats = {
-			"Red Slime", "12,13", "null", "2", "5", "20", "5", "1", "2", "1", "3", "10", "Fire", "null", "26, 50"
+			"Red Slime", "12,13", "2", "5", "20", "5", "1", "2", "1", "3", "1", "10", "Fire", "null", "26, 50"
 		};
 		
 		String[] BSlimeStats = {
-			"Blue Slime", "12,14", "null", "3", "10", "50", "9", "3", "6", "5", "7", "15", "Water, Ice", "null", "51, 75"
+			"Blue Slime", "12,14", "3", "10", "50", "9", "3", "6", "5", "7", "1", "15", "Water, Ice", "null", "51, 75"
 		};
 			
 		String[] GGoblinStats = {
-			"Green Goblin", "16,8", "Male", "1", "10", "200", "7", "2", "3", "1", "7", "1000", "null", "null", "25, 25"
+			"Green Goblin", "16,8", "1", "10", "200", "7", "2", "3", "1", "7", "1", "1000", "null", "null", "25, 25"
 		};
 		
 		String[] RGoblinStats = {
-			"Fire Goblin", "16,10", "Male", "5", "100", "1000", "70", "20", "30", "10", "70", "10000", "Fire", "Fire Ball", "25, 25"
+			"Fire Goblin", "16,10", "5", "100", "1000", "70", "20", "30", "10", "70", "10", "10000", "Fire", "Fire Ball", "25, 25"
 		};
 			
 		String[] BGoblinStats = {
-			"Water Goblin", "16,11", "Female", "10", "1000", "10000", "700", "200", "300", "100", "700", "10000", "Ice, Water", "null", "25, 25"
+			"Water Goblin", "16,11", "10", "1000", "10000", "700", "200", "300", "100", "700", "100", "10000", "Ice, Water", "null", "25, 25"
 		};
 		
 		String[] PUndeadStats = {
-			"Undead Priest", "12,9", "Male", "100", "10000", "100000", "7000", "2000", "3000", "1000", "7000", "100000", "Ice, Dark, Posion", "Fire Ball", "0, 0"
+			"Undead Priest", "12,9", "100", "10000", "100000", "7000", "2000", "3000", "1000", "7000", "10000", "100000", "Ice, Dark, Posion", "Fire Ball", "0, 0"
 		};
 		
 		/*

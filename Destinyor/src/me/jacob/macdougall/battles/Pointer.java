@@ -24,6 +24,9 @@ public class Pointer {
     public int ePointerX = 20;
     public int ePointerY = 38;
     
+    public boolean ep = false;
+    public boolean p = false;
+    
     private final BattleInput bInput;
     private final Battles battle;
 	
@@ -46,10 +49,13 @@ public class Pointer {
     //}
     
     public void render(Screen screen) {
+    	if(ep)
     	screen.render(Art.getFont()[35][1], ePointerX, ePointerY);
+    	if(p)
+    	screen.render(Art.getFont()[35][1], PointerX, PointerY);
     }
     
-    public void point(Player[] players, InputHandler input, Enemy[] enemies) {
+    public void point(Player player, InputHandler input, Enemy[] enemies) {
         switch(menu) {
         case 0:
             if(Time.getKeyTimer(10, false)) {
@@ -86,7 +92,7 @@ public class Pointer {
         }
             switch(commands) {
                 case 0: if(bInput.enter() && Time.getKeyTimer(10, false)) {
-                    battle.Attack(players, enemies, input);
+                    battle.Attack(player, enemies, input);
                     Time.resetKeyTimer();
                 }
                     break;
@@ -100,9 +106,9 @@ public class Pointer {
             
         case 1: 
             if(Time.getKeyTimer(10, false)) {
-            for(int i = 0; i < Player.AmountOFPlayers(); i++) {
+            //for(int i = 0; i < Player.AmountOFPlayers(); i++) {
             if(bInput.up()) {
-                if(spell >= 1 && spell <= players[i].spells.size()) {
+                if(spell >= 1 && spell <= player.spells.size()) {
                     spell--;
                 } else {
                     spell = 1;
@@ -110,7 +116,8 @@ public class Pointer {
                 Time.resetKeyTimer();
             }
             if(bInput.down()) {
-                if(spell >= 1 && spell <= players[i].spells.size()) {
+                //if(spell >= 1 && spell <= players[i].spells.size()) {
+            	if(spell >= 1 && spell <= player.spells.size()) {
                     spell++;
                 } else {
                  spell = 1;
@@ -124,15 +131,21 @@ public class Pointer {
             }
             if(bInput.enter()) {
             	//for(int i = 0;)
-                battle.spellHandler(players, input, enemies);
+                battle.spellHandler(player, input, enemies);
                 menu = 0;
                 spell = 1;
                 commands = 0;
                 return;
             }
-        }
+        //}
             }
             break;
     }
+    }
+    
+    public void pointEnemy() {
+    	if(!bInput.targetSelected) {
+    		
+    	}
     }
 }

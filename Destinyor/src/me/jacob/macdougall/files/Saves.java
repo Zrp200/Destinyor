@@ -17,14 +17,14 @@ public class Saves {
 	}
 	
 	public void Save() {
-		File file = new File(Destinyor.DestinyorFolder + Destinyor.fileSplit + "Save" + id + ".destinyor");
+		File file = new File(DestinyorFiles.DestinyorFolder + DestinyorFiles.fileSplit + "Save" + id + ".destinyor");
 		Writer.writeSaveFile(file.getAbsolutePath());
 	}
 	
 	public void getSaves() {
-		File saves = new File(Destinyor.DestinyorSaves);
+		File saves = new File(DestinyorFiles.DestinyorCharacters);
 		while(saves.exists()) {
-			saves = new File(Destinyor.DestinyorFolder + Destinyor.fileSplit + "Save" + no + ".destinyor");
+			saves = new File(DestinyorFiles.DestinyorFolder + DestinyorFiles.fileSplit + "Save" + no + ".destinyor");
 			no++;
 		}
 	}

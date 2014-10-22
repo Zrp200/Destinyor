@@ -30,6 +30,11 @@ public class Spells implements Cloneable {
 	public int[] condition;
 	public Effect effects;
 	
+	public Player player;
+	public Enemy enemy;
+	
+	//public int targets = 0;
+	
 	//																																										// Heals, Statboosts
 	public static final int Normal = 0, Requires_Sword = 1, Requires_Shield = 2, Requires_Combo = 3, Requires_Two_Hands = 4, UseAbleOutside = 5, AoE = 6, Ignore_Defense = 7, Helpful = 8, Relative = 9;
 	
@@ -129,7 +134,9 @@ public class Spells implements Cloneable {
 //                        entity.HP = -(this.damage * player.Wis);
 //                }
 //            } else {
-            enemy.HP -= ((this.damage * player.Wis));
+        	this.player = player;
+        	this.enemy = enemy;
+            enemy.setHp(-(this.damage * player.Wis));
             //player.mana = -this.cost;
            // }
         }

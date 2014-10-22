@@ -15,8 +15,7 @@ public class Debug extends Canvas {
 	
 	private static final long serialVersionUID = 8341857801876146189L;
 	
-	//BufferedImage bi;
-        Screen screen;
+    private Screen screen;
 	
 	public void render() {
 		BufferStrategy strategy = this.getBufferStrategy();
@@ -30,12 +29,8 @@ public class Debug extends Canvas {
                 spritesheet();
                 
 		Graphics g = strategy.getDrawGraphics();
-                //g.setColor(Color.DARK_GRAY);
+		
 		g.drawImage(screen.image, 224, 32, null);
-                
-		//g.setColor(Color.BLACK);
-		//g.draw3DRect(0, 0, Resolution.width(), Resolution.height(), false);
-		//g.fill3DRect(0, 0, Resolution.width(), Resolution.height(), false);
 		
 		g.setColor(Color.GREEN);
                 drawBoxes(g);
@@ -59,26 +54,20 @@ public class Debug extends Canvas {
 	}
 	
 	public void spritesheet() {
-            Tile.renderSpritesheet(screen);
-		//try {
-			//bi = ImageIO.read(Destinyor.class.getResourceAsStream("/icon0.png"));
-		//} catch (IOException e) {
-			//e.printStackTrace();
-		//}
-//		return bi;
+		Tile.renderSpritesheet(screen);
 	}
         
-        public void drawBoxes(Graphics g) {
-            for(int i = 0; i < Art.getSpritesheet().length; i++) {
-                for(int j = 0; j < Art.getSpritesheet()[i].length; j++) {
-                    g.drawRect((i + 7) * 32, (j + 1) * 32, 32, 32);
-                }
-            }
-        }
+	public void drawBoxes(Graphics g) {
+		for(int i = 0; i < Art.getSpritesheet().length; i++) {
+			for(int j = 0; j < Art.getSpritesheet()[i].length; j++) {
+				g.drawRect((i + 7) * 32, (j + 1) * 32, 32, 32);
+			}
+		}
+    }
 	
 	public Debug() {
-                if(Destinyor.Debug) {
-		JFrame frame2 = new JFrame("Debug");
+		if(Destinyor.Debug) {
+			JFrame frame2 = new JFrame("Debug");
 		
 			frame2.add(this);
 			frame2.pack();
@@ -86,14 +75,9 @@ public class Debug extends Canvas {
 			frame2.setVisible(true);
 			frame2.setSize(1024, 768);
 			frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        System.out.println(Art.getSpritesheet().length * 32);
-                        screen = new Screen(Art.getSpritesheet().length * 32, Art.getSpritesheet()[0].length * 32);
-                        //frame2.setBackground(Color.BLACK);
-                        this.setBackground(Color.BLACK);
-			//spritesheet(screen);
-		} //else {
-			//frame2 = null;
-		//}
+            screen = new Screen(Art.getSpritesheet().length * 32, Art.getSpritesheet()[0].length * 32);
+            this.setBackground(Color.BLACK);
+		}
 	}
 	
 }

@@ -5,6 +5,7 @@ import graphic.engine.screen.Screen;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import me.jacob.macdougall.magic.*;
 
@@ -37,6 +38,8 @@ public class Equipment extends Items implements Cloneable {
         
 	
 	public int damage = 0;
+	public int minDamage = 0;
+	public int maxDamage = 0;
 	public Element element;
 	public int type = 0;
     public Spells spellEffect;
@@ -149,6 +152,12 @@ public class Equipment extends Items implements Cloneable {
 			// grab pixel data and put it on the player in the correct area
 			// Head, Body, Arms, Leg, ect
 		}
+	}
+	
+	public int getDamage() {
+		Random random = new Random();
+		int d = random.nextInt(maxDamage - minDamage) + minDamage;
+		return d;
 	}
 	
 //	public boolean isArmour()

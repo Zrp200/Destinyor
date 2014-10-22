@@ -17,11 +17,9 @@ public class SFX {
 	
 	public SFX(String name, Sound... sounds) {
 		this.name = name;
-		//for(int i = 0; i < sounds.length; i++) {
-                for(Sound sound : sounds) {
+        for(Sound sound : sounds) {
 			putEffect(sound);
 		}
-			
 	}
 	
 	public SFX getSFX(String name) {

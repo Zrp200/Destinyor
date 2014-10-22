@@ -16,6 +16,14 @@ public class FileLoader {
 		}
 	}
 	
+	public static File CreateFolderAndReturn(String location) {
+		File file = new File(location);
+		if(!file.exists()) {
+		file.mkdir();
+		}
+		return file;
+	}
+	
 	public static void CreateFile(String location) {
 			File file = new File(location);
 			if(!file.exists()) {
@@ -26,43 +34,43 @@ public class FileLoader {
 				boolean enemies = false;
 				boolean spells = false;
                 boolean dialouges = false;
-				if(location.equals(Destinyor.DestinyorSettings)) {
-					location = Destinyor.DestinyorFolder;
+				if(location.equals(DestinyorFiles.DestinyorSettings)) {
+					location = DestinyorFiles.DestinyorFolder;
 					settings = true;
 				}
-				if(location.equals(Destinyor.DestinyorSaves)) {
-					location = Destinyor.DestinyorFolder;
+				if(location.equals(DestinyorFiles.DestinyorCharacters)) {
+					location = DestinyorFiles.DestinyorFolder;
 					saves = true;
 				}
-				if(location.equals(Destinyor.DestinyorEnemies)) {
-					location = Destinyor.DestinyorFolder;
+				if(location.equals(DestinyorFiles.DestinyorEnemies)) {
+					location = DestinyorFiles.DestinyorFolder;
 					enemies = true;
 				}
-				if(location.equals(Destinyor.DestinyorSpells)) {
-					location = Destinyor.DestinyorFolder;
+				if(location.equals(DestinyorFiles.DestinyorSpells)) {
+					location = DestinyorFiles.DestinyorFolder;
 					spells = true;
 				}
                                 
-                                if(location.equals(Destinyor.DestinyorNpcs)) {
-                                    location = Destinyor.DestinyorFolder;
+                                if(location.equals(DestinyorFiles.DestinyorNpcs)) {
+                                    location = DestinyorFiles.DestinyorFolder;
                                     dialouges = true;
                                 }
 				File dir = new File(location);
 				dir.mkdirs();
 				if(settings) {
-					location = Destinyor.DestinyorSettings;
+					location = DestinyorFiles.DestinyorSettings;
 				}
 				if(saves) {
-					location = Destinyor.DestinyorSaves;
+					location = DestinyorFiles.DestinyorCharacters;
 				}
 				if(enemies) {
-					location = Destinyor.DestinyorEnemies;
+					location = DestinyorFiles.DestinyorEnemies;
 				}
 				if(spells) {
-					location = Destinyor.DestinyorSpells;
+					location = DestinyorFiles.DestinyorSpells;
 				}
                 if(dialouges) {
-                	location = Destinyor.DestinyorNpcs;
+                	location = DestinyorFiles.DestinyorNpcs;
                 }
                 WriteToFiles(location);
 			}
@@ -70,45 +78,45 @@ public class FileLoader {
 	
 	public static void ReadFromFiles(String location) {
 		
-		if(location.equals(Destinyor.DestinyorSettings)) {
+		if(location.equals(DestinyorFiles.DestinyorSettings)) {
 			Reader.ReadSettings(location);
 		}
 		
-		if(location.equals(Destinyor.DestinyorEnemies)) {
+		if(location.equals(DestinyorFiles.DestinyorEnemies)) {
 			Reader.ReadEnemies(location);
 		}
 		
-		if(location.equals(Destinyor.DestinyorSaves)) {
+		if(location.equals(DestinyorFiles.DestinyorCharacters)) {
 			Reader.ReadPlayer(location);
 		}
 		
-		if(location.equals(Destinyor.DestinyorSpells)) {
+		if(location.equals(DestinyorFiles.DestinyorSpells)) {
 			Reader.ReadSpells(location);
 		}
                 
-                if(location.equals(Destinyor.DestinyorNpcs)) {
+                if(location.equals(DestinyorFiles.DestinyorNpcs)) {
                     Reader.ReadNpcs(location);
                 }
 	}
 	
 	public static void WriteToFiles(String location) {
 		
-		if(location.equals(Destinyor.DestinyorSettings)) {
+		if(location.equals(DestinyorFiles.DestinyorSettings)) {
 			Writer.writeSettingFile(location);
 		}
-		if(location.equals(Destinyor.DestinyorSaves)) {
+		if(location.equals(DestinyorFiles.DestinyorCharacters)) {
 			Writer.writeDefaultSaveFile(location);
 		}
 		
-		if(location.equals(Destinyor.DestinyorEnemies)) {
+		if(location.equals(DestinyorFiles.DestinyorEnemies)) {
 			Writer.WriteEnemyFile(location);
 		}
 		
-		if(location.equals(Destinyor.DestinyorSpells)) {
+		if(location.equals(DestinyorFiles.DestinyorSpells)) {
 			Writer.WriteSpellFile(location);
 		}
                 
-                if(location.equals(Destinyor.DestinyorNpcs)) {
+                if(location.equals(DestinyorFiles.DestinyorNpcs)) {
                     Writer.writeNpcs(location);
                 }
 	}

@@ -15,8 +15,12 @@ public class SetGame {
 				"Name = ", "Element = ", "Damage = ", "Targets = ", "Condition = "
 		};
 		
+//		String[] stats1 = {
+//				""
+//		}
 		
-		input = file.engine.reader.Reader.Read(Destinyor.DestinyorSpells);
+		
+		input = file.engine.reader.Reader.Read(DestinyorFiles.DestinyorSpells);
 		splitter = input.split("");
 		
 		for(int i = 1; i < splitter.length; i++) {

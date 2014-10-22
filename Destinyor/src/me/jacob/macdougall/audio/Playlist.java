@@ -38,23 +38,14 @@ public class Playlist {
 		if(levelID == LevelMap.level) {
 			for(Sound song : songs.values()) {
 				if(checkSongs())
-				//if(song.playing())
-				//if(song.clip.getFrameLength() != song.clip.getFramePosition()) {
-					//if(song.clip.)
 					return;
-					
-				//} else {
-					//song.stopSound();
-				//}
 			}
 			nextSong();
-			//song.playSound();
 		}
 	}
 	
 	public void nextSong() throws LineUnavailableException, IOException {
 		int oldSong = nextSong;
-		//System.out.println("Size of Songs: " + this.songs.size());
 		nextSong = rand.nextInt(this.songs.size());
 		if(oldSong == nextSong && this.songs.size() >= 2) {
 			while(oldSong == nextSong) {
@@ -68,7 +59,6 @@ public class Playlist {
 	}
 	
 	public static boolean checkSongs() {
-		//System.out.println(Sound.checkSongs());
 		if(Sound.checkSongs()) {
 			return true;
 		}
@@ -77,16 +67,7 @@ public class Playlist {
 			for(Sound sounds : playlist.songs.values()) {
 				if(sounds.isPlaying) { //Checks to make sure the song is a song and not a sound effect
 					return true;
-				} //else {
-//					if(playlist.levelID == LevelMap.level) {
-//					//nextSong = rand.nextInt(playlist.songs.size());
-//					//song = playlist.songs.get(nextSong - 1);
-//					//song.open();
-//					playlist.Play();
-//					//song.loop();
-//					playlist.isPlaying = true;
-//					}
-				//}
+				}
 			}
 		}
 		return false;

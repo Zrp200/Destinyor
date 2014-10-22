@@ -7,6 +7,7 @@ import java.util.Map;
 //import javax.swing.JFrame;
 
 import me.jacob.macdougall.graphics.Buttons;
+import me.jacob.macdougall.graphics.Scrollbars;
 //import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 import graphic.engine.window.Resolution;
@@ -41,8 +42,7 @@ public class ResolutionButton {
 	
 	public void render(Screen screen) {
 		if(rOn) {
-			//for(int i = 0; i < Resolution.Resolutions.length; i++) {
-                        for(String res : Resolution.Resolutions) {
+			for(String res : Resolution.Resolutions) {
 				Buttons button = buttons.get(res);
 				button.render(screen);
 			}
@@ -83,6 +83,21 @@ public class ResolutionButton {
 				rOn = false;
 			}
 		}
+		
+		}
+	}
+	
+	public void setRes(int x, int y, Scrollbars scroll) {
+		if(rOn && Time.getKeyTimer(5, true)) {
+			Destinyor.Refresh = true;
+			Buttons button = buttons.get(Resolution.Resolutions[scroll.clicked()]);
+			if(button.inBox(x, y) || scroll.inBox(x, y)) {
+				resolution = Resolution.Resolutions[scroll.i];
+				width = Resolution.Width[scroll.i];
+				height = Resolution.Height[scroll.i];
+				menu.buttons.get(2)[1].setName(resolution);
+				rOn = false;
+			}
 		}
 	}
 	
@@ -104,14 +119,6 @@ public class ResolutionButton {
 				menu.buttons.get(2)[4].setName(Window);
 				wOn = false;
 			}
-//				Buttons button = buttons.get(Resolution.Resolutions[i]);
-//				if(button.inBox(x, y)) {
-//					resolution = Resolution.Resolutions[i];
-//					width = Resolution.Width[i];
-//					height = Resolution.Height[i];
-//					menu.buttons.get(2)[1].setName(resolution);
-//				}
-//			}
 		}
 	}
 	
@@ -128,16 +135,8 @@ public class ResolutionButton {
 			Destinyor.setSettings();
 			mustRestart = true;
 		}
-//		switch(Window) {
-//        case "Fullscreen": game.frame.setUndecorated(true);
-//            game.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//            break;
-//        case "Borderless Window": game.frame.setUndecorated(true);
-//            break;
-//    }
 		Destinyor.Refresh = true;
-		//game.frame.setL
-		Menus.menu = 0;
+		Menus.menu = Menus.getLastMenuState();
 	}
 	
 }

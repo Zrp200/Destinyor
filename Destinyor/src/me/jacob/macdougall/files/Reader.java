@@ -33,7 +33,7 @@ public class Reader {
 	public static void ReadEnemies(String location) {
 		BufferedReader br;
 		String[] Stats = {
-			"Name = ","Frame = ", "Gender = ", "Level = ", "Experience = ", "Health = ", "Strength = ", "Skill = ", "Speed = ", "Luck = ", "Defense = ", "Gold = ", "Resistance = ", "Spells = ", "X&Y = "
+			"Name = ","Frame = ", "Level = ", "Experience = ", "Health = ", "Strength = ", "Skill = ", "Speed = ", "Luck = ", "Defense = ", "Wisdom = ", "Gold = ", "Resistance = ", "Spells = ", "X&Y = "
 		};
 		
 		try{
@@ -49,6 +49,7 @@ public class Reader {
             int Spd;
             int Luk;
             int Def;
+            int Wis;
                           
             String Name;
             String Frame;
@@ -57,43 +58,37 @@ public class Reader {
             Spells[] spells;
             String[] spiltSpells;
             String getSpells;
-            String Gender;
             String[] pos;
+            
+            String[] stats = new String[Stats.length];
+            
             String endEnemy = br.readLine();
             
             while(endEnemy != null) {
-            	br.skip(Stats[0].length());
-    	        Name = br.readLine();
+            	for(int i = 0; i < stats.length; i++) {
+            		br.skip(Stats[i].length());
+            		stats[i] = br.readLine().trim();
+            	}
+            	
+            	endEnemy = br.readLine();
+            	
+    	        Name = stats[0];
                 KEYS.add(Name);
-                br.skip(Stats[1].length());
-                Frame = br.readLine();
-                br.skip(Stats[2].length());
-				Gender = br.readLine();
-				br.skip(Stats[3].length());
-				LVL = Integer.parseInt(br.readLine());
-				br.skip(Stats[4].length());
-				Exp = Integer.parseInt(br.readLine());
-				br.skip(Stats[5].length());
-				HP = Integer.parseInt(br.readLine());
-				br.skip(Stats[6].length());
-				Str = Integer.parseInt(br.readLine());
-				br.skip(Stats[7].length());
-				Skl = Integer.parseInt(br.readLine());
-				br.skip(Stats[8].length());
-				Spd = Integer.parseInt(br.readLine());
-				br.skip(Stats[9].length());
-				Luk = Integer.parseInt(br.readLine());
-				br.skip(Stats[10].length());
-	            Def = Integer.parseInt(br.readLine());
-				br.skip(Stats[11].length());
-				Gold = Integer.parseInt(br.readLine());
-				br.skip(Stats[12].length());
-				Resistances = br.readLine();
-				br.skip(Stats[13].length());
-				getSpells =  br.readLine().trim();
-				br.skip(Stats[14].length());
-				pos = br.readLine().split(",");
-                endEnemy = br.readLine();
+                Frame = stats[1];
+				LVL = Integer.parseInt(stats[2]);
+				Exp = Integer.parseInt(stats[3]);
+				HP = Integer.parseInt(stats[4]);
+				Str = Integer.parseInt(stats[5]);
+				Skl = Integer.parseInt(stats[6]);
+				Spd = Integer.parseInt(stats[7]);
+				Luk = Integer.parseInt(stats[8]);
+	            Def = Integer.parseInt(stats[9]);
+	            Wis = Integer.parseInt(stats[10]);
+				Gold = Integer.parseInt(stats[11]);
+				Resistances = stats[12];
+				getSpells =  stats[13].trim();
+				pos = stats[14].trim().split(",");
+            	
                 for(int i = 0; i < Element.getElements().length; i++) {
                     if(Resistances.equals(Element.getElement(i).getElement())) {
                         Resistance = Element.getElement(i);
@@ -111,8 +106,7 @@ public class Reader {
                 }
                 
                     System.out.println("Reader.ReadEnemies: " + Name);
-	            
-                Enemy.enemies.put(Name, new Enemy(Name, Frame, Gender, LVL, Exp, HP, Str, Skl, Spd, Luk, Def, Gold, Resistance, spells, Integer.parseInt(pos[0].trim()), Integer.parseInt(pos[1].trim())));
+                Enemy.enemies.put(Name, new Enemy(Name, Frame, LVL, Exp, HP, Str, Skl, Spd, Luk, Def, Wis, Gold, Resistance, spells, Integer.parseInt(pos[0].trim()), Integer.parseInt(pos[1].trim())));
                 DebugWriter.println("Menu: Adding: " + Name);
             }
 			
@@ -155,9 +149,12 @@ public class Reader {
                     
 	                if(dialouge.contains(".txt")) {
 	                
-	                if(Destinyor.home.contains("\\"))
-	                dialouge = ReadDialouge(Destinyor.DestinyorFolder + "\\Dialouges\\" + dialouge);
-	                else dialouge = ReadDialouge(Destinyor.DestinyorFolder + "//Dialouges//" + dialouge);
+	                	
+	                dialouge = ReadDialouge(DestinyorFiles.DestinyorFolder + DestinyorFiles.fileSplit + "Dialouges" + DestinyorFiles.fileSplit + dialouge);
+	                	
+//	                if(Destinyor.home.contains("\\"))
+//	                dialouge = ReadDialouge(Destinyor.DestinyorFolder + "\\Dialouges\\" + dialouge);
+//	                else dialouge = ReadDialouge(Destinyor.DestinyorFolder + "//Dialouges//" + dialouge);
 	                }
 	                
 	                endNpc = br.readLine();
@@ -224,11 +221,11 @@ public class Reader {
             
             if(!file.exists()) {
             String location1 = location;
-            if(Destinyor.home.contains("\\")) {
-                location = "\\Dialouges";
-            } else {
-                location = "//Dialouges";
-            }
+            //if(Destinyor.home.contains("\\")) {
+                location = DestinyorFiles.fileSplit + "Dialouges";
+           // } else {
+                //location = "//Dialouges";
+            //}
             File dir = new File(location);
             dir.mkdirs();
             

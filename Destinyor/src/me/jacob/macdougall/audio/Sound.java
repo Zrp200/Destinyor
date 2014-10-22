@@ -26,22 +26,9 @@ public class Sound implements LineListener {
 	public static int nextSong;
 	
 	public boolean isPlaying = false;
-//	public Sound(String location) {
-//		try {
-//	    	audioInputStream = AudioSystem.getAudioInputStream(new File(location).getAbsoluteFile());
-//	        clip = AudioSystem.getClip();
-//	        clip.open(audioInputStream);
-//	        Line.Info linfo = new Line.Info(Clip.class);
-//	        line = AudioSystem.getLine(linfo);
-//	    } catch(Exception ex) {
-//	        System.out.println("Error with playing sound.");
-//	        ex.printStackTrace();
-//	    }
-//	}
 	public AudioInputStream ais; // Permanet AudioInputStream object
 	public AudioInputStream audioInputStream;
 	public Clip clip;
-	//public LineListener ls;
 	public Line line;
 	public File soundFile;
 	public FloatControl volume;
@@ -52,7 +39,6 @@ public class Sound implements LineListener {
 	public float audioLevel = -20; // -80 == mute, 0 == normal, 6 == max
 	
 	public void playSound() {
-		//System.out.println("Playing: " + name);
 		DebugWriter.println("Playing: " + soundFile.getName());
 	        clip.start();
 	        isPlaying = true;
@@ -68,7 +54,6 @@ public class Sound implements LineListener {
 		
 		if(clip != null && !clip.isOpen()) {
 			System.out.println("Opening: " + name);
-			
 			clip.open(audioInputStream);
 			volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			volume.setValue(audioLevel);
@@ -95,12 +80,7 @@ public class Sound implements LineListener {
 	public void loop() throws LineUnavailableException, IOException {
 		if(this.loopable && this.clip.isOpen()) {
 			if(!this.clip.isActive()) {
-				//System.out.println("True");
-				//audioInputStream = ais;
 				clip.loop(1);
-				//open();
-				//playSound();
-				
 			}
 		}
 	}
@@ -115,7 +95,6 @@ public class Sound implements LineListener {
 			try {
 				open();
 			} catch (LineUnavailableException | IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -128,7 +107,6 @@ public class Sound implements LineListener {
 	    if (type == LineEvent.Type.STOP) {
 	      stopSound();
 	    }
-		// TODO Auto-generated method stub
 	}
 	  
 	  public Sound(String location, boolean loopable) {
@@ -136,20 +114,16 @@ public class Sound implements LineListener {
 		  this.name = location;
 		  names.put(names.size(), name);
 		  try {
-	    soundFile = new File(location);
+			  soundFile = new File(location);
 
-	    DebugWriter.println("Adding " + soundFile.getName());
+			  DebugWriter.println("Adding " + soundFile.getName());
 	    
-	    Line.Info linfo = new Line.Info(Clip.class);
-	    line = AudioSystem.getLine(linfo);
-	    clip = (Clip) line;
-	    clip.addLineListener(this);
-	    
-	    audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-	    ais = audioInputStream;
-	    
-	    //ais = audioInputStream;
-	    
+			  Line.Info linfo = new Line.Info(Clip.class);
+			  line = AudioSystem.getLine(linfo);
+			  clip = (Clip) line;
+			  clip.addLineListener(this);
+			  audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+			  ais = audioInputStream;
 		} catch(Exception ex) {
 		        System.out.println("Error with playing sound: " + name);
 		        ex.printStackTrace();
@@ -162,11 +136,6 @@ public class Sound implements LineListener {
 					if(sound.isPlaying && sound.loopable) { //Checks to make sure the song is a song and not a sound effect
 						return true;
 					}
-						//if(playlist.levelID == LevelMap.level)
-						//nextSong = rand.nextInt(playlist.songs.size());
-						//playlist.songs.get(nextSong);
-						//playlist.isPlaying = true;
-					//}
 				}
 				return false;
 			}
@@ -184,23 +153,5 @@ public class Sound implements LineListener {
 	  public String getName() {
 		  return soundFile.getName();
 	  }
-		//}
-
-//	  public void update(LineEvent le) {
-//	    LineEvent.Type type = le.getType();
-//	    if (type == LineEvent.Type.OPEN) {
-//	      System.out.println("OPEN");
-//	    } else if (type == LineEvent.Type.CLOSE) {
-//	      System.out.println("CLOSE");
-//	      System.exit(0);
-//	    } else if (type == LineEvent.Type.START) {
-//	      System.out.println("START");
-//	      playingDialog.setVisible(true);
-//	    } else if (type == LineEvent.Type.STOP) {
-//	      System.out.println("STOP");
-//	      playingDialog.setVisible(false);
-//	      clip.close();
-//	    }
-//	  }
 	
 }
