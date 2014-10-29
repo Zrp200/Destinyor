@@ -140,6 +140,7 @@ public class UI {
 			for(int j = 0; j < h; j++) {
 				screen.render(Art.getSpritesheet()[18][3],  (0 * Tile.SIZE), ((j + 0) * Tile.SIZE));
 				screen.render(Art.getSpritesheet()[19][3], (15 * Tile.SIZE) - 3, (j + 0) * Tile.SIZE);
+				screen.render(Art.getSpritesheet()[19][3], 12 * Tile.SIZE, (j + 9) * Tile.SIZE);
 			}
 		}
 	}

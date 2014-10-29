@@ -6,21 +6,6 @@ import me.jacob.macdougall.player.Player;
 
 public class Calculations {
 	
-	public static int pAttack(Player player, Enemy enemy) {
-		if(player.hasEquipment()) {
-			if(enemy.hasEquipment()) {
-				return attackWithBoth(player, enemy); // Attack with weapons, and armour being taken into account
-			} else {
-				return attackWithWeapons(player, enemy); // Attack with only weapons being taken into account
-			}
-		} else {
-			if(enemy.hasEquipment()) {
-				return attackWithArmour(player, enemy); // Attack with only armour being taken into account
-			}
-		}
-		return 1;
-	}
-	
 	public static boolean canDamage(int damage) {
 			if(damage > 0) {
 				return true;
@@ -42,13 +27,32 @@ public class Calculations {
 		for(int i = 0; i < weapons.length; i++) {
 			damage += weapons[i].damage;
 		}
-		damage += (strBonus(player.Str) + sklBonus(player.Skl) + wisBonus(player.Wis));
+		damage += armedDamage(player.getStr(), player.getSkl(), player.getSpd(), player.getWis());
 		for(int i = 0; i < armour.length; i++) {
 			damage -= armour[i].damage;
 		}
-		damage -= sklBonus(enemy.getSkl()) + defBonus(enemy.getDef()) + wisBonus(enemy.getWis());
+		damage -= equippedDamage(enemy.getDef(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
 		if(canDamage(damage)) {
 			//int d = (int) (damage * player.skillcheck(enemy));
+			return damage;
+		} else {
+			return 1;
+		}
+	}
+	
+	public static int attackWithBoth(Enemy enemy, Player player) {
+		Equipment[] weapons = enemy.returnWeapons();
+		Equipment[] armour = player.returnArmour();
+		int damage = 0;
+		for(int i = 0; i < weapons.length; i++) {
+			damage += weapons[i].damage;
+		}
+		damage += armedDamage(enemy.getStr(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		for(int i = 0; i < armour.length; i++) {
+			damage -= armour[i].damage;
+		}
+		damage -= equippedDamage(player.getDef(), player.getSkl(), player.getSpd(), player.getWis());
+		if(canDamage(damage)) {
 			return damage;
 		} else {
 			return 1;
@@ -61,8 +65,23 @@ public class Calculations {
 		for(int i = 0; i < weapons.length; i++) {
 			damage += weapons[i].damage;
 		}
-		damage += armedDamage(player.Str, player.Skl, player.Spd, player.Wis);
+		damage += armedDamage(player.getStr(), player.getSkl(), player.getSpd(), player.getWis());
 		damage -= unequippedDamage(enemy.getDef(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		if(canDamage(damage)) {
+			return damage;
+		} else {
+			return 1;
+		}
+	}
+	
+	public static int attackWithWeapons(Enemy enemy, Player player) {
+		Equipment[] weapons = enemy.returnWeapons();
+		int damage = 0;
+		for(int i = 0; i < weapons.length; i++) {
+			damage += weapons[i].damage;
+		}
+		damage += armedDamage(enemy.getStr(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		damage -= unequippedDamage(player.getDef(), player.getSkl(), player.getSpd(), player.getWis());
 		if(canDamage(damage)) {
 			return damage;
 		} else {
@@ -73,12 +92,28 @@ public class Calculations {
 	public static int attackWithArmour(Player player, Enemy enemy) {
 		Equipment[] armour = enemy.returnArmour();
 		int damage = 0;
-		damage += unarmedDamage(player.Str, player.Skl, player.Spd, player.Wis);
+		damage += unarmedDamage(player.getStr(), player.getSkl(), player.getSpd(), player.getWis());
 		
 		for(int i = 0; i < armour.length; i++) {
 			damage -= armour[i].damage;
 		}
-		damage -= sklBonus(enemy.getSkl()) + defBonus(enemy.getDef()) + wisBonus(enemy.getWis());
+		damage -= equippedDamage(enemy.getDef(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		if(canDamage(damage)) {
+			return damage;
+		} else {
+			return 1;
+		}
+	}
+	
+	public static int attackWithArmour(Enemy enemy, Player player) {
+		Equipment[] armour = enemy.returnArmour();
+		int damage = 0;
+		damage += unarmedDamage(enemy.getStr(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		
+		for(int i = 0; i < armour.length; i++) {
+			damage -= armour[i].damage;
+		}
+		damage -= equippedDamage(player.getDef(), player.getSkl(), player.getSpd(), player.getWis());
 		if(canDamage(damage)) {
 			return damage;
 		} else {
@@ -88,7 +123,18 @@ public class Calculations {
 	
 	public static int attackWithoutBoth(Player player, Enemy enemy) {
 		int damage = 0;
-		damage += unarmedDamage(player.Str, player.Skl, player.Spd, player.Wis);
+		damage += unarmedDamage(player.getStr(), player.getSkl(), player.getSpd(), player.getWis());
+		damage -= unequippedDamage(enemy.getDef(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		if(canDamage(damage)) {
+			return damage;
+		}
+		return 1;
+	}
+	
+	public static int attackWithoutBoth(Enemy enemy, Player player) {
+		int damage = 0;
+		damage += unarmedDamage(enemy.getStr(), enemy.getSkl(), enemy.getSpd(), enemy.getWis());
+		damage -= unequippedDamage(player.getDef(), player.getSkl(), player.getSpd(), player.getWis());
 		if(canDamage(damage)) {
 			return damage;
 		}
@@ -124,21 +170,53 @@ public class Calculations {
 		return (Spd * 0.05f);
 	}
 	
+	/**
+	 * 
+	 * @param Str
+	 * @param Skl
+	 * @param Spd
+	 * @param Wis
+	 * @return
+	 */
 	public static int unarmedDamage(int Str, int Skl, int Spd, int Wis) {
 		float d = strBonus(Str) + sklBonus(Skl) + spdBonus(Spd);
 		return Math.round(d);
 	}
 	
+	/**
+	 * 
+	 * @param Def
+	 * @param Skl
+	 * @param Spd
+	 * @param Wis
+	 * @return
+	 */
 	public static int unequippedDamage(int Def, int Skl, int Spd, int Wis) {
 		float d = defBonus(Def) + sklBonus(Skl) + spdBonus(Spd);
 		return Math.round(d);
 	}
 	
+	/**
+	 * 
+	 * @param Str
+	 * @param Skl
+	 * @param Spd
+	 * @param Wis
+	 * @return
+	 */
 	public static int armedDamage(int Str, int Skl, int Spd, int Wis) {
 		float d = strBonus(Str) + sklBonus(Skl) + armedSpdBonus(Spd) + wisBonus(Wis);
 		return Math.round(d);
 	}
 	
+	/**
+	 * 
+	 * @param Def
+	 * @param Skl
+	 * @param Spd
+	 * @param Wis
+	 * @return
+	 */
 	public static int equippedDamage(int Def, int Skl, int Spd, int Wis) {
 		float d = defBonus(Def) + sklBonus(Skl) + armedSpdBonus(Spd) + wisBonus(Wis);
 		return Math.round(d);

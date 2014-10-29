@@ -191,7 +191,7 @@ public class Enemy extends Dummy implements Cloneable {
 	public int attack(Player player) {
 		if(damage == 0) {
 		Random random = new Random();
-		if(str - player.Def <= 0) {
+		if(str - player.getDef() <= 0) {
 			
 			damage = random.nextInt(2);
 			//players[eTargets].Hp -= random;
@@ -201,7 +201,7 @@ public class Enemy extends Dummy implements Cloneable {
 			TA = 0;
 			return damage;
 		} else {
-			damage = random.nextInt((str - player.Def));
+			damage = random.nextInt((str - player.getDef()));
 			//players[eTargets].Hp -= (Damage - players[eTargets].Def);
 			TA = 0;
 		}
@@ -226,46 +226,5 @@ public class Enemy extends Dummy implements Cloneable {
 //		return null;
 //	};
 	
-	public boolean hasEquipment() {
-		return !this.equipped.isEmpty();
-//		if(this.equipment.size() > 0) {
-//			return true;
-//		}
-//		return false;
-	}
 	
-	public Equipment[] armour() {
-		Equipment[] e = new Equipment[2]; // Only two hands
-		int i = 0;
-		for(Equipment equip : equipped.values()) {
-			if(equip.isWeapon()) {
-				e[i] = equip;
-				i++;
-			}
-		}
-		return e;
-	}
-	
-	public Equipment[] returnArmour() {
-		Equipment[] equip = this.armour();
-		Equipment[] e = new Equipment[equip.length];
-		int j = 0;
-		if(equip != null && equip[0] != null) {
-			for(int i = 0; i < equip.length; i++) {
-				if(equip[i] != null) {
-					e[i] = equip[i];
-					j++;
-				}
-			}
-			equip = new Equipment[j];
-			j = 0;
-			for(int i = 0; i < e.length; i++) {
-				if(e[i] != null) {
-				equip[j] = e[i];
-				j++;
-				}
-			}
-		}
-		return equip;
-	}
 }

@@ -48,6 +48,7 @@ public class BattleRender {
 			
 		
 			if(players[p].TA >= battle.limit) {
+				if(!point.ep)
 				point.p = true;
 				battles.commands.get(0).render(screen);
 				battles.commands.get(1).render(screen);
@@ -66,7 +67,7 @@ public class BattleRender {
 			//}
 		
 			if(Destinyor.Debug) {
-				GameFont.render(players[p].Hp + "", screen, 450, 16 + (p * 64));
+				GameFont.render(players[p].getHp() + "", screen, 450, 16 + (p * 64));
 			}
 		}
 		//battles.commands.get(2).y = 32;
@@ -113,7 +114,7 @@ public class BattleRender {
 			}
 			
 			if(enemy.attacking) {
-				GameFont.render(enemy.getName() + " Used " + "Attack: " + enemy.getName() + " did " + battle.tempEDamageHolder + " to " + players[battle.eTargets].Name, screen, X, Y);
+				GameFont.render(enemy.getName() + " Used " + "Attack: " + enemy.getName() + " did " + battle.tempEDamageHolder + " to " + players[battle.eTargets].getName(), screen, X, Y);
 			}
                 }
                 

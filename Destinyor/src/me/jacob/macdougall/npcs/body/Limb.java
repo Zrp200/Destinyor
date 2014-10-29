@@ -1,4 +1,4 @@
-package me.jacob.macdougall.npcs;
+package me.jacob.macdougall.npcs.body;
 
 import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.Screen;
@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Limbs {
+public class Limb {
 	
-	public static Map<String, Limbs> limbs = new HashMap<>();
+	public static Map<String, Limb> limbs = new HashMap<>();
 	public static Map<Integer, String> names = new HashMap<>();
 	
 	public Bitmap sprite;
@@ -18,12 +18,19 @@ public class Limbs {
 	int no;
 	public boolean renderable = false;
 	
-	public Limbs(String name, int no, boolean renderable) {
+	public Limb(String name, boolean renderable) {
 		this.name = name;
-		this.no = no;
 		this.renderable = renderable;
+		this.no = getLength();
 		limbs.put(name, this);
 		names.put(no, name);
+		if(getLength() > 1) {
+			Limb[] limbs = {
+				getLimb(no - 1), getLimb(no)	
+			};
+			
+			Limbs.setLimbs(limbs);
+		}
 	}
 	
 	
@@ -37,6 +44,10 @@ public class Limbs {
 		screen.render(sprite, x, y);
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 	public static int getNO(String name) {
 		return limbs.get(name).no;
 	}
@@ -45,15 +56,15 @@ public class Limbs {
 		return names.get(NO);
 	}
 	
-	public static Limbs getLimb(String name) {
+	public static Limb getLimb(String name) {
 		return limbs.get(name);
 	}
 	
-	public static Limbs getLimb(int NO) {
+	public static Limb getLimb(int NO) {
 		return limbs.get(names.get(NO));
 	}
 	
-	public static Collection<Limbs> getValues() {
+	public static Collection<Limb> getValues() {
 		return limbs.values();
 	}
 	
@@ -68,4 +79,7 @@ public class Limbs {
 	public static int getNamesSize() {
 		return names.size();
 	}
+	
+	
+	
 }

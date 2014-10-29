@@ -219,13 +219,13 @@ public class NPC {
 		if(Player.getPlayers()[0] != null) {
 			for(int i = 0; i < dialouge.length; i++) {
 				if(dialouge[i].contains("p1.name")) {
-					dialouge[i] = dialougePerm[i].replace("p1.name", Player.getPlayers()[0].Name);
+					dialouge[i] = dialougePerm[i].replace("p1.name", Player.getPlayers()[0].getName());
 				}
 				if(dialouge[i].contains("p1.gender")) {
 					// if there are no actual players this will throw an exception and crash the game, which is kinda the point
 					String gender = "";
 					try {
-					gender = (Player.getActualPlayers()[0].Gender.equalsIgnoreCase("Male") ? "boy" : "girl");
+					gender = (Player.getActualPlayers()[0].getGender().equalsIgnoreCase("Male") ? "boy" : "girl");
 					} catch(NullPointerException e) {
 						e.printStackTrace();
 						System.exit(-1);
@@ -249,13 +249,13 @@ public class NPC {
 		if(Player.getPlayers()[1] != null) {
 			for(int i = 0; i < dialouge.length; i++) {
 				if(dialouge[i].contains("p2.name")) {
-					dialouge[i] = dialougePerm[i].replace("p2.name", Player.getPlayers()[1].Name);
+					dialouge[i] = dialougePerm[i].replace("p2.name", Player.getPlayers()[1].getName());
 				}
 				if(dialouge[i].contains("p2.gender")) {
 						if(Player.getActualPlayers() != null) {
 					// if there are no actual players this will throw an exception and crash the game, which is kinda the point
 						String gender = "";
-						gender = (Player.getActualPlayers()[1].Gender.equalsIgnoreCase("Male") ? "boy" : "girl");
+						gender = (Player.getActualPlayers()[1].getGender().equalsIgnoreCase("Male") ? "boy" : "girl");
 						dialouge[i] = dialougePerm[i].replace("p2.gender", gender);
 					} else {
 						dialouge[i] = dialougePerm[i].replace("p2.gender", "you");
@@ -277,13 +277,13 @@ public class NPC {
 		if(Player.getPlayers()[2] != null) {
 			for(int i = 0; i < dialouge.length; i++) {
 				if(dialouge[i].contains("p3.name")) {
-					dialouge[i] = dialougePerm[i].replace("p3.name", Player.getPlayers()[2].Name);
+					dialouge[i] = dialougePerm[i].replace("p3.name", Player.getPlayers()[2].getName());
 				}
 				if(dialouge[i].contains("p3.gender")) {
 					if(Player.getActualPlayers() != null) {
 				// if there are no actual players this will throw an exception and crash the game, which is kinda the point
 						String gender = "";
-						gender = (Player.getActualPlayers()[2].Gender.equalsIgnoreCase("Male") ? "boy" : "girl");
+						gender = (Player.getActualPlayers()[2].getGender().equalsIgnoreCase("Male") ? "boy" : "girl");
 						dialouge[i] = dialougePerm[i].replace("p3.gender", gender);
 					} else {
 						dialouge[i] = dialougePerm[i].replace("p3.gender", "you");
@@ -305,13 +305,13 @@ public class NPC {
 		if(Player.getPlayers()[3] != null) {
 			for(int i = 0; i < dialouge.length; i++) {
 				if(dialouge[i].contains("p4.name")) {
-					dialouge[i] = dialougePerm[i].replace("p4.name", Player.getPlayers()[3].Name);
+					dialouge[i] = dialougePerm[i].replace("p4.name", Player.getPlayers()[3].getName());
 				}
 				if(dialouge[i].contains("p4.gender")) {
 					if(Player.getActualPlayers() != null) {
 				// if there are no actual players this will throw an exception and crash the game, which is kinda the point
 						String gender = "";
-						gender = (Player.getActualPlayers()[3].Gender.equalsIgnoreCase("Male") ? "boy" : "girl");
+						gender = (Player.getActualPlayers()[3].getGender().equalsIgnoreCase("Male") ? "boy" : "girl");
 						dialouge[i] = dialougePerm[i].replace("p4.gender", gender);
 					} else {
 						dialouge[i] = dialougePerm[i].replace("p4.gender", "you");

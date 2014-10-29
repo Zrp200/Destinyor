@@ -1,5 +1,7 @@
 package me.jacob.macdougall.files;
 
+import java.util.Locale;
+
 import me.jacob.macdougall.Destinyor;
 
 public class DestinyorFiles {
@@ -8,6 +10,8 @@ public class DestinyorFiles {
 	
 	public static final String home = System.getProperty("user.home");
 	public static final String fileSplit = System.getProperty("file.separator");
+	//public static final String locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
+	public static final Locale LOCALE = Locale.getDefault();
     public static final String DestinyorFolder = home + fileSplit + "Documents" + fileSplit + Destinyor.title;
     
     public static String DestinyorCharacters = DestinyorFolder + fileSplit + "Save" + ".destinyor";
@@ -31,7 +35,7 @@ public class DestinyorFiles {
     
     
     public static void setFile(String file, String url) {
-    	if(DestinyorCharacters.contains(file)) {
+    	if(DestinyorCharacters.contains(file) || file.contains("Characters.destinyor")) {
     		DestinyorCharacters = url;
     	}
     	else
@@ -61,7 +65,6 @@ public class DestinyorFiles {
     	if(DestinyorCharacter1Sheet.contains(file)) {
     		DestinyorCharacter1Sheet = fileSplit + file;
     		DestinyorCharacter1Sheet = DestinyorModFolder + DestinyorCharacter1Sheet;
-    		//System.out.println(DestinyorCharacter1Sheet);
     	}
     	if(DestinyorCharacter2Sheet.contains(file)) {
     		DestinyorCharacter2Sheet = fileSplit + file;

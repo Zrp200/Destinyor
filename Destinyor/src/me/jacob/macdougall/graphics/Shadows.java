@@ -27,54 +27,15 @@ public class Shadows {
 		try {
 			image = Art.convertSpritesheet(bitmap, this);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//pixels = bitmap.pixels;
-//		pixels = new int[LevelMap.SIZE * LevelMap.SIZE];
-//		//pixels = new int[LevelMap.SIZE * LevelMap.SIZE][LevelMap.SIZE];
-//		
-//		for(int i = 0; i < 32; i++) {
-//			for(int j = 0; j < 32; j++) {
-//				pixels = image.getRGB(0, 0, 32, 32, bitmap.pixels, 0, 32);
-//			}
-//		}
 		
 		
 	}
 	
-//	public boolean inRange(int x, int y) {
-//        	if(Player.X >= x - 8 && Player.X <= x + 8 && Player.Y >= y - 6 && Player.Y <= y + 6) {
-//        		//System.out.println(x + ":" + y);
-//        		return true;
-//        	} else {
-//        		//System.out.println(x + ":" + y);
-//        		return false;
-//        	}  
-//	}
-	
 	public Bitmap getShadows(int direction) {
-		//if(shadow == null) {
-		//Bitmap shadow = new Bitmap(LevelMap.SIZE, LevelMap.SIZE);
-		//Bitmap bitmaps = bitmap;
 		Bitmap bitmaps = new Bitmap(32, 32);
 		
-		//shadow.pixels = bitmaps.pixels;
-		
-		//int[] pixels = new int[32 * (32 / 4)];
-		//shadowPixels = pixels;
-		
-//		int col;
-//		for(int i = 0; i < LevelMap.SIZE; i++) {
-//			//for(int j = 0; j < LevelMap.SIZE; j++) {
-//				col = image.getRGB(i, 0);
-//				//switch(direction) {
-//				//case LEFT: 
-//				//}
-//				bitmaps.pixels[i] = (col) - (col - (col));
-//				//int col = (r << 16) | (g << 8) | b;
-//			//}
-//		}
 		image.getRGB(0, 0, 32, 32, bitmaps.pixels, 0, 32);
 		
 		switch(direction) {

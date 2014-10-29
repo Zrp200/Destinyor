@@ -114,6 +114,12 @@ public class Time {
 		}
 	}
         
+        /**
+         * Get Key Timer, goes up by 60 every second, aka relies on the ups to function
+         * @param amount Amount to test if true
+         * @param UseTime UseTime if you want it to use time when called, or after a button pressed
+         * @return
+         */
         public static boolean getKeyTimer(int amount, boolean UseTime) {
         	if(UseTime) {
                     return keyTimer(amount);

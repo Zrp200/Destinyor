@@ -10,8 +10,8 @@ import me.jacob.macdougall.player.Player;
 
 public class PlayerBattle {
 	
-	public Spells spell = null;
-	public Pointer point = null;
+	public static Spells spell = null;
+	public static Pointer point = null;
 	
 	public static void turn() {
 		
@@ -37,16 +37,16 @@ public class PlayerBattle {
 		//point = new Pointer();
 	}
 	
-	public void calculateDamage(InputHandler input, Enemy[] entities, Move move) {
+	public static void calculateDamage(InputHandler input, Enemy[] entities, Move move) {
 		if(spell != null && spell.inUse) {
-			this.spellHandler(spell.player, input, entities);
+			spellHandler(spell.player, input, entities);
 		} else {
           // bInput.Combat(Player.getActualPlayers(), entities, input);
 			turn();
 		}
 	}
 	
-    public void spellHandler(Player player, InputHandler input, Enemy[] entities) {
+    public static void spellHandler(Player player, InputHandler input, Enemy[] entities) {
     	boolean[] anyFocused = new boolean[entities.length + 1];
         
     	Spell: {
@@ -54,7 +54,7 @@ public class PlayerBattle {
     			for(Enemy enemy : entities) {
     				if(enemy.Focused && enemy.alive()) {
     					if(player.getSpells(point.spell).effect == Spells.Requires_Combo) {
-    						this.spell =  player.getSpells(point.spell);
+    						spell =  player.getSpells(point.spell);
                             player.getSpells(point.spell).attack(player, enemy);
                             player.TA = 0;
                             point.spell = 1;
@@ -78,38 +78,32 @@ public class PlayerBattle {
     	}
     }
     
-    public boolean anyFocused(boolean[] array)
+    public static boolean anyFocused(boolean[] array)
     {
     for(boolean b : array) if(b) return true;
     return false;
     }
     
-    public void PlayerAttack(Player player, Spells spells, Enemy[] entities) {
-        Equipment[] items = new Equipment[player.equipped.size()];
-        int i = 0;
-        if(player.equipped != null)
-        for(Equipment equipment : player.equipped.values()) {
-            if(equipment.isWeapon()) {
-                items[i] = equipment;
-                i++;
-            }
-        }
-		if(spells.name.contains("Attack") && player.canAttack) {
-                        if(items.length > 0) {
-                        	//randomDamage = randomGen.nextInt(player.Str + items[0].damage);
-                        } else {
-                            //randomDamage = randomGen.nextInt(player.Str);
-                        }
-                        
-			for(Enemy enemy : entities) {
-				if(enemy.Focused) {
-					player.attack(enemy);
-                    //ptarget = enemy.getName();
-					player.TA = 0;
-				}
+    public static void PlayerAttack(Player player, Spells spells, Enemy enemy) {
+        player.attack(enemy);
+    }
+    
+    public static int pAttack(Player player, Enemy enemy) {
+		if(player.hasEquipment()) {
+			if(enemy.hasEquipment()) {
+				return Calculations.attackWithBoth(player, enemy); // Attack with weapons, and armour being taken into account
+			} else {
+				return Calculations.attackWithWeapons(player, enemy); // Attack with only weapons being taken into account
+			}
+		} else {
+			if(enemy.hasEquipment()) {
+				return Calculations.attackWithArmour(player, enemy); // Attack with only armour being taken into account
+			} else {
+				return Calculations.attackWithoutBoth(player, enemy);
 			}
 		}
-    }
+		//return 1;
+	}
 	
 	
 	

@@ -39,11 +39,6 @@ public class MassSprites {
 	}
 	
 	public void render(Screen screen) {
-		
-		
-		
-		//System.out.println("Rendering");
-		//System.out.println(frames[3] - frames[2]);
 		if(map != null) {
 		for(int i = 0; i < frames[1] - frames[0]; i++)
 			for(int j = 0; j < frames[3] - frames[2]; j++)

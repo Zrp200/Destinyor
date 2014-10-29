@@ -101,7 +101,7 @@ public class Move {
                     }
                 }
                 if(UI.menu == UI.Equipment || UI.menu == UI.Inventory || (UI.menu >= UI.Player1 && UI.menu <= UI.Player4)) {
-                	if(Keys.MoveRight() && Time.getKeyTimer(10, true)) {
+                	if(Keys.MoveRight() && Time.getKeyTimer(10, false)) {
                 		if(UI.menu >= UI.Player1 && UI.menu <= UI.Player4) {
                 		UI.menu++;;
                 		}
@@ -113,7 +113,7 @@ public class Move {
                 		}
                 		Time.resetKeyTimer();
                 	}
-                	if(Keys.MoveLeft() && Time.getKeyTimer(10, true)) {
+                	if(Keys.MoveLeft() && Time.getKeyTimer(10, false)) {
                 		if(UI.menu >= UI.Player1 && UI.menu <= UI.Player4) {
                     		UI.menu--;
                     		}

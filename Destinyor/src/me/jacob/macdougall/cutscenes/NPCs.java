@@ -25,9 +25,7 @@ public class NPCs extends NPC {
         super(name + "c", frame, x, y, Dialouge, false);
         absoluteName = name + "c";
         DebugWriter.println("Adding NPC: " + absoluteName);
-        //System.out.println(absoluteName);
         trueName = name.replace("" + id, "");
-        //System.out.println(trueName);
         this.cutscene = true;
         cNpcs.put(name, this);
         this.id = id;
@@ -37,8 +35,6 @@ public class NPCs extends NPC {
     public void init() {
     	for(int i = 0; i < dialouge.length; i++) {
         	dialouge[i] = dialouge[i].replaceAll(absoluteName, trueName);
-        	//dialouge[i].replaceAll(absoluteName, trueName);
-        	//System.out.println(dialouge[i].replaceAll(absoluteName, trueName));
         }
     }
     

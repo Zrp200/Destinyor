@@ -25,35 +25,35 @@ public class Keywords {
 		args = args.toLowerCase(Locale.getDefault());
 		try {
 		if(args.contains("p1" + name)) {
-			args.replace("p1" + name, Player.getPlayers()[0].Name);
+			args.replace("p1" + name, Player.getPlayers()[0].getName());
 			//return args;
 		}
 		if(args.contains("p2" + name)) {
-			args.replace("p2" + name, Player.getPlayers()[1].Name);
+			args.replace("p2" + name, Player.getPlayers()[1].getName());
 			//return args;
 		}
 		if(args.contains("p3" + name)) {
-			args.replace("p3" + name, Player.getPlayers()[2].Name);
+			args.replace("p3" + name, Player.getPlayers()[2].getName());
 			//return args;
 		}
 		if(args.contains("p4" + name)) {
-			args.replace("p4" + name, Player.getPlayers()[3].Name);
+			args.replace("p4" + name, Player.getPlayers()[3].getName());
 			//return args;
 		}
 		if(args.contains("p1" + gender)) {
-			args.replace("p1" + gender, Player.getPlayers()[0].Gender.equalsIgnoreCase("male") ? "boy" : "girl");
+			args.replace("p1" + gender, Player.getPlayers()[0].getGender().equalsIgnoreCase("male") ? "boy" : "girl");
 			//return args;
 		}
 		if(args.contains("p2" + gender)) {
-			args.replace("p2" + gender, Player.getPlayers()[1].Gender.equalsIgnoreCase("male") ? "boy" : "girl");
+			args.replace("p2" + gender, Player.getPlayers()[1].getGender().equalsIgnoreCase("male") ? "boy" : "girl");
 			//return args;
 		}
 		if(args.contains("p3" + gender)) {
-			args.replace("p3" + gender, Player.getPlayers()[2].Gender.equalsIgnoreCase("male") ? "boy" : "girl");
+			args.replace("p3" + gender, Player.getPlayers()[2].getGender().equalsIgnoreCase("male") ? "boy" : "girl");
 			//return args;
 		}
 		if(args.contains("p4" + gender)) {
-			args.replace("p4" + gender, Player.getPlayers()[3].Gender.equalsIgnoreCase("male") ? "boy" : "girl");
+			args.replace("p4" + gender, Player.getPlayers()[3].getGender().equalsIgnoreCase("male") ? "boy" : "girl");
 			//return args;
 		}
 		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {

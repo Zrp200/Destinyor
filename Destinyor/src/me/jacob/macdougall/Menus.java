@@ -146,6 +146,7 @@ public class Menus {
 					case 0: isOn = false;
 							mainMenu = false;
 							menu = -1;
+							mouse.resetMouseWheel();
 							movement(move);
 							break;
 							
@@ -165,16 +166,20 @@ public class Menus {
 				}
 			}
 			if(menu == 2) {
+				rButton.setRes(pressed[0], pressed[1]);
 				rButton.setWindow(pressed[0], pressed[1]);
-				if(buttons.get(menu)[1].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, true)) {
+				rButton.setSelected(mouse);
+				if(buttons.get(menu)[1].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
 					rButton.rClick();
+					Time.resetKeyTimer();
 					Destinyor.Refresh = true;
 				} else
 				if(buttons.get(menu)[2].inBox(pressed[0], pressed[1])) {
 					rButton.accept(game);
 				} else
-				if(buttons.get(menu)[4].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, true)) {
+				if(buttons.get(menu)[4].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
 					rButton.wClick();
+					Time.resetKeyTimer();
 				} else
 				if(rScroll.inBox(pressed[0], pressed[1])) {
 					rScroll.clicked();
@@ -184,15 +189,18 @@ public class Menus {
 	}
 	
 	public void inputChecker() {
-		if(Time.getKeyTimer(10, true) && menu != NONE) {
+		if(Time.getKeyTimer(10, false) && menu != NONE) {
 		if(Keys.MoveUp()) {
 			buttonSelected -= 1;
+			Time.resetKeyTimer();
 		}
 		if(Keys.MoveDown()) {
 			buttonSelected += 1;
+			Time.resetKeyTimer();
 		}
 		if(Keys.Enter()) {
 			click();
+			Time.resetKeyTimer();
 		}
 		}
 		if(menu != NONE) {

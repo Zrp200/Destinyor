@@ -8,30 +8,27 @@ import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.items.Items;
 import me.jacob.macdougall.magic.Element;
 import me.jacob.macdougall.magic.Spells;
+import me.jacob.macdougall.npcs.Dummy;
 import me.jacob.macdougall.npcs.Enemy;
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
-import graphic.engine.window.Resolution;
-import me.jacob.macdougall.battles.Calculations;
+import me.jacob.macdougall.battles.PlayerBattle;
 
 import java.awt.Graphics;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 
-public class Player {
+public class Player extends Dummy {
 	
 	// Static means that all instances of the class will have the same value. Only values relating to movement should be static as only one character moves.
         // The inventory should also be static as all players have access to it, same with gold.
 	public static Map<Integer, Items> inventory = new HashMap<>();
-	private static Map<Integer, Equipment> Einventory = new HashMap<>();
-	public Map<String, Equipment> equipped = new HashMap<>();
+	//private static Map<Integer, Equipment> Einventory = new HashMap<>();
+	//public Map<String, Equipment> equipped = new HashMap<>();
         public Map<Integer, Spells> spells = new HashMap<>();
 	public static Map<Integer, String> names = new HashMap<>();
 	public static Map<String, Player> players = new HashMap<>();
@@ -47,22 +44,16 @@ public class Player {
      
 	public Random random = new Random();
 	
+	public int HP; // This hp is for save files, because it won't be modified by easy difficultly, also used for leveling up
+	
 	public int TA = 0;
 	private boolean paused = true;
 	
-	public int Lvl;
-	public int Exp;
-	public int Hp;
-	public int Str;
-	public int Skl;
-	public int Spd;
-	public int Luk;
-	public int Def;
-    public int Wis;
     public int accuracy = 100;
-	public static int Gold;
 	public int chanceToMiss = 0;
 	public int rand = 0;
+	
+	private int threat = 100;
 	
 	public int TALimit = 500;
 	//
@@ -70,8 +61,8 @@ public class Player {
 	public static int temp = 0;
 	public static String combatName = "";
 	
-	public String Name;
-	public String Gender;
+	//public String Name;
+	//public String Gender;
 	public Element[] Resistance;
 	
 	public static boolean Attackable = false;
@@ -124,9 +115,10 @@ public class Player {
         }
         
 	public Player(String name, String gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, boolean inParty, Spells[] spells, Equipment[] items) {
-		
-		this.Name = name;
-		this.Gender = gender;
+		super(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, X, Y, spells, items);
+		HP = hp;
+		//this.Name = name;
+		//this.Gender = gender;
 		
                 this.spells.put(0, Spells.Attack);
                 
@@ -144,57 +136,29 @@ public class Player {
                 
                 this.spells.put(1, Spells.get("Fire Ball"));
                 
-		Lvl = lvl;
-		Exp = exp;
-		Hp = hp;
-		Str = str;
-		Skl = skl;
-		Spd = spd;
-		Luk = luk;
-		Def = def;
-                Wis = wis;
-		Gold = gold;
+//		Lvl = lvl;
+//		Exp = exp;
+//		Hp = hp;
+//		Str = str;
+//		Skl = skl;
+//		Spd = spd;
+//		Luk = luk;
+//		Def = def;
+//                Wis = wis;
+//		Gold = gold;
                 
 		this.inParty = inParty;
-//                switch(players) {
-//                    case 0: p1 = true;
-//                        inParty = true;
-//                        break;
-//                    case 1: p2 = true;
-//                        inParty = true;
-//                        break;
-//                    case 2: p3 = true;
-//                        inParty = true;
-//                        break;
-//                    case 3: p4 = true;
-//                        inParty = true;
-//                        break;
-//                }
 		
-		if(Lvl == 0) {
-			// Assume all variables to be 0
-			Lvl = 1;
-			Exp = 0;
-			Hp = 100;
-			Str = 10;
-			Skl = 10;
-			Spd = 10;
-			Luk = 10;
-			Def = 10;
-            Wis = 10;
-			Gold = 0;
-		}
-		
-		put("stat.level", Lvl);
-		put("stat.exp", Exp);
-		put("stat.hp", Hp);
-		put("stat.str", Str);
-		put("stat.skl", Skl);
-		put("stat.spd", Spd);
-		put("stat.luk", Luk);
-		put("stat.def", Def);
-		put("stat.gold", Gold);
-                names.put(Player.players.size(), name);
+		put("stat.level", getLvl());
+		put("stat.exp", getExp());
+		put("stat.hp", getHp());
+		put("stat.str", getStr());
+		put("stat.skl", getSkl());
+		put("stat.spd", getSpd());
+		put("stat.luk", getLuk());
+		put("stat.def", getDef());
+		put("stat.gold", getGold());
+        names.put(Player.players.size(), name);
 	}
         
 	public static Player[] getPlayers() {
@@ -262,14 +226,14 @@ public class Player {
 	}
 
 	public void levelUp() {
-            if(Exp >= 50 * Lvl) {
-                Lvl += 1;
-                Str += 10;
-                Def += 10;
-                Hp = get("stat.hp") + 50;
-                put("stat.hp", Hp);
-                DebugWriter.println("Leveling Up: " + Name);
-            }
+//            if(Exp >= 50 * Lvl) {
+//                Lvl += 1;
+//                Str += 10;
+//                Def += 10;
+//                Hp = get("stat.hp") + 50;
+//                put("stat.hp", Hp);
+//                DebugWriter.println("Leveling Up: " + Name);
+//            }
 	}
 
 	public void pause() {
@@ -343,7 +307,7 @@ public class Player {
 		if(Time.frameTimer(10)) {
 		Move.frame++;//System.out.println("Changing frame");
 		}
-		GameFont.render(Name, screen, (448 - 18), ((32 * 10) - 18) + no);
+		GameFont.render(getName(), screen, (448 - 18), ((32 * 10) - 18) + no);
 		//GameFont.render(String.valueOf(TA / 5), screen, 446 + 32, ((32 * 10) - 18) + no);
 		
 	}
@@ -351,7 +315,7 @@ public class Player {
 	public void renderTime(Graphics g, int no) {
 		int x = GraphicsGetter.getAbsoluteX(472);
 		int y = GraphicsGetter.getAbsoluteY((302 - 2) + (no * 12));
-		int width = GraphicsGetter.getWidth(500 / 20);
+		int width = GraphicsGetter.getWidth(this.TALimit / 20);
 		int width2 = GraphicsGetter.getWidth(this.TA / 20);
 		int height = GraphicsGetter.getHeight(6);
 //		int x = 472 * (Resolution.width() / 512);
@@ -394,11 +358,13 @@ public class Player {
 //		temp = damage;
 //		//temp = -1;
 //		}
-		Calculations.pAttack(this, enemy);
+		damage = random.nextInt(PlayerBattle.pAttack(this, enemy) - 1) + 1;
 			
+		enemy.setHp(enemy.getHp() - damage);
 		}
-		Player.combatName = this.Name;
+		Player.combatName = this.getName();
 		Player.temp = damage;
+		TA = 0;
 		//temp = -1;
 		attacked = false;
 	}
@@ -411,40 +377,7 @@ public class Player {
 //		return false;
 	}
 	
-	public Equipment[] weapon() {
-		Equipment[] e = new Equipment[2]; // Only two hands
-		int i = 0;
-		for(Equipment equip : equipped.values()) {
-			if(equip.isWeapon()) {
-				e[i] = equip;
-				i++;
-			}
-		}
-		return e;
-	}
 	
-	public Equipment[] returnWeapons() {
-		Equipment[] equip = this.weapon();
-		Equipment[] e = new Equipment[equip.length];
-		int j = 0;
-		if(equip != null && equip[0] != null) {
-			for(int i = 0; i < equip.length; i++) {
-				if(equip[i] != null) {
-					e[i] = equip[i];
-					j++;
-				}
-			}
-			equip = new Equipment[j];
-			j = 0;
-			for(int i = 0; i < e.length; i++) {
-				if(e[i] != null) {
-				equip[j] = e[i];
-				j++;
-				}
-			}
-		}
-		return equip;
-	}
 	
 	public void useSpell(int spell, Enemy enemy) {
 		if(!miss(enemy)) {
@@ -468,39 +401,39 @@ public class Player {
 //		}
 //	}
 	
-	/**
-	 * Returns the damage in int format
-	 * @param enemy that the player is attackign
-	 * @param weapon that will be calculated into the damage
-	 * @return
-	 */
-	public int damage(Enemy enemy, Equipment weapon) {
-		int damage = 0;
-		switch(Destinyor.difficulty) {
-		case Destinyor.EASY: damage = (Str + weapon.damage) * 2;
-		damage += damage * skillcheck(enemy);
-		break;
-		case Destinyor.NORMAL: damage = Str + weapon.damage;
-		damage += damage * skillcheck(enemy);
-		break;
-		case Destinyor.HARD: damage = (int) ((Str + weapon.damage) * 0.5);
-		damage += damage * skillcheck(enemy);
-		break;
-		}
-		return damage;
-	}
+//	/**
+//	 * Returns the damage in int format
+//	 * @param enemy that the player is attackign
+//	 * @param weapon that will be calculated into the damage
+//	 * @return
+//	 */
+//	public int damage(Enemy enemy, Equipment weapon) {
+//		int damage = 0;
+//		switch(Destinyor.difficulty) {
+//		case Destinyor.EASY: damage = (getStr() + weapon.damage) * 2;
+//		damage += damage * skillcheck(enemy);
+//		break;
+//		case Destinyor.NORMAL: damage = getStr() + weapon.damage;
+//		damage += damage * skillcheck(enemy);
+//		break;
+//		case Destinyor.HARD: damage = (int) ((getStr() + weapon.damage) * 0.5);
+//		damage += damage * skillcheck(enemy);
+//		break;
+//		}
+//		return damage;
+//	}
 	
-	public int damage() {
-		int damage = 0;
-		damage = Str;
-		return damage;
-	}
+//	public int damage() {
+//		int damage = 0;
+//		damage = Str;
+//		return damage;
+//	}
 	// Spells will miss
 	public boolean miss(Enemy enemy) {
 		// ensures rand can't be negative, incase I add negative Luk modifers
-		DebugWriter.removeln(Name + ": Chance to miss was 1 out of " + rand);
-		rand = (int) (Luk + (Luk * skillcheck(enemy)) * 1);
-		DebugWriter.println(Name + ": Chance to miss was 1 out of " + rand);
+		DebugWriter.removeln(getName() + ": Chance to miss was 1 out of " + rand);
+		rand = (int) (getLuk() + (getLuk() * skillcheck(enemy)) * 1);
+		DebugWriter.println(getName() + ": Chance to miss was 1 out of " + rand);
 		chanceToMiss = random.nextInt(rand);
 		if(chanceToMiss <= 0) {
 			return true;
@@ -509,12 +442,12 @@ public class Player {
 		}
 	}
 	
-	public int damage(Enemy enemy) {
-		int damage = 0;
-		damage = Str;
-		damage += damage * skillcheck(enemy);
-		return damage;
-	}
+//	public int damage(Enemy enemy) {
+//		int damage = 0;
+//		damage = Str;
+//		damage += damage * skillcheck(enemy);
+//		return damage;
+//	}
 	
 	public int defense() {
 		return 0;
@@ -530,18 +463,18 @@ public class Player {
 	 */
 	public float skillcheck(Enemy enemy) {
 		int crit = 0;
-		if(this.Skl > enemy.getSkl()) {
-			crit = enemy.getSkl() % this.Skl;
+		if(this.getSkl() > enemy.getSkl()) {
+			crit = enemy.getSkl() % this.getSkl();
 		}
 		return crit;
 	}
 	
-	public int critical(Enemy enemy) {
-		int crit = 0;
-		crit = (int) Math.ceil(((damage() * skillcheck(enemy)) * (2 * Skl / Luk)));
-		
-		return crit;
-	}
+//	public int critical(Enemy enemy) {
+//		int crit = 0;
+//		crit = (int) Math.ceil(((damage() * skillcheck(enemy)) * (2 * Skl / Luk)));
+//		
+//		return crit;
+//	}
         
         public Equipment Equipment(String key) {
             if(this.equipped.get(key) == null) {
@@ -553,7 +486,7 @@ public class Player {
 //        
         public void Equip(Equipment equip) {
         	//Equipment equipment = equip.newEquipmentInstance();
-        	this.equipped.put(equip.name, equip);
+        	this.equipped.put(equipped.size(), equip);
         	equip.equipped = true;
             //this.equipped.put(Equipment.equipment.get(key).name, Equipment.equipment.get(key));
         }
@@ -580,18 +513,18 @@ public class Player {
 //            Einventory.put(Einventory.size() - 1, item);
 //        }
         
-        public static Items[] Inventory() {
-        	Items[] inv = new Items[inventory.size() + Einventory.size()];
-        	for(int i = 0; i < inventory.size() + Einventory.size(); i++) {
-        		if(i < inventory.size()) {
-        			inv[i] = inventory.get(i);
-        		}
-        		if(i >= inventory.size()) {
-        			inv[i] = Einventory.get(i - inventory.size());
-        		}
-        	}
-        	return inv;
-        }
+//        public static Items[] Inventory() {
+//        	Items[] inv = new Items[inventory.size() + Einventory.size()];
+//        	for(int i = 0; i < inventory.size() + Einventory.size(); i++) {
+//        		if(i < inventory.size()) {
+//        			inv[i] = inventory.get(i);
+//        		}
+//        		if(i >= inventory.size()) {
+//        			inv[i] = Einventory.get(i - inventory.size());
+//        		}
+//        	}
+//        	return inv;
+//        }
         
         /**
          * Returns a player with max TA
@@ -607,9 +540,15 @@ public class Player {
         			return player;
         		}
         	}
-        	
 			return null;
-        	
+        }
+        
+        public int getThreat() {
+        	return (int) (threat + getStr() + getWis() + getSkl() - (getHp() * 0.10f));
+        }
+        
+        public void setThreat(int threat) {
+        	this.threat = threat;
         }
 
 }

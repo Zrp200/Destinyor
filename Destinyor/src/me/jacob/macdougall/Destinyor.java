@@ -84,6 +84,9 @@ import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.magic.*;
 import me.jacob.macdougall.minimap.Minimap;
 import me.jacob.macdougall.npcs.*;
+import me.jacob.macdougall.npcs.body.Entities;
+import me.jacob.macdougall.npcs.body.Limb;
+import me.jacob.macdougall.npcs.body.Limbs;
 import me.jacob.macdougall.player.*;
 //import me.jacob.macdougall.text.TextGetter;
 import me.jacob.macdougall.threads.Thread_Controller;
@@ -113,13 +116,9 @@ public class Destinyor extends Canvas implements Runnable {
 	public static final String title = "Destinyor";
 	public static final String build = "000.000.001.100";
 	
-	
-    
-    
     public static final int EASY = 0, NORMAL = 1, HARD = 2;
         
     public static int difficulty = 0;
-    
     
     public static boolean create = true; // Create the files
     public static boolean write = false; // Write over the files
@@ -343,12 +342,12 @@ public class Destinyor extends Canvas implements Runnable {
             
         UI.renderInventory(screen);
             
-        if(UI.menu >= 6 && UI.menu <= 9) {
+        if(UI.menu >= 6 && UI.menu <= 9 && UI.menu < Player.getActualPlayers().length - 6) {
         	for(int i = 0; i < Equipment.items.size(); i++) {
-                GameFont.render(players[p - 6].Name, screen, px, py);
-                players[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
+                GameFont.render(Player.getActualPlayers()[p - 6].getName(), screen, px, py);
+                Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).render(screen, x, y + 12 * (i + 1));
                     
-                if(!players[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
+                if(!Player.getActualPlayers()[p - 6].Equipment(Equipment.names.get(i)).name.equals("null")) {
                 	y += 6;
                 }
             }
@@ -502,7 +501,7 @@ public class Destinyor extends Canvas implements Runnable {
 			if(Battles.enemiesCreated) {
                     	
 				battle.assignTarget(mouse, enemies);
-				battle.bInput.clicker(mouse, enemies, input);
+				battle.bInput.clicker(mouse, enemies);
 				battle.calculateDamage(input, enemies, move);
             }
 		}
@@ -578,31 +577,35 @@ public class Destinyor extends Canvas implements Runnable {
 		FileLoader.ReadFromFiles(DestinyorFiles.DestinyorSettings);
 		Override = FileLoader.Override();
         Debug = FileLoader.Debug();
-        Limbs limb; //http://www.innerbody.com/anatomy/integumentary
+        Limb limb; //http://www.innerbody.com/anatomy/integumentary
         // Will add txt mod file later
-        limb = new Limbs("Head", 0, false);
-        limb = new Limbs("Neck", 1, false);
-        limb = new Limbs("Upper Torso", 2, false);
-        limb = new Limbs("Left Shoulder", 3, false);
-        limb = new Limbs("Right Shoulder", 4, false);
-        limb = new Limbs("Left Wing", 5, false);
-        limb = new Limbs("Right Wing", 6, false);
-        limb = new Limbs("Left Arm", 7, false);
-        limb = new Limbs("Right Arm", 8, false);
-        limb = new Limbs("Lower Torso", 9, false);
-        limb = new Limbs("Left Hand", 10, false);
-        limb = new Limbs("Right Hand", 11, false);
+        limb = new Limbs("Head", false);
+        limb = new Limbs("Neck", false);
+        limb = new Limbs("Upper Torso", false);
+        limb = new Limbs("Left Shoulder", false);
+        limb = new Limbs("Right Shoulder", false);
+        limb = new Limbs("Left Wing", false);
+        limb = new Limbs("Right Wing", false);
+        limb = new Limbs("Left Arm", false);
+        limb = new Limbs("Right Arm", false);
+        limb = new Limbs("Lower Torso", false);
+        limb = new Limbs("Left Hand", false);
+        limb = new Limbs("Right Hand", false);
         //limb = new Limbs("Belt", 0, false);
         //limb = new Limbs("Grion", 0, false);
-        limb = new Limbs("Left Leg", 12, false);
-        limb = new Limbs("Right Leg", 13, false);
-        limb = new Limbs("Left Foot", 14, false);
-        limb = new Limbs("Right Foot", 15, false);
+        limb = new Limbs("Left Leg", false);
+        limb = new Limbs("Right Leg", false);
+        limb = new Limbs("Left Foot", false);
+        limb = new Limbs("Right Foot", false);
         limb = null;
+        
+        for(int i = 0; i < Limb.getLength(); i++) {
+        	System.out.println(Limb.getLimb(i).getName());
+        }
         
         Entities entity;
         
-        Limbs[] limbs = new Limbs[13];
+        Limb[] limbs = new Limb[13];
         for(int i = 0; i < limbs.length; i++) {
         	if(i == 5) {
         		i += 2;
@@ -610,15 +613,13 @@ public class Destinyor extends Canvas implements Runnable {
         	if(i == 6) {
         		i += 1;
         	}
-        	limbs[i] = Limbs.getLimb(i);
-        	
-        	System.out.println(Limbs.getName(i));
+        	limbs[i] = Limb.getLimb(i);
         }
+        
         entity = new Entities("Humaniod", 13, limbs);
         limbs = new Limbs[15];
         for(int i = 0; i < limbs.length; i++) {
         	limbs[i] = Limbs.getLimb(i);
-        	System.out.println(Limbs.getName(i));
         }
         entity = new Entities("Angelic", 15, limbs);
         
@@ -680,6 +681,7 @@ public class Destinyor extends Canvas implements Runnable {
 		frame.requestFocusInWindow();
 		game.addMouseListener(game.mouse.new MouseHandler());
 		game.addMouseMotionListener(game.mouse.new MouseHandler());
+		game.addMouseWheelListener(game.mouse.new MouseHandler());
 		
 		System.out.println("Destinyor.main(): " + Resolution.width() + " x " + Resolution.height() + " = " + Res);
 		System.out.println("Destinyor.main(): " + game.getSize());

@@ -53,7 +53,7 @@ public class Sound implements LineListener {
 		}
 		
 		if(clip != null && !clip.isOpen()) {
-			System.out.println("Opening: " + name);
+			//System.out.println("Opening: " + name);
 			clip.open(audioInputStream);
 			volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			volume.setValue(audioLevel);
@@ -63,7 +63,7 @@ public class Sound implements LineListener {
 	
 	public void stopSound() {
 		if(clip != null) {
-			System.out.println("Stopping: " + name);
+			//System.out.println("Stopping: " + name);
 			clip.stop();
 			close();
 			this.isPlaying = false;
@@ -72,7 +72,7 @@ public class Sound implements LineListener {
 	
 	public void close() {
 		if(clip != null && clip.isOpen()) {
-			System.out.println("Closing: " + name);
+			//System.out.println("Closing: " + name);
 			clip.close();
 		}
 	}
@@ -125,7 +125,7 @@ public class Sound implements LineListener {
 			  audioInputStream = AudioSystem.getAudioInputStream(soundFile);
 			  ais = audioInputStream;
 		} catch(Exception ex) {
-		        System.out.println("Error with playing sound: " + name);
+		        DebugWriter.println("Error with playing sound: " + name);
 		        ex.printStackTrace();
 		}
 		 sounds.put(location, this);

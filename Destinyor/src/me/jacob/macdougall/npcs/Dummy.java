@@ -3,6 +3,7 @@ package me.jacob.macdougall.npcs;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.magic.Spells;
 import me.jacob.macdougall.world.LevelMap;
@@ -26,7 +27,7 @@ public class Dummy {
 	protected int luk;
 	protected int def;
 	protected int wis;
-	
+	protected int gold;
 	protected int x, y;
 	
 	public boolean npc = true;
@@ -62,6 +63,7 @@ public class Dummy {
 		this.luk = luk;
 		this.def = def;
 		this.wis = wis;
+		this.gold = gold;
 		this.x = x;
 		this.y = y;
 		if(gender != null) {
@@ -92,6 +94,17 @@ public class Dummy {
 		this.exp = exp;
 	}
 	public int getHp() {
+		int hp = this.hp;
+		if(Destinyor.difficulty == Destinyor.EASY) {
+			if(this.npc) {
+				hp = (int) (hp * 0.50f);
+			} else {
+				hp = hp * 2;
+			}
+		}
+		return hp;
+	}
+	public int getTrueHp() {
 		return hp;
 	}
 	public void setHp(int hp) {
@@ -133,6 +146,12 @@ public class Dummy {
 	public void setWis(int wis) {
 		this.wis = wis;
 	}
+	public int getGold() {
+		return gold;
+	}
+	public void setGold(int gold) {
+		this.gold = gold;
+	}
 	
 	public String getName() {
 		return name;
@@ -165,6 +184,92 @@ public class Dummy {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean hasEquipment() {
+		return !this.equipped.isEmpty();
+	}
+	
+	public Equipment[] armour() {
+		Equipment[] e = new Equipment[equipped.size()];
+		int i = 0;
+		for(Equipment equip : equipped.values()) {
+			if(equip.isArmour()) {
+				e[i] = equip;
+				i++;
+			}
+		}
+		return e;
+	}
+	
+	/**
+	 * Returns an array containing all armours, no nulls or weapons.
+	 * @return Returns any equipment that is equipped, that is a armour. (Defined by Equipment.isArmour())
+	 */
+	public Equipment[] returnArmour() {
+		Equipment[] equip = this.armour();
+		Equipment[] e = new Equipment[equip.length];
+		int j = 0;
+		if(equip != null && equip[0] != null) {
+			for(int i = 0; i < equip.length; i++) {
+				if(equip[i] != null) {
+					e[i] = equip[i];
+					j++;
+				}
+			}
+			equip = new Equipment[j];
+			j = 0;
+			for(int i = 0; i < e.length; i++) {
+				if(e[i] != null) {
+				equip[j] = e[i];
+				j++;
+				}
+			}
+		}
+		return equip;
+	}
+	
+	/**
+	 * Gets all equipment, creates null spaces where there a weapon doesn't exist, however there still is equipment
+	 * @return
+	 */
+	public Equipment[] weapon() {
+		Equipment[] e = new Equipment[equipped.size()]; // Only two hands
+		int i = 0;
+		for(Equipment equip : equipped.values()) {
+			if(equip.isWeapon()) {
+				e[i] = equip;
+				i++;
+			}
+		}
+		return e;
+	}
+	
+	/**
+	 * Returns an array containing all weapons, no nulls or armours.
+	 * @return Returns any equipment that is equipped, that is a weapon. (Defined by Equipment.isWeapon())
+	 */
+	public Equipment[] returnWeapons() {
+		Equipment[] equip = this.weapon();
+		Equipment[] e = new Equipment[equip.length];
+		int j = 0;
+		if(equip != null && equip[0] != null) {
+			for(int i = 0; i < equip.length; i++) {
+				if(equip[i] != null) {
+					e[i] = equip[i];
+					j++;
+				}
+			}
+			equip = new Equipment[j];
+			j = 0;
+			for(int i = 0; i < e.length; i++) {
+				if(e[i] != null) {
+				equip[j] = e[i];
+				j++;
+				}
+			}
+		}
+		return equip;
 	}
 	
 }

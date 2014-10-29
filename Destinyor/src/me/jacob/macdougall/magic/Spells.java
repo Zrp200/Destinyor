@@ -136,7 +136,7 @@ public class Spells implements Cloneable {
 //            } else {
         	this.player = player;
         	this.enemy = enemy;
-            enemy.setHp(-(this.damage * player.Wis));
+            enemy.setHp(enemy.getHp() -(this.damage * player.getWis()));
             //player.mana = -this.cost;
            // }
         }

@@ -57,8 +57,8 @@ public class Staircase {
     	this.goTo = goTo;
     	this.x = x;
     	this.y = y;
-    	pX = x1;
-    	pY = y1;
+    	this.pX = x1;
+    	this.pY = y1;
     	this.sprite = bitmap;
     	staircases.put(staircases.size(), this);
     }

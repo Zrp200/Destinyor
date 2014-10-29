@@ -1,8 +1,9 @@
-package me.jacob.macdougall.npcs;
+package me.jacob.macdougall.npcs.body;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class Entities {
 	// Ordinal Number, http://en.wikipedia.org/wiki/Ordinal_number_(linguistics)
@@ -29,7 +30,7 @@ public class Entities {
 	public String[] limbs;
 	//public String[] names;
 	
-	public Limbs[] currentLimbs;
+	public Limb[] currentLimbs;
 	
 	public Entities(String name, int limbAmount, String limb) {
 		//Entities entity = (Entities) entities.getObject(name);
@@ -45,7 +46,7 @@ public class Entities {
 		}
 		//int amount = 0;
 		for(int i = 0; i < limbs.length; i++) {
-			for(Limbs l : Limbs.limbs.values()) {
+			for(Limb l : Limb.limbs.values()) {
 				if(limbs[i].equalsIgnoreCase(l.name)) {
 					currentLimbs[i] = l;
 				}
@@ -75,7 +76,7 @@ public class Entities {
 		this.name = name;
 		this.limbAmount = limbAmount;
 		for(int i = 0; i < limbs.length; i++) {
-			for(Limbs l : Limbs.limbs.values()) {
+			for(Limb l : Limb.limbs.values()) {
 				if(limbs[i] == l.no) {
 					currentLimbs[i] = l;
 				}
@@ -90,7 +91,7 @@ public class Entities {
 	 * @param limbAmount How many limbs the entity has
 	 * @param limbs The value of the limbs
 	 */
-	public Entities(String name, int limbAmount, Limbs[] limbs) {
+	public Entities(String name, int limbAmount, Limb[] limbs) {
 		this.name = name;
 		this.limbAmount = limbAmount;
 		currentLimbs = limbs;

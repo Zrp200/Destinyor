@@ -105,7 +105,7 @@ public class Reader {
                         spells = null;
                 }
                 
-                    System.out.println("Reader.ReadEnemies: " + Name);
+                    DebugWriter.println("Reader.ReadEnemies: " + Name);
                 Enemy.enemies.put(Name, new Enemy(Name, Frame, LVL, Exp, HP, Str, Skl, Spd, Luk, Def, Wis, Gold, Resistance, spells, Integer.parseInt(pos[0].trim()), Integer.parseInt(pos[1].trim())));
                 DebugWriter.println("Menu: Adding: " + Name);
             }
@@ -164,7 +164,7 @@ public class Reader {
 	                
 	                //endEnemy = br.readLine();
 	                
-	                System.out.println("Reader.ReadNpcs: " + Name);
+	                DebugWriter.println("Reader.ReadNpcs: " + Name);
 	            }
 				
 				br.close();
@@ -195,7 +195,6 @@ public class Reader {
                 
                 while(i != lines) {
                     nullchecker = br.readLine();
-                    //System.out.println(nullchecker);
                     if(nullchecker != null) {
                     temptext[i] = nullchecker;
                     i++;
@@ -387,7 +386,6 @@ public class Reader {
 			
 			//Entity.entities.put(Key, new Entity(Name, Frame, Gender, LVL, Exp, HP, Str, Skl, Spd, Luk, Def, Gold, Resistance, Condition));
 			Player.addPlayer(name, new Player(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, inParty, null, null));
-			System.out.println("Reader.ReadPlayers: " + name);
                         DebugWriter.println("Adding: " + name);
 			nullChecker = br.readLine();
                 }
@@ -429,7 +427,6 @@ public class Reader {
 			
 			
 			DebugWriter.println("Menu: Adding: " + name);
-			System.out.println("Adding: " + name);
 			
 			SPELLKEYS.add(key);
 			

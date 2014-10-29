@@ -3,6 +3,7 @@ package me.jacob.macdougall.battles;
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Screen;
 import input.engine.keyboard.InputHandler;
+import me.jacob.macdougall.Keys;
 import me.jacob.macdougall.Time;
 import me.jacob.macdougall.npcs.Enemy;
 import me.jacob.macdougall.player.Player;
@@ -26,6 +27,7 @@ public class Pointer {
     
     public boolean ep = false;
     public boolean p = false;
+    public int e = 0;
     
     private final BattleInput bInput;
     private final Battles battle;
@@ -38,6 +40,8 @@ public class Pointer {
     public void reset() {
     	PointerX = 178;
     	PointerY = 305;
+    	ePointerX = 20;
+    	ePointerY = 38;
     }
     
     //public void enemyPoint(Enemy[] entities) {
@@ -55,52 +59,11 @@ public class Pointer {
     	screen.render(Art.getFont()[35][1], PointerX, PointerY);
     }
     
-    public void point(Player player, InputHandler input, Enemy[] enemies) {
+    public void point(Player player, Enemy[] enemies) {
         switch(menu) {
         case 0:
             if(Time.getKeyTimer(10, false)) {
-                if(bInput.up()) {
-                    if(commands > 0 && commands < commandsMax) {
-                    	commands--;
-                    	PointerY -= 10;
-                    } else {
-                    	commands = 0;
-                    	PointerX = 178;
-                    	PointerY = 305;
-                    }
-                    Time.resetKeyTimer();
-                }
-                
-            if(bInput.down()) {
-                if(commands >= 0 && commands < commandsMax) {
-                	commands++;
-                	PointerY += 20;
-                } else {
-                	commands = 0;
-                	PointerX = 178;
-                	PointerY = 305;
-                }
-                Time.resetKeyTimer();
-            }
-        if(bInput.right()) {
-            if(commands == 1) {
-            BattleRender.DrawSpells = true;
-            menu = 1;
-            Time.resetKeyTimer();
-            }
-            }
-        }
-            switch(commands) {
-                case 0: if(bInput.enter() && Time.getKeyTimer(10, false)) {
-                    battle.Attack(player, enemies, input);
-                    Time.resetKeyTimer();
-                }
-                    break;
-                case 1: if(bInput.enter() && Time.getKeyTimer(10, false)) {
-                    menu = 1;
-                    BattleRender.DrawSpells = true;
-                    Time.resetKeyTimer();
-                }     
+            	menuZero(player, enemies);
             }
             break;
             
@@ -131,7 +94,7 @@ public class Pointer {
             }
             if(bInput.enter()) {
             	//for(int i = 0;)
-                battle.spellHandler(player, input, enemies);
+                battle.spellHandler(player, enemies);
                 menu = 0;
                 spell = 1;
                 commands = 0;
@@ -143,9 +106,80 @@ public class Pointer {
     }
     }
     
-    public void pointEnemy() {
-    	if(!bInput.targetSelected) {
-    		
+    public void right() {
+    	
+    }
+    
+    public void commands(Player player, Enemy[] enemies) {
+    	switch(commands) {
+        	case 0: 
+        		if(Keys.Enter() && Time.getKeyTimer(10, false)) {
+        			if(checkEnemy(enemies)) {
+        				battle.Attack(player, enemies);
+        			} else {
+        				pointEnemy();
+        			}
+        			
+        			Time.resetKeyTimer();
+        		}
+        		break;
+        	case 1: 
+        		if(Keys.Enter() && Time.getKeyTimer(10, false)) {
+        			menu = 1;
+        			BattleRender.DrawSpells = true;
+        			Time.resetKeyTimer();
+        		}
+        		break;
     	}
+    }
+    
+    
+    public void menuZero(Player player, Enemy[] enemies) {
+    	if(!ep && p) {
+    	if(Keys.MoveUp()) {
+    		if(commands > 0 && commands < commandsMax) {
+            	commands--;
+            	PointerY -= 10;
+            } else {
+            	commands = 0;
+            	PointerX = 178;
+            	PointerY = 305;
+            }
+            Time.resetKeyTimer();
+    	}
+        if(Keys.MoveDown()) {
+        	if(commands >= 0 && commands < commandsMax) {
+            	commands++;
+            	PointerY += 20;
+            } else {
+            	commands = 0;
+            	PointerX = 178;
+            	PointerY = 305;
+            }
+            Time.resetKeyTimer();
+        }
+        if(Keys.MoveRight()) { 
+        	if(commands == 1) {
+                BattleRender.DrawSpells = true;
+                menu = 1;
+                Time.resetKeyTimer();
+        	}
+        }
+        commands(player, enemies);
+    	}
+    }
+    
+    public void pointEnemy() {
+    	ep = true;
+    	p = false;
+    }
+    
+    public boolean checkEnemy(Enemy[] enemies) {
+    	for(Enemy enemy : enemies) {
+    		if(enemy.Focused) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 }

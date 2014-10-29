@@ -199,146 +199,146 @@ public class Writer {
 			}
         }
 	
-	public static void writeSaveFile(String location) {
-            
-            int players = 4;
-		String player1Name = "Player Name = ";
-		String player1Gender = "Player Gender = ";
-		String player1Level = "Player Level = " + 1;
-		String player1Exp = "Player Experience = " + 0;
-		String player1Hp = "Player Health = " + 100;
-		String player1Str = "Player Strength = " + 10;
-		String player1Skl = "Player Skill = " + 10;
-		String player1Spd = "Player Speed = " + 10;
-		String player1Luk = "Player Luck = " + 10;
-		String player1Def = "Player Defense = " + 10;
-                String player1Wis = "Player Wisdom = " + 10;
-		String player1Gold = "Player Gold = " + 0;
-		String player1Resistance = "Player Resistances = ";
-                
-                int level = 1;
-                int exp = 0;
-                int hp = 100;
-                int str = 10;
-                int skl = 10;
-                int spd = 10;
-                int luk = 10;
-                int def = 10;
-                int wis = 10;
-                int gold = Player.Gold;
-                //String resist;
-		
-                String name = "Kyro";
-                String gender = "Male";
-		
-		String player1Spells = "Player Spells = ";
-		String player1XY = "Player X & Y = " + Player.X + "," + Player.Y;
-		
-		try {
-			
-			bw = new BufferedWriter(new FileWriter(location));  
-                        bw.write("Players");
-			for(int i = 0; i < players; i++) {
-                            Player p;
-                            switch(i) {
-                                case 0: 
-                                    name = "Kyro";
-                                    gender = "Male";
-                                    p = Player.getPlayer(Player.names.get(i));
-                                    level = p.Lvl;
-                                    exp = p.Exp;
-                                    hp = p.Hp;
-                                    str = p.Str;
-                                    skl = p.Skl;
-                                    spd = p.Spd;
-                                    luk = p.Luk;
-                                    def = p.Def;
-                                    wis = p.Wis;
-                                    break;
-                                case 1: 
-                                    name = "Karen";
-                                    gender = "Female";
-                                    p = Player.getPlayer(Player.names.get(i));
-                                    level = p.Lvl;
-                                    exp = p.Exp;
-                                    hp = p.Hp;
-                                    str = p.Str;
-                                    skl = p.Skl;
-                                    spd = p.Spd;
-                                    luk = p.Luk;
-                                    def = p.Def;
-                                    wis = p.Wis;
-                                    break;
-                                case 2:
-                                    name = "Mark";
-                                    gender = "Male";
-                                    p = Player.getPlayer(Player.names.get(i));
-                                    level = p.Lvl;
-                                    exp = p.Exp;
-                                    hp = p.Hp;
-                                    str = p.Str;
-                                    skl = p.Skl;
-                                    spd = p.Spd;
-                                    luk = p.Luk;
-                                    def = p.Def;
-                                    wis = p.Wis;
-                                    break;
-                                case 3: 
-                                    name = "Lesie";
-                                    gender = "Female";
-                                    p = Player.getPlayer(Player.names.get(i));
-                                    level = p.Lvl;
-                                    exp = p.Exp;
-                                    hp = p.Hp;
-                                    str = p.Str;
-                                    skl = p.Skl;
-                                    spd = p.Spd;
-                                    luk = p.Luk;
-                                    def = p.Def;
-                                    wis = p.Wis;
-                                    break;
-                                
-                            }
-                        bw.newLine();
-                        bw.newLine();
-			bw.write(player1Name + name);
-			bw.newLine();
-			bw.write(player1Gender + gender);
-			bw.newLine();
-			bw.write(player1Level + level);
-			bw.newLine();
-			bw.write(player1Exp + exp);
-			bw.newLine();
-			bw.write(player1Hp + hp);
-			bw.newLine();
-			bw.write(player1Str + str);
-			bw.newLine();
-			bw.write(player1Skl + skl);
-			bw.newLine();
-			bw.write(player1Spd + spd);
-			bw.newLine();
-			bw.write(player1Luk + luk);
-			bw.newLine();
-			bw.write(player1Def + def);
-			bw.newLine();
-                        bw.write(player1Wis + wis);
-                        bw.newLine();
-			bw.write(player1Gold + gold);
-			bw.newLine();
-			bw.write(player1Resistance);
-			bw.newLine();
-			bw.write(player1Spells);
-			bw.newLine();
-			bw.write(player1XY);
-			
-                        }
-			
-			bw.close();
-		
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	public static void writeSaveFile(String location) {
+//            
+//            int players = 4;
+//		String player1Name = "Player Name = ";
+//		String player1Gender = "Player Gender = ";
+//		String player1Level = "Player Level = " + 1;
+//		String player1Exp = "Player Experience = " + 0;
+//		String player1Hp = "Player Health = " + 100;
+//		String player1Str = "Player Strength = " + 10;
+//		String player1Skl = "Player Skill = " + 10;
+//		String player1Spd = "Player Speed = " + 10;
+//		String player1Luk = "Player Luck = " + 10;
+//		String player1Def = "Player Defense = " + 10;
+//                String player1Wis = "Player Wisdom = " + 10;
+//		String player1Gold = "Player Gold = " + 0;
+//		String player1Resistance = "Player Resistances = ";
+//                
+//                int level = 1;
+//                int exp = 0;
+//                int hp = 100;
+//                int str = 10;
+//                int skl = 10;
+//                int spd = 10;
+//                int luk = 10;
+//                int def = 10;
+//                int wis = 10;
+//                int gold = Player.Gold;
+//                //String resist;
+//		
+//                String name = "Kyro";
+//                String gender = "Male";
+//		
+//		String player1Spells = "Player Spells = ";
+//		String player1XY = "Player X & Y = " + Player.X + "," + Player.Y;
+//		
+//		try {
+//			
+//			bw = new BufferedWriter(new FileWriter(location));  
+//                        bw.write("Players");
+//			for(int i = 0; i < players; i++) {
+//                            Player p;
+//                            switch(i) {
+//                                case 0: 
+//                                    name = "Kyro";
+//                                    gender = "Male";
+//                                    p = Player.getPlayer(Player.names.get(i));
+//                                    level = p.Lvl;
+//                                    exp = p.Exp;
+//                                    hp = p.Hp;
+//                                    str = p.Str;
+//                                    skl = p.Skl;
+//                                    spd = p.Spd;
+//                                    luk = p.Luk;
+//                                    def = p.Def;
+//                                    wis = p.Wis;
+//                                    break;
+//                                case 1: 
+//                                    name = "Karen";
+//                                    gender = "Female";
+//                                    p = Player.getPlayer(Player.names.get(i));
+//                                    level = p.Lvl;
+//                                    exp = p.Exp;
+//                                    hp = p.Hp;
+//                                    str = p.Str;
+//                                    skl = p.Skl;
+//                                    spd = p.Spd;
+//                                    luk = p.Luk;
+//                                    def = p.Def;
+//                                    wis = p.Wis;
+//                                    break;
+//                                case 2:
+//                                    name = "Mark";
+//                                    gender = "Male";
+//                                    p = Player.getPlayer(Player.names.get(i));
+//                                    level = p.Lvl;
+//                                    exp = p.Exp;
+//                                    hp = p.Hp;
+//                                    str = p.Str;
+//                                    skl = p.Skl;
+//                                    spd = p.Spd;
+//                                    luk = p.Luk;
+//                                    def = p.Def;
+//                                    wis = p.Wis;
+//                                    break;
+//                                case 3: 
+//                                    name = "Lesie";
+//                                    gender = "Female";
+//                                    p = Player.getPlayer(Player.names.get(i));
+//                                    level = p.Lvl;
+//                                    exp = p.Exp;
+//                                    hp = p.Hp;
+//                                    str = p.Str;
+//                                    skl = p.Skl;
+//                                    spd = p.Spd;
+//                                    luk = p.Luk;
+//                                    def = p.Def;
+//                                    wis = p.Wis;
+//                                    break;
+//                                
+//                            }
+//                        bw.newLine();
+//                        bw.newLine();
+//			bw.write(player1Name + name);
+//			bw.newLine();
+//			bw.write(player1Gender + gender);
+//			bw.newLine();
+//			bw.write(player1Level + level);
+//			bw.newLine();
+//			bw.write(player1Exp + exp);
+//			bw.newLine();
+//			bw.write(player1Hp + hp);
+//			bw.newLine();
+//			bw.write(player1Str + str);
+//			bw.newLine();
+//			bw.write(player1Skl + skl);
+//			bw.newLine();
+//			bw.write(player1Spd + spd);
+//			bw.newLine();
+//			bw.write(player1Luk + luk);
+//			bw.newLine();
+//			bw.write(player1Def + def);
+//			bw.newLine();
+//                        bw.write(player1Wis + wis);
+//                        bw.newLine();
+//			bw.write(player1Gold + gold);
+//			bw.newLine();
+//			bw.write(player1Resistance);
+//			bw.newLine();
+//			bw.write(player1Spells);
+//			bw.newLine();
+//			bw.write(player1XY);
+//			
+//                        }
+//			
+//			bw.close();
+//		
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public static void WriteEnemyFile(String location) {
 		

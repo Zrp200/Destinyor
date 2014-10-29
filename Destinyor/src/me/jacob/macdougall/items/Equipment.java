@@ -132,20 +132,28 @@ public class Equipment extends Items implements Cloneable {
 	}
 	
 	public boolean isWeapon() {
-		if(type == Right_Hand) {
+		if(type == Right_Hand || type == Left_Hand) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	public boolean isSheild() {
-		if(type == Left_Hand) {
+	public boolean isArmour() {
+		if(type != Right_Hand || type != Left_Hand) {
 			return true;
 		} else {
 			return false;
 		}
 	}
+	
+//	public boolean isSheild() {
+//		if(type == Left_Hand) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	
 	public void changeArmourColor(int area) {
 		if(this.equipped) {

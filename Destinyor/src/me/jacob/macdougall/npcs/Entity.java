@@ -9,6 +9,7 @@ import java.util.Map;
 
 import me.jacob.macdougall.magic.Element;
 import me.jacob.macdougall.magic.Spells;
+import me.jacob.macdougall.npcs.body.Entities;
 
 public class Entity implements Cloneable {
 	

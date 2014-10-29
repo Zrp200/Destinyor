@@ -50,9 +50,7 @@ public class Items implements Cloneable {
 		
 		for(int i = 0; i < frame.pixels.length; i++) {
 			pixel += pixels[i];
-		//System.out.println(pixels[i]);
 		}
-		pixel = pixel / pixels.length;
-		System.out.println(pixel);
+		pixel = pixel / pixels.length; //Gets the average colour of the item
 	}
 }

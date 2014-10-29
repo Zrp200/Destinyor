@@ -13,7 +13,7 @@ public class EndBattleException extends Exception {
 	public void EndBattle() {
 		Battles.endBattle = true;
 		UI.menu = UI.Map;
-		Player.Gold -= (int) (Player.Gold * 0.02f);
+		//Player.setGold((int) (Player.Gold * 0.02f));
 	}
 	
 

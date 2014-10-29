@@ -85,7 +85,7 @@ public class Combo_Spell extends Spells {
 			//}
 		}
 		this.damage = damage * answer;
-		enemy.setHp(-(this.damage + player.Wis));
+		enemy.setHp(enemy.getHp() - (this.damage + player.getWis()));
 		this.inUse = false;
 		}
 	}

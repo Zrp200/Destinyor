@@ -28,13 +28,11 @@ public class Playlist {
 		this.levelID = levelID;
 		for(int i = 0; i < sound.length; i++) {
 			songs.put(i, sound[i]);
-			System.out.println(sound[i].name + " " + i);
 		}
 		playlists.put(playlists.size(), this);
 	}
 	
 	public void Play() throws LineUnavailableException, IOException {
-		System.out.println(nextSong);
 		if(levelID == LevelMap.level) {
 			for(Sound song : songs.values()) {
 				if(checkSongs())

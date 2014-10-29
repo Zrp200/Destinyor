@@ -1,6 +1,8 @@
 package me.jacob.macdougall;
 
 //import java.awt.Component;
+import input.engine.mouse.Mouse;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,27 +27,37 @@ public class ResolutionButton {
 	public int width = Resolution.width();
 	public int height = Resolution.height();
 	
+	int selected = Resolution.getResolutionInt();
+	
 	public boolean rOn = false;
 	public boolean wOn = false;
+	
+	private int amount = 3;
 	
 	public boolean mustRestart = false;
 	
 	public ResolutionButton(Menus menu) {
 		for(int i = 0; i < Resolution.Resolutions.length; i++) {
-			buttons.put(Resolution.Resolutions[i], new Buttons(Resolution.Resolutions[i], 32, 21 * i));
+			buttons.put(Resolution.Resolutions[i], new Buttons(Resolution.Resolutions[i], 130, 0));
 		}
-		buttons.put("Borderless Window", new Buttons("Borderless Window", 512 - 250, 0));
-		buttons.put("Fullscreen", new Buttons("Fullscreen", 512 - 250, 21));
-		buttons.put("Window", new Buttons("Window", 512 - 250, 42));
+		buttons.put("Borderless Window", new Buttons("Borderless Window", 382, 32 - 21));
+		buttons.put("Fullscreen", new Buttons("Fullscreen", 382, 32));
+		buttons.put("Window", new Buttons("Window", 382, 32 + 21));
 		this.menu = menu;
 	}
 	
 	public void render(Screen screen) {
 		if(rOn) {
-			for(String res : Resolution.Resolutions) {
-				Buttons button = buttons.get(res);
+			//for(String res : Resolution.Resolutions) {
+			for(int i = 0; i < selected(amount).length; i++) {
+				Buttons button = buttons.get(Resolution.Resolutions[selected(amount)[i]]);
+				//int y = button.y;
+				//int offset = 1;
+				button.y = (32 - 21) + (21 * (i));
 				button.render(screen);
+				//button.y = y;
 			}
+			//}
 		}
 		if(wOn) {
 			buttons.get("Borderless Window").render(screen);
@@ -71,15 +83,17 @@ public class ResolutionButton {
 	}
 	
 	public void setRes(int x, int y) {
-		if(rOn && Time.getKeyTimer(5, true)) {
+		if(rOn && Time.getKeyTimer(10, false)) {
 		Destinyor.Refresh = true;
-		for(int i = 0; i < Resolution.Resolutions.length; i++) {
-			Buttons button = buttons.get(Resolution.Resolutions[i]);
+		for(int i = 0; i < selected(amount).length; i++) {
+			Buttons button = buttons.get(Resolution.Resolutions[selected(amount)[i]]);
 			if(button.inBox(x, y)) {
-				resolution = Resolution.Resolutions[i];
-				width = Resolution.Width[i];
-				height = Resolution.Height[i];
+				resolution = Resolution.Resolutions[selected(amount)[i]];
+				width = Resolution.Width[selected(amount)[i]];
+				height = Resolution.Height[selected(amount)[i]];
 				menu.buttons.get(2)[1].setName(resolution);
+				Time.resetKeyTimer();
+				selected = Resolution.getResolutionInt(resolution);
 				rOn = false;
 			}
 		}
@@ -88,7 +102,7 @@ public class ResolutionButton {
 	}
 	
 	public void setRes(int x, int y, Scrollbars scroll) {
-		if(rOn && Time.getKeyTimer(5, true)) {
+		if(rOn && Time.getKeyTimer(5, false)) {
 			Destinyor.Refresh = true;
 			Buttons button = buttons.get(Resolution.Resolutions[scroll.clicked()]);
 			if(button.inBox(x, y) || scroll.inBox(x, y)) {
@@ -96,29 +110,61 @@ public class ResolutionButton {
 				width = Resolution.Width[scroll.i];
 				height = Resolution.Height[scroll.i];
 				menu.buttons.get(2)[1].setName(resolution);
+				Time.resetKeyTimer();
 				rOn = false;
 			}
 		}
 	}
 	
 	public void setWindow(int x, int y) {
-		if(wOn && Time.getKeyTimer(5, true)) {
+		if(wOn && Time.getKeyTimer(5, false)) {
 			Destinyor.Refresh = true;
 			if(buttons.get("Window").inBox(x, y)) {
 				Window = "Window";
 				menu.buttons.get(2)[4].setName(Window);
+				Time.resetKeyTimer();
 				wOn = false;
 			}
 			if(buttons.get("Borderless Window").inBox(x, y)) {
 				Window = "Borderless Window";
 				menu.buttons.get(2)[4].setName(Window);
+				Time.resetKeyTimer();
 				wOn = false;
 			}
 			if(buttons.get("Fullscreen").inBox(x, y)) {
 				Window = "Fullscreen";
 				menu.buttons.get(2)[4].setName(Window);
+				Time.resetKeyTimer();
 				wOn = false;
 			}
+		}
+	}
+	
+	public void setSelected(Mouse mouse) {
+		if(rOn) {
+			if(!mouse.getMouseWheelMoved()) {
+				if(Time.getKeyTimer(10, false)) {
+					if(Keys.MoveDown()) {
+						selected++;
+						Time.resetKeyTimer();
+					}
+					if(Keys.MoveUp()) {
+						selected--;
+						Time.resetKeyTimer();
+					}
+				}
+			} else {
+				selected = mouse.getMouseWheel(0, Resolution.Resolutions.length - 1, Resolution.getResolutionInt());
+				mouse.setMouseWheelMoved(false);
+			}
+//			if(selected <= -1) {
+//				selected = Resolution.Resolutions.length - 1;
+//				mouse.resetMouseWheel();
+//			}
+//			if(selected >= Resolution.Resolutions.length) {
+//				selected = 0;
+//				mouse.resetMouseWheel();
+//			}
 		}
 	}
 	
@@ -137,6 +183,30 @@ public class ResolutionButton {
 		}
 		Destinyor.Refresh = true;
 		Menus.menu = Menus.getLastMenuState();
+	}
+	
+	private int[] selected(int amount) {
+		if(selected <= -1) {
+			selected = Resolution.Resolutions.length - 1;
+		}
+		if(selected >= Resolution.Resolutions.length) {
+			selected = 0;
+		}
+		int[] selectedButtons = new int[amount];
+		for(int i = -1; i < amount - 1; i++) {
+			if(selected + i >= 0) {
+				if(selected + i <= Resolution.Resolutions.length - 1) {
+					selectedButtons[i + 1] = selected + i;
+				} else {
+					selectedButtons[i + 1] = 0;
+				}
+			} else {
+				selectedButtons[i + 1] = Resolution.Resolutions.length - 1;
+			}
+			//System.out.println(selectedButtons[i + 1]);
+		}
+		
+		return selectedButtons;
 	}
 	
 }

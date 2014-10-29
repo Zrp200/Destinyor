@@ -73,8 +73,6 @@ public class Cutscene {
         
         names = new String[(int) (Math.ceil(Holder.length / 2))];
         
-        //System.out.println(Math.ceil(Holder.length / 2));
-        
             for(int i = 1; i < Holder.length; i += 2) {
                 // 1, 3
                 names[namesH] = Holder[i];
@@ -118,8 +116,6 @@ public class Cutscene {
             //npcs.put(names[i], stuff[i]);
         	dir = new int[stuff[i].length];
             for(int j = 0; j < stuff[i].length; j++) {
-                //System.out.println(stuff[i][j]);
-                
                 
                 if(stuff[i][j].contains("left")) {
                     directions.put(j, 1);
@@ -193,48 +189,12 @@ public class Cutscene {
                
                if(nY == 0)
                    nY = NPC.npcs.get(names[i]).getY();
-               
-               //System.out.println(dir[j]);
             }
             
-//            int x = 1;
-//            int y = 1;
-//            int d = 1;
-//            dir = new int[dirs.size()];
-//            for(int v = 0; v < dirs.size(); v++) {
-//            	dir[v] = dirs.get(v);
-//            	System.out.println(dirs.get(v));
-//            	switch(dirs.get(v)) {
-//            	case 0: x++;
-//            	break;
-//            	case 1: y++;
-//            	break;
-//            	case 2: d++;
-//            	break;
-//            	}
-//            }
-            //int[] tempDirection = new int[directions.size()];
-            
-            
-            
-//            for(int j = 0; j < directions.size(); j++) {
-//            	//System.out.println(dir[j]);
-//            	//System.out.println(directions.get(j));
-//            	//tempDirection[j] = directions.get(j);
-//            }
-            
-//            System.out.println("");
-            
-            
-            
-            //System.out.println(dxf);
-            //System.out.println(dyf);
-            //System.out.println(ddf);
             direction = new int[3][];
             direction[0] = new int[dxf];
             direction[1] = new int[dyf];
             direction[2] = new int[ddf];
-            //System.out.println(dir.length);
             
             dxf = 0;
             dyf = 0;
@@ -244,38 +204,18 @@ public class Cutscene {
             for(int j = 0; j < dir.length; j++) {
             	switch(dir[j]) {
             	case 0: direction[dir[j]][dxf] = directions.get(d);
-            	//System.out.println("Adding X " + directions.get(d));
-            	//System.out.println("Adding X " + direction[dir[j]][dxf]);
             		dxf++;
             		break;
             	case 1: direction[1][dyf] = directions.get(d);
-            	//System.out.println("Adding Y " + directions.get(d));
-            	//System.out.println("Adding Y " + direction[dir[j]][dyf]);
             		dyf++;
             		break;
             	case 2: direction[2][ddf] = directions.get(d);
-            	//System.out.println("Adding Text " + directions.get(d));
-            	//System.out.println("Adding Text " + direction[dir[j]][ddf]);
             		ddf++;
             		break;
             	}
             	d++;
             }
             
-            
-            
-            
-            
-            //int dirs = 0;
-            //for(int d1 = 0; d1 < direction.length; d1++) {
-            //for(int[] d1 : direction) {
-            	//for(int d2 = 0; d2 < d1.length; d2++) {
-                //for(int d2 : d1) {
-            		//System.out.println(dir[dirs]);
-            		//System.out.println(direction[d1][d2]);
-            		//dirs++;
-            	//}
-            //}
             dxf = 0;
             dyf = 0;
             ddf = 0;
@@ -315,26 +255,16 @@ public class Cutscene {
     }
     
     public void update(InputHandler input) {
-//    	for(NPCs n : this.npc.values()) {
-//    		for(int i = 0; i < n.dir.length; i++) {
-//    			for(int j = 0; j < n.direction[n.dir[i]].length; j++) {
-//    				System.out.println(n.name + ": " + n.dir[i] + " " + n.direction[n.dir[i]][j]);
-//    			}
-//    		}
-//    	}
-    	
     	if(cNpc != null) {
-        	//System.out.println(cNpc.name);
         	if(cNpc.Moving && Time.cutsceneTimer(60)) {
         		cNpc.Moving = false;
         		cJ++;
         	}
         	if(!Time.cutsceneTimer(60) && cNpc.Moving) {
-        		//System.out.println("Returning");
         		return;
         	}
         	
-        	if(Keys.Enter() && cNpc.speaking && Time.getKeyTimer(50, true)) {
+        	if(Keys.Enter() && cNpc.speaking && Time.getKeyTimer(10, false)) {
                 cNpc.stopSpeaking();
                 dd++;
                 cJ++;
@@ -344,39 +274,11 @@ public class Cutscene {
         		return;
         	}
         }
-    	
-    	
-//    	for(int i = 0; i < names.length; i++) {
-//    		cNpc = npc.get(names[cI] + cI);
-//    		for(int j = 0; j < cNpc.dir.length; j++) {
-//    			//if(cNpc.moving || cNpc.speaking) {
-//    				//return;
-//    			//} else {
-//    				switch(cNpc.dir[j]) {
-//    					case 0: cNpc.setX(cNpc.direction[cNpc.dir[j]][dx]);
-//    					dx++;
-//    					cNpc.moving = true;
-//    					Time.resetCutsceneTimer();
-//    					break;
-//    					case 1: cNpc.setY(cNpc.direction[cNpc.dir[j]][dy]);
-//    					cNpc.moving = true;
-//    					dy++;
-//    					Time.resetCutsceneTimer();
-//    					break;
-//    					case 2: cNpc.Speaking(dd);
-//    					break;
-//    				}
-//    			}
-//    		}
-    	//}
-    	
-//        // an if loop that is similar to a for loop, without the return
+//       an if loop that is similar to a for loop, without the return
     	
         if(this.cI < names.length) {
         	
             cNpc = npc.get(names[cI] + cI);
-            //System.out.println(cNpc.name);
-            //System.out.println(cNpc.dir.length);
             
             if(this.cJ < cNpc.dir.length) {
             	
@@ -388,21 +290,6 @@ public class Cutscene {
             		cNpc.Speaking(dd);
             	}
             	
-//            	
-//                switch(cNpc.dir[cJ]) {
-//                    case 0: cNpc.setX(cNpc.direction[cNpc.dir[cJ]][dx]);
-//                    		cNpc.moving = true;
-//                            dx++;
-//                            Time.resetCutsceneTimer();
-//                            break;
-//                    case 1: cNpc.setY(cNpc.direction[cNpc.dir[cJ]][dy]);
-//                    		cNpc.moving = true;
-//                            dy++;
-//                            Time.resetCutsceneTimer();
-//                            break;
-//                    case 2: cNpc.Speaking(dd);
-//                    		break;
-//                }  
                 if(cNpc.Moving || cNpc.speaking) {
                 	return;
                 }
@@ -411,11 +298,7 @@ public class Cutscene {
             dy = 0;
             dd = 0;
             cJ = 0;
-//                if(!cNpc.speaking) {
-//                //cJ++;
-//                } else {
-//                	return;
-//                
+            
             cI++;
             return;
          }
