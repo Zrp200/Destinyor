@@ -5,14 +5,14 @@
 
 /* To Do:
  * Fix Destinyor game code to make it look pretty and easier to find and change methods and variables // this.setMinPriority(); // HAHA GOOD JOKE!
- * Implement Music fully sorta done
+ * Implement Music fully // sorta done
  * Implement SoundEffects working on it.
  * Implement Spells fully
  * Fix menu for all resolution // TWO YEARS LATER AND IT IS DONE!
  * Get more fps // this.setMinPriority();
  * Add random npc save file // this.setMinPriority();
  * add reader for random npc save file
- * finish implementing items Done?
+ * finish implementing items // Done?
  * Implement bigger monsters
  * Implement Bosses Working
  * Add non moving npcs for shopkeepers and other essinstial npcs //NOT HAVING IT
@@ -24,15 +24,15 @@
  * Add Battle UI to give more feedback
  * Fix bugs
  * Add random text to the npcs
- * Make a timer class DONE
+ * Make a timer class // DONE
  * Maybe add semi random duengeons
- * Create element txt file //Why? Because Modding
+ * Create element txt file // Why? Because Modding
  * Create effect txt file
  * Restructre all the Map<> Variables aka add a Name<String> = new HashMap<>();
  * Change all the reader files to a simple for(int i = 0; i < x lines of code; i++) { br.skip(Stats[i].length); statHolder[i] = br.readLine(); }
  * add txt mod file for limbs
  * add txt file for keys
- * add moddable keys aka remapable WORKING ON IT SHEESH
+ * add moddable keys aka remapable // WORKING ON IT SHEESH
  * 
  * it should be attack stat +plus weapon attack - armour and defense right
  * Armour effects psyical damage as well as magic, weapons do not, but can have a wis+ stat.
@@ -65,9 +65,6 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
-//import java.awt.RenderingHints;
-//import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
@@ -77,10 +74,8 @@ import me.jacob.macdougall.battles.*;
 import me.jacob.macdougall.cutscenes.*;
 import me.jacob.macdougall.files.*;
 import me.jacob.macdougall.files.mod.FileChecker;
-//import me.jacob.macdougall.graphics.Shadows;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.items.Equipment;
-//import me.jacob.macdougall.items.Items;
 import me.jacob.macdougall.magic.*;
 import me.jacob.macdougall.minimap.Minimap;
 import me.jacob.macdougall.npcs.*;
@@ -88,7 +83,6 @@ import me.jacob.macdougall.npcs.body.Entities;
 import me.jacob.macdougall.npcs.body.Limb;
 import me.jacob.macdougall.npcs.body.Limbs;
 import me.jacob.macdougall.player.*;
-//import me.jacob.macdougall.text.TextGetter;
 import me.jacob.macdougall.threads.Thread_Controller;
 import me.jacob.macdougall.world.*;
 import graphic.engine.screen.Art;
@@ -97,9 +91,6 @@ import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 
 import java.awt.Font;
-//import java.io.IOException;
-
-//import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 
 
@@ -116,13 +107,13 @@ public class Destinyor extends Canvas implements Runnable {
 	public static final String title = "Destinyor";
 	public static final String build = "000.000.001.100";
 	
-    public static final int EASY = 0, NORMAL = 1, HARD = 2;
+    	public static final int EASY = 0, NORMAL = 1, HARD = 2;
         
-    public static int difficulty = 0;
+    	public static int difficulty = 0;
     
-    public static boolean create = true; // Create the files
-    public static boolean write = false; // Write over the files
-    public static boolean read = false; // Read the files
+    	public static boolean create = true; // Create the files
+    	public static boolean write = false; // Write over the files
+    	public static boolean read = false; // Read the files
     
 	public static boolean Override = false;
 	public static boolean Debug = false;
@@ -157,32 +148,30 @@ public class Destinyor extends Canvas implements Runnable {
 	
 	// Entities Objects
 	private Player player;
-    private Player[] players;
-    public static Enemy[] enemies;
+    	private Player[] players;
+    	public static Enemy[] enemies;
     
-    // Other Objects
-    private LevelMap map;
+    	// Other Objects
+	private LevelMap map;
 	private Menus menus;
 	private Cutscene cutscene;
-    private Cities city1;
+    	private Cities city1;
     
-    private final Clock clock = new Clock();
+    	private final Clock clock = new Clock();
 	
-    private boolean running = false;
+    	private boolean running = false;
     
 	public Destinyor() {
-    
-    //Sound music1 = new Sound(Destinyor.class.getResource("/Lady Java.wav").getPath().replace("%20", " "), true);
-    Sound music2 = new Sound(Destinyor.class.getResource("/Orc March.wav").getPath().replace("%20", " "), true);
-    @SuppressWarnings("unused")
+    	//Sound music1 = new Sound(Destinyor.class.getResource("/Lady Java.wav").getPath().replace("%20", " "), true);
+    	Sound music2 = new Sound(Destinyor.class.getResource("/Orc March.wav").getPath().replace("%20", " "), true);
+    	@SuppressWarnings("unused")
 	Playlist playlist = new Playlist(1, music2);
-    
 	}
 	
 	public void init() {
    	 screen = new Screen(1024 / 2, 768 / 2);
    	
-   	 input = new InputHandler(this);	
+   	input = new InputHandler(this);	
         battle = new Battles(input);   
         menus = new Menus(this, input);
         Thread_Controller.init(screen, battle, input);
@@ -193,7 +182,7 @@ public class Destinyor extends Canvas implements Runnable {
         Objects o = new Objects("test" + 1 + 1, 7, 7, true, "0, 5, 3");
         
         if(Debug) {
-       	 debug = new Debug();
+       	 	debug = new Debug();
         }
         map = LevelMap.Maps.get(1);
         minimap = new Minimap(this);
@@ -202,8 +191,7 @@ public class Destinyor extends Canvas implements Runnable {
         
         move = new Move(this, map);
         Menus.movement(move);
-        player = Player.getPlayer(FileLoader.PKeys().get(0));
-        players = Player.getPlayers();
+        player = Player.getPlayer(Player.getActualPlayers()[0]);
         Thread_Controller.setNpc(move);
 
         // Start making random npcs
@@ -267,22 +255,22 @@ public class Destinyor extends Canvas implements Runnable {
         
        //public Item(String name, int damage, int cost, String attribute, Element element, String type, boolean equipped, String user)
         
-		 Thread_Controller.startNPC();
+	Thread_Controller.startNPC();
 		 
-		 cutscene = new Cutscene(DestinyorFiles.DestinyorCutsceneFolder + DestinyorFiles.fileSplit + "default.txt", input);
+	cutscene = new Cutscene(DestinyorFiles.DestinyorCutsceneFolder + DestinyorFiles.fileSplit + "default.txt", input);
 		 
-		 Thread_Controller.startCutscene();
-		 Thread_Controller.pauseCutscene();
+	Thread_Controller.startCutscene();
+	Thread_Controller.pauseCutscene();
    }
 	
-	public static void RemoveDebug() {
-		for(int i = 0; i < DebugWriter.strings.size(); i++) {
-			if(DebugWriter.getln(i).contains("Menu:")) {
-				DebugWriter.removeln(DebugWriter.getln(i));
-				i--;
-			}
+    public static void RemoveDebug() {
+	for(int i = 0; i < DebugWriter.strings.size(); i++) {
+		if(DebugWriter.getln(i).contains("Menu:")) {
+			DebugWriter.removeln(DebugWriter.getln(i));
+			i--;
 		}
 	}
+    }
 	
     private void RenderInventory() {
     	UI.renderInventory(screen);
@@ -520,7 +508,6 @@ public class Destinyor extends Canvas implements Runnable {
         double fThen = System.currentTimeMillis();
         double unprocessed = 0;
         double fUnprocessed = 0;
-        int j = 0;
         while(running && Thread_Controller.doneLoading) {
         	double now = System.nanoTime();
         	unprocessed += (now - then) / nsPerUpdate;
@@ -552,7 +539,6 @@ public class Destinyor extends Canvas implements Runnable {
         	// FPS Timer
         	if(System.currentTimeMillis() - fps_Timer > 1000) {
         		System.out.printf("\n Main_Thread: %d fps, %d updates", fps, update);
-        		j = 0;
                 FramesPerSecond = fps;
                 UpdatesPerSecond = update;
                 fUnprocessed = 0;
