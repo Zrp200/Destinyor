@@ -2,8 +2,8 @@ package me.jacob.macdougall.magic;
 
 import java.util.Random;
 
-import me.jacob.macdougall.Keys;
-import me.jacob.macdougall.npcs.Enemy;
+import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.player.Player;
 
 public class Combo_Spell extends Spells {
@@ -16,7 +16,6 @@ public class Combo_Spell extends Spells {
 	int[] userCombo;
 	int answer;
 	int currentCombo = -1;
-	//int[] answer;
 	
 	
 	public Combo_Spell(String name, Element element, int damage, int targets, int cost, String Condition) {
@@ -31,7 +30,6 @@ public class Combo_Spell extends Spells {
 		combo = new int[comboLength];
 		userCombo = new int[comboLength];
 		this.inUse = true;
-		//answer = new int[comboLength];
 		
 		for(int i = 0; i < comboLength; i++) {
 			combo[i] = rand.nextInt(3) + 1;
@@ -74,15 +72,6 @@ public class Combo_Spell extends Spells {
 			if(combo[i] == userCombo[i]) {
 				answer++;
 			}
-			
-			
-				//answer[i] = 0;
-			//switch(combo[i]) {
-			//case LEFT: break;
-			//case RIGHT: break;
-			//case UP: break;
-			//case DOWN: break;
-			//}
 		}
 		this.damage = damage * answer;
 		enemy.setHp(enemy.getHp() - (this.damage + player.getWis()));

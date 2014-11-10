@@ -25,7 +25,7 @@ public class Shadows {
 	
 	public Shadows(Bitmap bitmap) {
 		try {
-			image = Art.convertSpritesheet(bitmap, this);
+                    image = Art.convertSpritesheet(bitmap, this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +58,7 @@ public class Shadows {
 		
 		case LEFT_CORNER: LEFT_CORNER(bitmaps); break;
 		}
-		
+		image.flush();
 		return bitmaps;
 	}
 	
@@ -128,6 +128,7 @@ public class Shadows {
 		return bitmaps;
 	}
 	
+	@SuppressWarnings("unused")
 	private Bitmap LEFT_UP_CORNER1(Bitmap bitmaps) {
 		int oldI = 0;
 		for(int i = 32; i < 32 * 32; i+=31) {

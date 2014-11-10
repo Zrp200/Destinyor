@@ -1,134 +1,124 @@
 package me.jacob.macdougall.npcs.body;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
+
+//import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Entities {
 	// Ordinal Number, http://en.wikipedia.org/wiki/Ordinal_number_(linguistics)
-	
-	//public static Map<String, Entities> entities = new HashMap<>();
-	//public static Map<Integer, String> names = new HashMap<>();
-	
-	private static String[] ON = {
-		"First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth",
-		"Thirteenth", "Fourtheenth", "Fifthteenth", "Sixthteenth", "Seventhteen", "Eighteenth", "Ninthteen", "Twentieth"
-	};
-	// if there are more than twenty of one limb, either something went wrong, or someone really likes that limb.
-	
-//	public static final int 	
-//			Left_Wing = 14,    Head = 0, Right_Wing = 15, // A minority of creatures will have wings so that's why it's higher
-//			Left_Shoulder = 1, Body = 2, Right_Shoulder = 3,
-//				Left_Arm = 4, Waist = 5, Right_Arm = 6,
-//				Left_Hand = 7, Belt = 8, Right_Hand = 9,
-//				Left_Leg = 10, Groin = 11, Right_Leg = 11,
-//				Left_Foot = 12,			Right_Foot = 13;
-	
+
+	public static Map<String, Entities> entities = new HashMap<>();
+	public static List<String> names = new ArrayList<>();
+
+	public List<Limb> limbs = new ArrayList<>();
+
 	public String name;
-	public int limbAmount;
-	public String[] limbs;
-	//public String[] names;
-	
-	public Limb[] currentLimbs;
-	
-	public Entities(String name, int limbAmount, String limb) {
-		//Entities entity = (Entities) entities.getObject(name);
-		this.name = name;
-		this.limbAmount = limbAmount - 1; // LimbAmount will be called for for() constructors, as such it will need to count from 0 to the END
-		limbs = new String[limbAmount]; //limbAmount is used because of the -1 for this.limbAmount
-		try {
-		limbs = limb.split(","); // limbs cannot be greater than limbAmount, if it is the game needs to end.
-		// This is because a for loop which adds an extra 1 to an array will crash the thread it is on but not the rest, therefore we need to close all the threads.
-		} catch(IndexOutOfBoundsException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-		//int amount = 0;
-		for(int i = 0; i < limbs.length; i++) {
-			for(Limb l : Limb.limbs.values()) {
-				if(limbs[i].equalsIgnoreCase(l.name)) {
-					currentLimbs[i] = l;
-				}
-			}
-//			if(limbs[i].contains("Arms")) {
-//				if(currentLimbs[amount] != Limbs.getNO("Left Arm") || currentLimbs[amount] != Right_Arm) {
-//				currentLimbs[amount] = Left_Arm;
-//				amount++;
-//				currentLimbs[amount] = Right_Arm; 
-//				}
-//			}
-//			if(limbs[i].contains("Left Arm")) {
-//				currentLimbs[i] = Left_Arm;
-//			}
-			//amount++;
-		}
-	}
-	
-	
-	/**
-	 * Direct call, only works for setting entities internally
-	 * @param name Name of the entity type
-	 * @param limbAmount How many limbs the entity has
-	 * @param limbs The number value of the limbs
-	 */
-	public Entities(String name, int limbAmount, int[] limbs) {
-		this.name = name;
-		this.limbAmount = limbAmount;
-		for(int i = 0; i < limbs.length; i++) {
-			for(Limb l : Limb.limbs.values()) {
-				if(limbs[i] == l.no) {
-					currentLimbs[i] = l;
-				}
-			}
-		}
-		//currentLimbs = limbs;
-	}
-	
+
 	/**
 	 * Direct call, can only be used internally
 	 * @param name Name of the entity type
 	 * @param limbAmount How many limbs the entity has
 	 * @param limbs The value of the limbs
 	 */
-	public Entities(String name, int limbAmount, Limb[] limbs) {
+	public Entities(String name, Limb... limbs) {
 		this.name = name;
-		this.limbAmount = limbAmount;
-		currentLimbs = limbs;
-		//currentLimbs = limbs;
+		for(int i = 0; i < limbs.length; i++) {
+			this.limbs.add(limbs[i]);
+		}
+	}
+
+	public Entities(String name, String limbNames) {
+		this.name = name;
+
+		limbNames = limbNames.trim();
+		limbNames = limbNames.replace(", ", ",");
+		String[] limbs = limbNames.split(",");
+
+		for(int i = 0; i < limbs.length; i++) {
+			this.limbs.add(Limb.getLimb(limbs[i]));
+		}
+	}
+
+	/**
+	 * http://stackoverflow.com/questions/5802118/why-we-use-clone-method-in-java
+	 * <br>
+	 * Clone constructor
+	 * @param entity
+	 */
+	private Entities(Entities entity) {
+		this.limbs = entity.limbs;
+		this.name = entity.name;
+	}
+
+	public Limb getLimb(String name) {
+		for(Limb limb : limbs) {
+			if(limb.name.equals(name))
+				return limb;
+		}
+		return null;
+	}
+
+	public Limb[] getLimbs() {
+		Limb[] limbs = new Limb[this.limbs.size()];
+
+		for(int i = 0; i < limbs.length; i++) {
+			limbs[i] = this.limbs.get(i);
+		}
+
+		return limbs;
+	}
+
+	public static Limb[] getHumaniod() {
+		Limb[] limbs = new Limb[9];
+
+		limbs[0] = Limb.getLimb("Head");
+		limbs[1] = Limb.getLimb("Neck");
+		limbs[2] = Limb.getLimb("Upper Torso");
+		limbs[3] = Limb.getLimb("Shoulders");
+		limbs[4] = Limb.getLimb("Arms");
+		limbs[5] = Limb.getLimb("Lower Torso");
+		limbs[6] = Limb.getLimb("Hands");
+		limbs[7] = Limb.getLimb("Legs");
+		limbs[8] = Limb.getLimb("Feet");
+
+		for(int i = 0; i < limbs.length; i++) {
+			limbs[i] = limbs[i].newInstance();
+		}
+
+		return limbs;
+	}
+
+	public static Entities newInstance(String name) {
+		Entities entity = new Entities(entities.get(name));
+
+		return entity;
+	}
+
+	public static Entities newInstance(Entities entity) {
+		Entities e = new Entities(entity);
+
+		return e;
+	}
+
+	public Entities newInstance() {
+		Entities entity = new Entities(this);
+
+		return entity;
+	}
+
+	public static void put(Entities entity) {
+		if(entity != null) {
+			entities.put(entity.name, entity);
+			names.add(entity.name);
+		}
 	}
 	
-//	public static int getNO(String name) {
-//		return limbs.get(name).no;
-//	}
-//	
-//	public static String getName(int NO) {
-//		return names.get(NO);
-//	}
-//	
-//	public static Limbs getLimb(String name) {
-//		return limbs.get(name);
-//	}
-//	
-//	public static Limbs getLimb(int NO) {
-//		return limbs.get(names.get(NO));
-//	}
-//	
-//	public static Collection<Limbs> getValues() {
-//		return limbs.values();
-//	}
-//	
-//	public static Collection<String> getNames() {
-//		return names.values();
-//	}
-//	
-//	public static int getLength() {
-//		return limbs.size();
-//	}
-//	
-//	public static int getNamesSize() {
-//		return names.size();
-//	}
-	
-	
+	public void put() {
+		entities.put(name, this);
+		names.add(name);
+	}
+
 }

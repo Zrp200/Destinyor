@@ -3,6 +3,8 @@ package me.jacob.macdougall.quests;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.jacob.macdougall.cutscenes.Cutscene;
+import me.jacob.macdougall.enemies.Boss;
 import me.jacob.macdougall.npcs.*;
 
 public class Quest {
@@ -12,10 +14,11 @@ public class Quest {
     public Rewards[] rewards;
     public NPC[] npcs;
     public Boss[] bosses;
+    public Cutscene[] cutscenes;
     
     public boolean Completed = false;
     
-    public Quest(Rewards[] rewards, NPC[] npcs, Boss[] bosses, boolean completed) {
+    public Quest(Rewards[] rewards, NPC[] npcs, Boss[] bosses, Cutscene[] cutscene, boolean completed) {
             this.bosses = bosses;
             this.npcs = npcs;
             this.rewards = rewards;

@@ -6,7 +6,7 @@ import graphic.engine.screen.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Items implements Cloneable {
+public class Items {
 	
 	public static Map<String, Items> items = new HashMap<>();
 	
@@ -17,32 +17,34 @@ public class Items implements Cloneable {
 	
 	public boolean equippable = false;
 	
-	
-	public static void addToInventory(String key) {
+	public Items() {
 		
 	}
 	
-	public static void removeFromInventory(String key) {
-		
+	protected Items(Items item) {
+		this.name = item.name;
+		this.cost = item.cost;
+		this.frame = item.frame;
+		this.equippable = item.equippable;
 	}
-	
-	public static Items newStaticInstance(String key) {
-		try {
-			return (Equipment) items.get(key).clone();
-        } catch (CloneNotSupportedException e) {
-        	System.err.println("Unable to clone " + key);
-        	return null;
-        }
-    }
 	
 	public Items newInstance() {
-		try {
-			return (Equipment) items.get(this.name).clone();
-        } catch (CloneNotSupportedException e) {
-        	System.err.println("Unable to clone " + this.name);
-        	return null;
-        }
-    }
+		Items item = new Items(this);
+		
+		return item;
+	}
+	
+	public static Items newInstance(String name) {
+		Items item = new Items(items.get(name));
+		
+		return item;
+	}
+	
+	public static Items newInstance(Items item) {
+		Items i = new Items(item);
+		
+		return i;
+	}
 	
 	public void getColor() {
 		double pixel = 0;

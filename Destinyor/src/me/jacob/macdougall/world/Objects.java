@@ -3,7 +3,6 @@ package me.jacob.macdougall.world;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.Time;
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Bitmap;
@@ -27,20 +26,45 @@ public class Objects {
 	int[] frames;
 	
 	public Objects(String name, int x, int y, boolean animated, String frame) {
+		this.name = name;
+		setFrame(frame);
+		
+		
+		this.x = x;
+		this.y = y;
+		this.animated = animated;
+		//objects.put(name, this);
+	}
+	
+	protected Objects(Objects object) {
+		this.name = object.name;
+		this.setFrame(object.frames);
+		
+		this.x = object.x;
+		this.y = object.y;
+		
+		this.animated = object.animated;
+	}
+	
+	public void setFrame(String frame) {
 		frame = frame.trim();
 		String[] frames = frame.split(",");
 		this.frames = new int[frames.length];
 		for(int i = 0; i < frames.length; i++) {
 			this.frames[i] = Integer.parseInt(frames[i].trim());
 		}
-		this.x = x;
-		this.y = y;
 		x1 = this.frames[0];
 		f1 = this.frames[0];
 		y1 = this.frames[1];
 		f2 = this.frames[this.frames.length - 1];
-		this.animated = animated;
-		objects.put(name, this);
+	}
+	
+	public void setFrame(int[] frames) {
+		this.frames = frames;
+		this.x1 = frames[0];
+		this.f1 = frames[1];
+		this.y1 = this.frames[1];
+		this.f2 = this.frames[this.frames.length - 1];
 	}
 	
 	public Bitmap sprite() {
@@ -56,11 +80,49 @@ public class Objects {
 		}
 	}
 	
-	public void render(LevelMap map, Screen screen) {
-		//System.out.println("This");
-		//Tile.tiles[map.tiles[x][y]].render(screen, map.MapX_Pos + x * LevelMap.SIZE, map.MapY_Pos + y * LevelMap.SIZE, null, this);
-		//Tile.tiles[map.tiles[x][y]].render(screen, map.MapX_Pos + x * LevelMap.SIZE, map.MapY_Pos + y * LevelMap.SIZE, null, this, 0);
-		screen.render(sprite(), map.MapX_Pos + x * 32, map.MapY_Pos + y * 32);
+	public static void render(Screen screen, int x, int y, Objects... objects) {
+		for(Objects object : objects) {
+			object.render(screen, x, y);
+		}
+	}
+	
+	private void render(Screen screen, int X, int Y) {
+		screen.render(sprite(), X + x * Tile.SIZE, Y + y * Tile.SIZE);
+	}
+	
+	public Objects newInstance() {
+		Objects object = new Objects(this);
+		
+		return object;
+	}
+	
+	public static Objects newInstance(String name) {
+		Objects object = new Objects(objects.get(name));
+		
+		return object;
+	}
+	
+	public static Objects newInstance(Objects object) {
+		Objects o = new Objects(object);
+		
+		return o;
+	}
+	
+	public static Objects newInstance(String name, int x, int y, boolean animated, String frame){
+			if(objects.get(name) != null) {
+				//System.out.println("Adding " + name);
+				Objects object = newInstance(objects.get(name));
+				object.x = x;
+				object.y = y;
+				object.animated = animated;
+				object.setFrame(frame);
+				return object;
+			} else {
+				//System.out.println("Making a new " + name);
+				Objects object = new Objects(name, x, y, animated, frame);
+				objects.put(name, object);
+				return newInstance(object);
+			}
 	}
 	
 	

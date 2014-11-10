@@ -11,25 +11,21 @@ import javax.imageio.ImageIO;
 import org.w3c.dom.*;
 
 import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.npcs.body.Limb;
 import me.jacob.macdougall.world.*;
 
 public class DynamicsLoader {
 	
-	//public static void init(InputHandler input, Destinyor game) {	
     public static void init() {
+    	loadLimbs();
 		loadTiles();
-//		loadItems();
-//		loadNPCS();
-//		loadEnemies();
-		
-		//loadLevels(input, game);
-                loadLevels();
+        loadLevels();
+        loadObjects();
 	}
-
-	//private static void loadLevels(InputHandler input, Destinyor game) {
+    
         private static void loadLevels() {
 		XMLFile mapXML = new XMLFile("/map.xml");
-		Document doc = mapXML.asDocument2();
+		Document doc = mapXML.asDocument();
 		
 		NodeList pxlDefine1 = ((Element) ((Element) doc.getElementsByTagName("maps").item(0)).getElementsByTagName("define").item(0)).getElementsByTagName("pixel");
 		List<Color> pxlCol1 = new ArrayList<>();
@@ -75,9 +71,7 @@ public class DynamicsLoader {
 		}
 		
 		cw1 = 0;
-		//for(int a = 0; a < maps.length; a++) {
                 for(BufferedImage[] m : maps) {
-			//for(int b = 0; b < map.length; b++) {
                         for(BufferedImage map : m) {
 				int w = map.getWidth();
 				int h = map.getHeight();
@@ -96,21 +90,27 @@ public class DynamicsLoader {
 					}
 				}
 				cw1++;
+                                map.flush();
 			}
-		}		
-		
+                        for(int i = 0; i < m.length; i++) {
+                            m[i].flush();
+                        }
+                }
+                mp.flush();
+                for(int i = 0; i < maps.length; i++) {
+                    for(int j = 0; j < maps[i].length; j++) {
+                        maps[i][j].flush();
+                    }
+                }
+                
+                maps = null;
+                
 		//Register all levels
-		//for(int i = 0; i < mps.length; i++){
-                for(LevelMap map : mps) {
-			LevelMap.Maps.put(map.floor, map);
-		}
+                for(LevelMap map : mps)
+			LevelMap.maps.put(map.floor, map);
 	}
-	
-//	private static void loadItems() {
-//		
-//	}
 
-    @SuppressWarnings("ResultOfObjectAllocationIgnored")
+    //@SuppressWarnings("ResultOfObjectAllocationIgnored")
 	private static void loadTiles() {
 		XMLFile tileXML = new XMLFile("/tiles.xml");
 		Document doc = tileXML.asDocument();
@@ -125,13 +125,37 @@ public class DynamicsLoader {
 		}
 	}
 	
-//	private static void loadNPCS() {
-//		
-//	}
-//	
-//	private static void loadEnemies() {
-//		
-//	}
+	private static void loadObjects() {
+		XMLFile objectXML = new XMLFile("/objects.xml");
+		Document doc = objectXML.asDocument();
+		NodeList mapNodes = doc.getElementsByTagName("objects");
+		for(int i = 0; i < mapNodes.getLength(); i++) {
+			Node n = mapNodes.item(i);
+			NodeList defineNodes = ((Element) n).getElementsByTagName("object");
+
+			for(int j = 0; j < defineNodes.getLength(); j++) {
+				Element e = (Element) defineNodes.item(j);
+				LevelMap.maps.get(i + 1).putObjects(Objects.newInstance(
+						e.getAttribute("name"), Integer.parseInt(e.getAttribute("x")),
+						Integer.parseInt(e.getAttribute("y")), Boolean.parseBoolean(e.getAttribute("animated")),
+						e.getAttribute("frame")));
+			}
+		}
+	}
+	
+	private static void loadLimbs() {
+		XMLFile limbXML = new XMLFile("/limbs.xml");
+		Document doc = limbXML.asDocument();
+		NodeList limbNodes = doc.getElementsByTagName("limbs");
+		for(int i = 0; i < limbNodes.getLength(); i++) {
+			Node n = limbNodes.item(i);
+			NodeList limbs = ((Element) n).getElementsByTagName("limb");
+			for(int j = 0; j < limbs.getLength(); j++) {
+				Element e = (Element) limbs.item(j);
+				new Limb(e.getAttribute("name"), false);
+			}
+		}
+	}
 
 	
 }

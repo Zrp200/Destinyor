@@ -3,28 +3,22 @@ package me.jacob.macdougall;
 import java.awt.Graphics;
 
 public class Clock {
-	
+
 	public int seconds = 0;
 	public int minutes = 0;
 	public int hours = 0;
 	public int days = 0;
 	public int weeks = 0;
-	
-	
+
 	public String getTime() {
-		int s = seconds;
-		int m = minutes;
-		int h = hours;
-		int d = days;
-		int w = weeks;
-		String time = w + " : " + d + " : " + h + " : " + m + " : " + s;
+		String time = weeks + " : " + days + " : " + hours + " : " + minutes + " : " + seconds;
 		return time;
 	}
-	
+
 	public void render(Graphics g) {
 		g.drawString(getTime(), 1, 96);
 	}
-	
+
 	public void tick() {
 		if(Time.getTime(60)) {
 			seconds++;
@@ -46,5 +40,5 @@ public class Clock {
 			weeks++;
 		}
 	}
-	
+        
 }

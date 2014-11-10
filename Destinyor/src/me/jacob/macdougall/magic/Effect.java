@@ -45,6 +45,7 @@ public class Effect {
 		Effect damage = new Effect("Healing", "HP", 50, "Heals the targets HP by 50");
 		setEffect(damage);
 		Effect OHKO = new Effect("One Hit KO", "HP", 1.0f, "Kills the user instantly");
+		setEffect(OHKO);
 	}
 	
 	public static Effect getEffect(String name, String effect, float damage, String description) {

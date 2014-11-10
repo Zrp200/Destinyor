@@ -1,7 +1,5 @@
 package me.jacob.macdougall.world;
 
-import graphic.engine.screen.Screen;
-
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +47,8 @@ public class Cities extends MassSprites {
 	 * @param y2 Y2
 	 */
 	public Cities(String name, int x, int y, int gold, int x1, int x2, int y1, int y2, int level1, int level2, int pX, int pY) {
-		super(x, y, x1, x2, y1, y2, LevelMap.Maps.get(level1));
-		this.map = LevelMap.Maps.get(level1);
+		super(x, y, x1, x2, y1, y2, LevelMap.maps.get(level1));
+		this.map = LevelMap.maps.get(level1);
 		this.gold = gold;
 		this.level1 = level1;
 		this.level2 = level2;

@@ -5,13 +5,13 @@ import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 
 import me.jacob.macdougall.audio.Playlist;
-import me.jacob.macdougall.audio.Sound;
+//import me.jacob.macdougall.audio.Sound;
 import me.jacob.macdougall.world.LevelMap;
 
 public class Audio_Thread extends Thread_Controller implements Runnable {
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		int fps = 0, update = 0;
         long fps_Timer = System.currentTimeMillis();
         double unsPerUpdate = 1000000000 / 60;
@@ -42,7 +42,6 @@ public class Audio_Thread extends Thread_Controller implements Runnable {
                 try {
     				Thread.sleep(5);
     			} catch (InterruptedException e) {
-    				// TODO Auto-generated catch block
     				e.printStackTrace();
     			}
         	}
@@ -78,42 +77,20 @@ public class Audio_Thread extends Thread_Controller implements Runnable {
 	protected void update() {
 		
 		try {
-			//System.out.println("Playing Sound");
 			if(!Playlist.checkSongs()) {
 				for(Playlist playlist : Playlist.playlists.values())
 				if(playlist.levelID == LevelMap.level) {
-					//nextSong = rand.nextInt(playlist.songs.size());
-					//song = playlist.songs.get(nextSong - 1);
-					//song.open();
 					playlist.Play();
-					//song.loop();
 					playlist.isPlaying = true;
 					}
 			}
 		} catch (LineUnavailableException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		for(Playlist playlist : Playlist.playlists.values()) {
-//			if(playlist.levelID == LevelMap.level) {
-//				playlist.checkSongs();
-//			}
-//		}
-//		for(Sound sounds : Sound.sounds.values()) {
-//			try {
-//				if(!sounds.loopable)
-//				sounds.loop();
-//			} catch (LineUnavailableException | IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 
 	@Override
 	protected void render() {
-		
-		// TODO Auto-generated method stub
 		
 	}
 

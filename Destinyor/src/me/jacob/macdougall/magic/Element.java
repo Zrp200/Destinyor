@@ -39,12 +39,10 @@ public class Element {
 	}
         
         public static Element getElement(int index) {
-            //Element e;
                 for(Element e : elements.values()) {
                     if(e.type.equals(types[index]))
                         return e;
                 }
-                //e = types[i]; 
             return null;
         }
         

@@ -20,7 +20,16 @@ public class MassSprites {
 	public int[] frames = new int[4];
 	public LevelMap map;
 	
-	
+	/**
+	 * Class used to control multiple sprites
+	 * @param x x position to begin draw at
+	 * @param y y position to begin drawing at
+	 * @param x1 first sprite x coordinate
+	 * @param x2 final sprite x coordinate
+	 * @param y1 first sprite y coordinate
+	 * @param y2 final sprite y coordinate
+	 * @param map level that it will be drawn on
+	 */
 	public MassSprites(int x, int y, int x1, int x2, int y1, int y2, LevelMap map) {
 		point = new Point(x, y);
 		frames[0] = x1;

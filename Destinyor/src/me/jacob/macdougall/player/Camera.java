@@ -8,10 +8,5 @@ public class Camera {
 	public static int pX = Player.X;
 	public static int pY = Player.Y;
 	public static int mX = 0, mY = 0;
-	//public static final int width = Resolution.width(), height = Resolution.height();
-	
-	public Camera() {
-		
-	}
 	
 }

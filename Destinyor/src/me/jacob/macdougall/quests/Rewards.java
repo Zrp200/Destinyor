@@ -11,9 +11,9 @@ public class Rewards {
     public static Map<String, Rewards> rewards;
     public String name;
     
-    public static Map<String, Rewards> itemReward;
-    public static Map<String, Rewards> effectReward;
-    public static Map<String, Rewards> playerReward;
+    public Map<String, Rewards> itemReward;
+    public Map<String, Rewards> effectReward;
+    public Map<String, Rewards> playerReward;
     
 	public Equipment[] item;
 	public Effect[] effect;

@@ -9,7 +9,7 @@ import me.jacob.macdougall.graphics.UI;
 public class Cutscene_Thread extends Thread_Controller implements Runnable {
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		int fps = 0, update = 0;
         long fps_Timer = System.currentTimeMillis();
         double unsPerUpdate = 1000000000 / 60;
@@ -81,7 +81,7 @@ public class Cutscene_Thread extends Thread_Controller implements Runnable {
 	protected void update() {
 		if(Cutscene.playing) {
             cutscene = Cutscene.cutscenes.get(Cutscene.getName);
-            cutscene.update(input);
+            cutscene.update();
             for(NPCs n : cutscene.npc.values()) {
             	n.CTick();
                 if(n.speaking) {
@@ -89,7 +89,7 @@ public class Cutscene_Thread extends Thread_Controller implements Runnable {
                 }
             }
             if(cutscene.finished) {
-            	cutscene.stopCutscene(move);
+            	cutscene.stopCutscene();
             }
         }
 		

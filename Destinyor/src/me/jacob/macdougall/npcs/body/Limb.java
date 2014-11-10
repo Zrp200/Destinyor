@@ -18,6 +18,8 @@ public class Limb {
 	int no;
 	public boolean renderable = false;
 	
+	private boolean hasEquipment = false;
+	
 	public Limb(String name, boolean renderable) {
 		this.name = name;
 		this.renderable = renderable;
@@ -33,8 +35,22 @@ public class Limb {
 		}
 	}
 	
+	/**
+	 * http://stackoverflow.com/questions/5802118/why-we-use-clone-method-in-java
+	 * <br>
+	 * Clone constructor
+	 * @param limb Limb that will be copied
+	 */
+	private Limb(Limb limb) {
+		this.name = limb.name;
+		this.renderable = limb.renderable;
+		this.no = limb.no;
+	}
 	
-	// Incase I want to do seperate rendering for bosses, or for enemy lose of limbs
+	/**
+	 * Incase I want to do seperate rendering for bosses, or for enemy lose of limbs
+	 * @param sprite
+	 */
 	public void Sprite(Bitmap sprite) {
 		this.sprite = sprite;
 	}
@@ -46,6 +62,22 @@ public class Limb {
 	
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * Is equipment attached to this instance of the limb?
+	 * @return
+	 */
+	public boolean isEquipped() {
+		return hasEquipment;
+	}
+	
+	/**
+	 * Is equipment attached to this instance of the limb?
+	 * @param equipped
+	 */
+	public void setEquipped(boolean equipped) {
+		hasEquipment = equipped;
 	}
 	
 	public static int getNO(String name) {
@@ -79,6 +111,23 @@ public class Limb {
 	public static int getNamesSize() {
 		return names.size();
 	}
+	
+	public static Limb newInstance(String name) {
+		Limb limb = new Limb(limbs.get(name));
+		return limb;
+	}
+	
+	public static Limb newInstance(Limb l) {
+		Limb limb = new Limb(l);
+		return limb;
+	}
+	
+	public Limb newInstance() {
+		Limb limb = new Limb(this);
+		return limb;
+	}
+	
+	
 	
 	
 	

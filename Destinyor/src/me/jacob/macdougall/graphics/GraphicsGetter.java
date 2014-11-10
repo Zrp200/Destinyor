@@ -9,14 +9,12 @@ public class GraphicsGetter {
 	public static int getAbsoluteX(int x) {
 		float xtemp = (float) Resolution.width() / 512;
 		float X = (float) (x * xtemp);
-		//X = x ^(Resolution.width() / Options.ResX[Resolution.getScaleX()] * Options.ResY[Resolution.getScaleY()]);
 		return (int) X;
 	}
 	
 	public static int getAbsoluteY(int y) {
 		float ytemp = (float) Resolution.height() / 384;
 		float Y = (float) (y * ytemp);
-		//X = x ^(Resolution.width() / Options.ResX[Resolution.getScaleX()] * Options.ResY[Resolution.getScaleY()]);
 		return (int) Y;
 	}
 	

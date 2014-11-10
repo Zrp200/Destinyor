@@ -3,10 +3,11 @@ package me.jacob.macdougall.threads;
 import static me.jacob.macdougall.Destinyor.create;
 import static me.jacob.macdougall.Destinyor.read;
 import static me.jacob.macdougall.Destinyor.write;
-import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.files.Default;
 import me.jacob.macdougall.files.DestinyorFiles;
 import me.jacob.macdougall.files.FileLoader;
-import me.jacob.macdougall.world.LevelMap;
+import me.jacob.macdougall.files.Reader;
+import me.jacob.macdougall.files.Writer;
 
 public class Loading_Thread extends Thread_Controller implements Runnable { 
 	
@@ -51,21 +52,29 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     }
     
     private void reader() {
-    	System.out.println("Reading");
         switch(reader) {
-            case 0: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorSpells);
+        	
+        	case 0: Reader.readEntities(DestinyorFiles.DestinyorEntities);
+        	reader++;
+        	break;
+        	
+            case 1: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorSpells);
             reader++;
             break;
             
-            case 1: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorCharacters);
+            case 2: Reader.ReadItems(DestinyorFiles.DestinyorItems);
             reader++;
             break;
             
-            case 2: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorEnemies);
+            case 3: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorCharacters);
             reader++;
             break;
             
-            case 3: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorNpcs);
+            case 4: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorEnemies);
+            reader++;
+            break;
+            
+            case 5: FileLoader.ReadFromFiles(DestinyorFiles.DestinyorNpcs);
             reader++;
             break;
                 
@@ -80,21 +89,29 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     }
     
     private void writer() {
-    	System.out.println("Writing");
         switch(writer) {
-            case 0: FileLoader.WriteToFiles(DestinyorFiles.DestinyorCharacters);
+        	
+        	case 0: Writer.WriteDefault(DestinyorFiles.DestinyorEntities, "Entities", Default.getEntities(), Default.getEntitiesFormat());
+        	writer++;
+        	break;
+        	
+        	case 1: FileLoader.WriteToFiles(DestinyorFiles.DestinyorSpells);
+            writer++;
+            break;
+        	
+        	case 2: Writer.WriteDefault(DestinyorFiles.DestinyorItems, "Items", Default.getItems(), Default.getItemsFormat());
+        	writer++;
+        	break;
+            
+            case 3: FileLoader.WriteToFiles(DestinyorFiles.DestinyorCharacters);
             writer++;
             break;
             
-            case 1: FileLoader.WriteToFiles(DestinyorFiles.DestinyorEnemies);
+            case 4: Writer.WriteDefault(DestinyorFiles.DestinyorEnemies, "Enemies", Default.getEnemies(), Default.getEnemiesFormat());
             writer++;
             break;
             
-            case 2: FileLoader.WriteToFiles(DestinyorFiles.DestinyorSpells);
-            writer++;
-            break;
-            
-            case 3: FileLoader.WriteToFiles(DestinyorFiles.DestinyorNpcs);
+            case 5: FileLoader.WriteToFiles(DestinyorFiles.DestinyorNpcs);
             writer++;
             break;
             
@@ -106,21 +123,29 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     }
     
     private void creater() {
-    	System.out.println("Creating");
         switch(creator) {
-            case 0: FileLoader.CreateFile(DestinyorFiles.DestinyorCharacters);
+        	
+        	case 0: FileLoader.CreateDefaultFile(DestinyorFiles.DestinyorEntities, "Entities", Default.getEntities(), Default.getEntitiesFormat());
+        	creator++;
+        	break;
+        	
+        	case 1: FileLoader.CreateFile(DestinyorFiles.DestinyorSpells);
             creator++;
             break;
             
-            case 1: FileLoader.CreateFile(DestinyorFiles.DestinyorEnemies);
+        	case 2: FileLoader.CreateDefaultFile(DestinyorFiles.DestinyorItems, "Items", Default.getItems(), Default.getItemsFormat());
+        	creator++;
+        	break;
+        	
+            case 3: FileLoader.CreateFile(DestinyorFiles.DestinyorCharacters);
             creator++;
             break;
             
-            case 2: FileLoader.CreateFile(DestinyorFiles.DestinyorSpells);
+            case 4: FileLoader.CreateDefaultFile(DestinyorFiles.DestinyorEnemies, "Enemies", Default.getEnemies(), Default.getEnemiesFormat());
             creator++;
             break;
             
-            case 3: FileLoader.CreateFile(DestinyorFiles.DestinyorNpcs);
+            case 5: FileLoader.CreateFile(DestinyorFiles.DestinyorNpcs);
             creator++;
             break;
             
@@ -152,7 +177,7 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
     }
     
     @Override
-    public void run() {
+    public synchronized void run() {
         while(Loading) {
             update();
             render();
@@ -162,10 +187,8 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
                         creator = 0;
                         writer = 0;
                         reader = 0;
-                        updateTiles();
-                        if(!setShadows)
                         pause();
-                        System.out.printf("\n Loading: %d fps, %d updates", fps, ups);
+                        //System.out.printf("\n Loading: %d fps, %d updates", fps, ups);
                     }
                 }
             }
@@ -175,14 +198,6 @@ public class Loading_Thread extends Thread_Controller implements Runnable {
 		} catch (InterruptedException e) {
 			return; // If interrupted continue from the start and check if loading is true else try again
 		}
-    }
-    
-    protected void updateTiles() {
-//    	for(LevelMap map : LevelMap.Maps.values()) {
-//    		System.out.println("Checking shadows");
-//    		map.checkShadows();
-//    	}
-    	setShadows = false;
     }
     
 }

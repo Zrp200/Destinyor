@@ -3,29 +3,23 @@ package me.jacob.macdougall.battles;
 import java.util.HashMap;
 import java.util.Map;
 
-import input.engine.keyboard.InputHandler;
 import input.engine.mouse.Mouse;
-import me.jacob.macdougall.Keys;
-import me.jacob.macdougall.Time;
-import me.jacob.macdougall.graphics.Commands;
-import me.jacob.macdougall.npcs.Enemy;
+import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.gui.Commands;
+import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.player.Player;
 
 public class BattleInput {
-	
-	//private InputHandler input;
+
 	public Pointer point;
-	private final Battles battles;
-	
-	public boolean targetSelected = false;
-	
+
+	public static boolean targetSelected = false;
+
 	public Map<Integer, Commands> commands = new HashMap<>();
-	
-	public BattleInput(InputHandler input, Pointer point, Battles battles) {
-		//this.input = input;
+
+	public BattleInput(Pointer point) {
 		this.point = point;
-		this.battles = battles;
-		
+
 		commands.put(0, new Commands("Attack", 190, 305, (7 * "Attack".length()), 8));
 		commands.put(1, new Commands("Spells", 190, 325, 8, 8));
 		commands.put(2, new Commands("Enemy1", 32, 32, 32, 32));
@@ -33,161 +27,98 @@ public class BattleInput {
 		commands.put(4, new Commands("Enemy3", 32, 140, 32, 32));
 		commands.put(5, new Commands("Enemy4", 32, 192, 32, 32));
 		commands.put(6, new Commands("Enemy5", 32, 244, 32, 32));
-		//this.point = point;
 	}
-	
+
 	public void clicker(Mouse mouse, Enemy[] entities) {
 		for(int i = 0; i < commands.size(); i++) {
 			if(commands.get(i).inBox(mouse.pressedX, mouse.pressedY)) {
-				switch(i) {
-				case 0: if(Player.getPlayerAttack() != null) battles.Attack(Player.getPlayerAttack(), entities); break;
-				case 1: break;
+				switch (i) {
+					case 0:
+						if(Player.getPlayerAttack() != null)
+							Player.getPlayerAttack().attack(Player.getPlayerAttack().getTarget());
+						break;
+					case 1:
+						break;
 				}
 			}
 		}
 	}
-	
-	public boolean up() {
-		return Keys.MoveUp();
-	}
-	
-	public boolean down() {
-		return Keys.MoveDown();
-	}
-	
-	public boolean left() {
-		return Keys.MoveLeft();
-	}
-	
-	public boolean right() {
-		return Keys.MoveRight();
-	}
-	
-	public boolean enter() {
-		return Keys.Enter();
-	}
-	
+
 	public void assingTarget(Mouse mouse, Enemy[] enemies) {
-		//for(int i = 0; i < entities.length; i++) {
-		//point.ePointerX = 20;
-		//point.ePointerY = 38;
-		
-                for(Enemy enemy : enemies) {
+
+		if(enemies != null) {
+			Player player = Player.getNextAttackPlayer();
+
+			if(player.getTarget() != null && !player.getTarget().alive()) {
+				for(Enemy enemy : enemies) {
+					if(player.getTarget() == null) {
+						player.setTarget(enemy);
+						break;
+					} else {
+						if(enemy.alive())
+							player.setTarget(enemy);
+					}
+				}
+			}
+
 			if(enemies.length > 0) {
-				if(Keys.Enemy1() || commands.get(2).inBox(mouse.pressedX, mouse.pressedY)) {
-					//System.out.println("Targeting");
-					//point.ePointerY = 38;
-					enemy.Focused = false;
-					enemies[0].Focused = true;
-					targetSelected = true;
+				if(enemies[0].alive()) {
+					if(Keys.Enemy1() || commands.get(2).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 0) {
+						targetSelected = true;
+						Player.getNextAttackPlayer().setTarget(enemies[0]);
+						System.out.println("Targeting 1");
+						Pointer.ep = false;
+					}
 				}
 			}
-			
+
 			if(enemies.length > 1) {
-				if(Keys.Enemy2() || commands.get(3).inBox(mouse.pressedX, mouse.pressedY)) {
-					//System.out.println("Targeting");
-					//point.ePointerY = (45) * 2;
-					enemy.Focused = false;
-					enemies[1].Focused = true;
-					targetSelected = true;
+				if(enemies[1].alive()) {
+					if(Keys.Enemy2() || commands.get(3).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 1) {
+						targetSelected = true;
+						Player.getNextAttackPlayer().setTarget(enemies[1]);
+						System.out.println("Targeting 2");
+						Pointer.ep = false;
+					}
 				}
 			}
-		
+
 			if(enemies.length > 2) {
-				if(Keys.Enemy3() || commands.get(4).inBox(mouse.pressedX, mouse.pressedY)) {
-					//System.out.println("Targeting");
-					//point.ePointerY = (48) * 3;
-					enemy.Focused = false;
-					enemies[2].Focused = true;
-					targetSelected = true;
+				if(enemies[2].alive()) {
+					if(Keys.Enemy3() || commands.get(4).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 2) {
+						targetSelected = true;
+						Player.getNextAttackPlayer().setTarget(enemies[2]);
+						System.out.println("Targeting 3");
+						Pointer.ep = false;
+					}
 				}
 			}
-		
+
 			if(enemies.length > 3) {
-				if(Keys.Enemy4() || commands.get(5).inBox(mouse.pressedX, mouse.pressedY)) {
-					//System.out.println("Targeting");
-					//point.ePointerY = (49) * 4;
-					enemy.Focused = false;
-					enemies[3].Focused = true;
-					targetSelected = true;
+				if(enemies[3].alive()) {
+					if(Keys.Enemy4() || commands.get(5).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 3) {
+						targetSelected = true;
+						Player.getNextAttackPlayer().setTarget(enemies[3]);
+						System.out.println("Targeting 4");
+						Pointer.ep = false;
+					}
 				}
 			}
-		
+
 			if(enemies.length > 4) {
-				if(Keys.Enemy5() || commands.get(6).inBox(mouse.pressedX, mouse.pressedY)) {
-					//System.out.println("Targeting");
-					//point.ePointerY = (49) * 5;
-					enemy.Focused = false;
-					enemies[4].Focused = true;
-					targetSelected = true;
-				}
-			}
-			
-			if(Keys.MoveDown()) {
-				
-			}
-		}
-                //getEnemy(enemies);
-                mouse.pressedX = 0;
-				mouse.pressedY = 0;
-	}
-	
-	public void getEnemy(Enemy[] enemies) {
-		if(point.ep && !point.p && Time.getKeyTimer(10, false)) {
-			for(Enemy enemy : enemies) {
-				if(Keys.MoveDown()) {
-					if(point.e >= enemies.length - 1) {
-						point.e = 0;
-						//point.ePointerY = -32;
-					} else {
-						point.e++;
+				if(enemies[4].alive()) {
+					if(Keys.Enemy5() || commands.get(6).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 4) {
+						targetSelected = true;
+						Player.getNextAttackPlayer().setTarget(enemies[4]);
+						System.out.println("Targeting 5");
+						Pointer.ep = false;
 					}
-					//point.ePointerX = enemies[point.e].X - 10;
-					
-					//point.ePointerY = enemies[point.e].Y / 2;
-					point.ePointerY = 38 * (point.e + 1); 
-					Time.resetKeyTimer();
-				}
-				if(Keys.MoveUp()) {
-					if(point.e <= 0) {
-						point.e = enemies.length - 1;
-					} else {
-						point.e--;
-					}
-					//point.ePointerX = enemies[point.e].X - 10;
-					//point.ePointerY = enemies[point.e].Y / 2;
-					point.ePointerY = 38 * (point.e);
-					Time.resetKeyTimer();
-				}
-				if(Keys.Enter()) {
-					enemy.Focused = false;
-					enemies[point.e].Focused = true;
-					targetSelected = true;
-					point.ep = false;
-					point.p = true;
-					Time.resetKeyTimer();
 				}
 			}
 		}
+
+		mouse.pressedX = 0;
+		mouse.pressedY = 0;
 	}
-	
-	public void Combat(Player[] players, Enemy[] enemies) {
-        boolean[] canAttack = { false, false, false, false };
-		//boolean canAttack = false;
-        int pl = 0;
-        for(int p = 0; p < players.length; p++) {
-            if(players[p].TA >= 500) {
-            	canAttack[p] = true;
-                //canAttack = true;
-                pl = p;
-            }
-       // }
-        if(canAttack[pl]) {
-        	//battles.
-        	point.point(players[pl], enemies);
-        }
-    }
-	}
-	
-	
+
 }

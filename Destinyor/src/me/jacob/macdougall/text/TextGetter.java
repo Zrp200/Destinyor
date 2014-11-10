@@ -6,10 +6,7 @@ import graphic.engine.screen.Screen;
 import input.engine.keyboard.InputHandler;
 
 import java.util.List;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
-import me.jacob.macdougall.Destinyor;
 
 public class TextGetter {
 	

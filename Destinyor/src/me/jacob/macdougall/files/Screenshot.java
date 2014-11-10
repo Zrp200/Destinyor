@@ -16,7 +16,6 @@ public class Screenshot {
 		try {
 			ImageIO.write(screen.image, "PNG", image);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		id++;

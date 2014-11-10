@@ -8,9 +8,10 @@ public class RandomLevel extends LevelMap {
 	
 	public RandomLevel() {
 		GenerateLevel();
-		Maps.put(Maps.size() + 1, this);
+		maps.put(maps.size() + 1, this);
 	}
 	
+	@SuppressWarnings("static-access")
 	public void GenerateLevel() {
 		for(int i = 0; i < this.FloorWidth; i++) {
 			for(int j = 0; j < this.FloorHeight; j++) {
@@ -27,10 +28,6 @@ public class RandomLevel extends LevelMap {
 				if(j == this.FloorHeight - 1) {
 					tiles[i][j] = 1;
 				}
-//				if(tiles[i][j-1] == tiles[i][j]) {
-//					tiles[i][j] = tiles[i][j-1]
-//				}
-				//System.out.println(Tile.tiles[tiles[i][j]]);
 			}
 		}
 		

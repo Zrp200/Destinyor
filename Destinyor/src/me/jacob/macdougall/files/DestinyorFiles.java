@@ -7,22 +7,26 @@ import me.jacob.macdougall.Destinyor;
 public class DestinyorFiles {
 	
 	// Contains every single file to be used by the game
+	//public static final String locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
 	
 	public static final String home = System.getProperty("user.home");
 	public static final String fileSplit = System.getProperty("file.separator");
-	//public static final String locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
+	
 	public static final Locale LOCALE = Locale.getDefault();
     public static final String DestinyorFolder = home + fileSplit + "Documents" + fileSplit + Destinyor.title;
+    public static final String DestinyorHome = DestinyorFolder + fileSplit;
+    public static final String EXT = ".destinyor";
     
-    public static String DestinyorCharacters = DestinyorFolder + fileSplit + "Save" + ".destinyor";
-    public static String DestinyorEnemies = DestinyorFolder + fileSplit + "Enemies" + ".destinyor";
+    public static String DestinyorCharacters = DestinyorFolder + fileSplit + "Characters" + EXT;
+    public static String DestinyorEnemies = DestinyorFolder + fileSplit + "Enemies" + EXT;
     public static String DestinyorSettings = DestinyorFolder + fileSplit + "settings" + ".ini";
-    public static String DestinyorSpells = DestinyorFolder + fileSplit + "Spells" + ".destinyor";
-    public static String DestinyorNpcs = DestinyorFolder + fileSplit + "Npcs" + ".destinyor";
-    public static String DestinyorItems = DestinyorFolder + fileSplit + "Items" + ".destinyor";
+    public static String DestinyorSpells = DestinyorFolder + fileSplit + "Spells" + EXT;
+    public static String DestinyorNpcs = DestinyorFolder + fileSplit + "Npcs" + EXT;
+    public static String DestinyorItems = DestinyorFolder + fileSplit + "Items" + EXT;
     public static String DestinyorDialougesFolder = DestinyorFolder + fileSplit + "Dialouges";
     public static String DestinyorCutsceneFolder = DestinyorFolder + fileSplit + "Cutscenes";
     public static String DestinyorModFolder = DestinyorFolder + fileSplit + "mod";
+    public static String DestinyorEntities = DestinyorFolder + fileSplit + "Entities" + EXT;
     
     public static String DestinyorSpriteSheet = "/icon0.png";
     public static String DestinyorCharacter1Sheet = "/Character1.png";
@@ -35,25 +39,33 @@ public class DestinyorFiles {
     
     
     public static void setFile(String file, String url) {
-    	if(DestinyorCharacters.contains(file) || file.contains("Characters.destinyor")) {
+    	if(DestinyorCharacters.contains(file) || file.contains("Characters.destinyor"))
     		DestinyorCharacters = url;
-    	}
+    	
     	else
-    	if(DestinyorEnemies.contains(file)) {
+    		
+    	if(DestinyorEnemies.contains(file))
         	DestinyorEnemies = url;
-        }
+    	
     	else
-    	if(DestinyorSpells.contains(file)) {
+    		
+    	if(DestinyorSpells.contains(file))
     		DestinyorSpells = url;
-    	}
+    	
     	else
-    	if(DestinyorNpcs.contains(file)) {
+    		
+    	if(DestinyorNpcs.contains(file))
     		DestinyorNpcs = url;
-    	}
+    	
     	else
-    	if(DestinyorItems.contains(file)) {
+    		
+    	if(DestinyorItems.contains(file))
     		DestinyorItems = url;
-    	}
+    	
+    	else
+    		
+    	if(DestinyorEntities.contains(file))
+    		DestinyorEntities = url;
     		
     }
     

@@ -6,12 +6,11 @@
 		<pixel rgb = "194,194,194" bind = "3" />
 		<pixel rgb = "255,0,255" bind = "4" />
 		<pixel rgb = "255,0,0" bind = "5" />
-		
 		<pixel rgb = "255,255,255" bind = "10" />
 	</define>
 	
 	<map floor = "1">
-	<map floor = "2">
+	
 	</map>
 	
 	<define>
@@ -25,7 +24,7 @@
 		<pixel rgb = "255,255,255" bind = "10" />
 	</define>
 	
-	
+	<map floor = "2">
 	
 	</map>
 	

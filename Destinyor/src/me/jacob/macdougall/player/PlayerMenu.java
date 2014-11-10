@@ -1,10 +1,8 @@
 package me.jacob.macdougall.player;
 
-
-import input.engine.keyboard.InputHandler;
-import me.jacob.macdougall.Keys;
 import me.jacob.macdougall.Time;
 import me.jacob.macdougall.graphics.UI;
+import me.jacob.macdougall.input.Keys;
 
 public class PlayerMenu {
     
@@ -13,10 +11,7 @@ public class PlayerMenu {
     public int spell = 0;
     public int menu = 0;
     
-    private InputHandler input;
-    
-    public PlayerMenu(InputHandler input) {
-        this.input = input;
+    public PlayerMenu() {
     }
     
     public void switchMenu() {

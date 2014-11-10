@@ -1,11 +1,11 @@
 package me.jacob.macdougall.player;
 
-import input.engine.keyboard.InputHandler;
-import input.engine.keyboard.Key;
 import me.jacob.macdougall.*;
 import me.jacob.macdougall.battles.Battles;
 import me.jacob.macdougall.graphics.UI;
+import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.npcs.NPC;
+import me.jacob.macdougall.npcs.RandomNPCs;
 import me.jacob.macdougall.world.*;
 import graphic.engine.screen.Bitmap;
 
@@ -15,7 +15,7 @@ public class Move {
 	
 	//InputHandler input;
 	LevelMap map;
-	Destinyor game;
+	//Destinyor game;
 	
 	public static int steps = 0;
 	public static int location = 0;
@@ -31,13 +31,13 @@ public class Move {
 	
 	public static int frame = 0;
 	
-	public boolean canMove = true;
+	public static boolean canMove = true;
 	public static boolean collision = false;
 	public boolean run = true;
 	public boolean hasMoved = false;
 	
-	public Move(Destinyor game, LevelMap lvlmap) {
-		this.game = game;
+	public Move(LevelMap lvlmap) {
+		//this.game = game;
 		//input = new InputHandler(game);
 		map = lvlmap;
 	}
@@ -80,22 +80,22 @@ public class Move {
                         	UI.menu = UI.Inventory;
 //                            UI.InventoryOn = true;
 //                            UI.MapOn = false;
-                            Destinyor.Refresh = true;
+                        	Destinyor.Refresh();
                         } else {
                         	UI.menu = UI.Map;
 //                            UI.InventoryOn = false;
 //                            UI.MapOn = true;
-                            Destinyor.Refresh = true;
+                        	Destinyor.Refresh();
                         }
                 }
                     if(Keys.Equipment()) {
                     	if(Time.inventoryTimer(10)) {
                     		if(UI.menu != UI.Equipment) {
                     			UI.menu = UI.Equipment;
-                    			Destinyor.Refresh = true;
+                    			Destinyor.Refresh();
                     		} else {
                     			UI.menu = UI.Map;
-                    			Destinyor.Refresh = true;
+                    			Destinyor.Refresh();
                     		}
                     	}
                     }
@@ -122,11 +122,10 @@ public class Move {
                     		}
                     		Time.resetKeyTimer();
                 	}
-                	System.out.println("Menu: " + UI.menu);
                 }
                 
-                game.ChangeScreenToUI();
-        	game.ChangeScreenToMap();
+                Destinyor.ChangeScreenToUI();
+                Destinyor.ChangeScreenToMap();
                 
 		if(UI.menu == 0 || UI.menu == 2)
 		minimap();
@@ -140,7 +139,7 @@ public class Move {
 					//UI.MinimapOn = true;
 				} else {
 					UI.menu = UI.Map;
-					Destinyor.Refresh = true;
+					Destinyor.Refresh();
 					//UI.MinimapOn = false;
 				}
 			}
@@ -222,18 +221,20 @@ public class Move {
 	private boolean canMove(int dir) {
 		
 		for(NPC n : NPC.npcs.values()) {
+			for(RandomNPCs n1 : RandomNPCs.randomNpcs.values()) {
 			if(dir == DIR_LEFT)
-				if(n.collision(Player.X - 1, Player.Y))
+				if(n.collision(Player.X - 1, Player.Y) || n1.collision(Player.X - 1, Player.Y))
 					return false;
 			if(dir == DIR_RIGHT)
-				if(n.collision(Player.X + 1, Player.Y))
+				if(n.collision(Player.X + 1, Player.Y) || n1.collision(Player.X + 1, Player.Y))
 					return false;
 			if(dir == DIR_UP)
-				if(n.collision(Player.X, Player.Y - 1))
+				if(n.collision(Player.X, Player.Y - 1) || n1.collision(Player.X, Player.Y - 1))
 					return false;
 			if(dir == DIR_DOWN)
-				if(n.collision(Player.X, Player.Y + 1))
+				if(n.collision(Player.X, Player.Y + 1) || n1.collision(Player.X, Player.Y + 1))
 					return false;
+			}
 		}
 		if(UI.menu == UI.Map || UI.menu == UI.Minimap) {
 			if(dir == DIR_LEFT) {
@@ -266,7 +267,7 @@ public class Move {
 		Player.X -= 1;
 		frame += 1;
 		Battles.enterCombat();
-		Destinyor.Refresh = true;
+		Destinyor.Refresh();
 	}
 	
 	public void MoveRight(){
@@ -275,7 +276,7 @@ public class Move {
 		Player.X += 1;
 		frame += 1;
 		Battles.enterCombat();
-		Destinyor.Refresh = true;
+		Destinyor.Refresh();
 	}
 	
 	public void MoveUp(){
@@ -284,7 +285,7 @@ public class Move {
 		Player.Y -= 1;
 		frame += 1;
 		Battles.enterCombat();
-		Destinyor.Refresh = true;
+		Destinyor.Refresh();
 	}
 	
 	public void MoveDown(){
@@ -293,7 +294,7 @@ public class Move {
 		Player.Y += 1;
 		frame += 1;
 		Battles.enterCombat();
-		Destinyor.Refresh = true;
+		Destinyor.Refresh();
 	}
 	
 }
