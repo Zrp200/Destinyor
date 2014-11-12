@@ -8,59 +8,53 @@ import me.jacob.macdougall.enemies.Boss;
 import me.jacob.macdougall.npcs.*;
 
 public class Quest {
-    
-    public static Map<Integer, Quest> quests = new HashMap<>();
-    
-    public Rewards[] rewards;
-    public NPC[] npcs;
-    public Boss[] bosses;
-    public Cutscene[] cutscenes;
-    
-    public boolean Completed = false;
-    
-    public Quest(Rewards[] rewards, NPC[] npcs, Boss[] bosses, Cutscene[] cutscene, boolean completed) {
-            this.bosses = bosses;
-            this.npcs = npcs;
-            this.rewards = rewards;
-            this.Completed = completed;
-    }
-    
-    public Boss[] getBosses() {
-        Boss[] boss;
-        if(bosses == null) {
-            boss = new Boss[1];
-            boss[0] = Boss.noBoss;
-        } else {
-            boss = bosses;
-        }
-            return boss;
-    }
-    
-    public boolean bossCheck() {
-    	boolean bosschecker[] = new boolean[bosses.length];
-    	if(bosses == null) {
-    		return true;
-    	}
-    	for(int i = 0; i < bosses.length; i++)
-    	if(bosses[i].HP <= 0 || bosses[i].Defeated) {
-    		bosschecker[i] = true;
-    		bosses[i].Defeated = true;
-    	}
-    	for(int i = 0; i < bosses.length; i++) {
-    		if(!bosschecker[i]) {
-    			return false;
-    		} else {
-    			if(i >= bosses.length) {
-    				return true;
-    			}
-    		}
-    	}
-    	return false;
-    }
-    
-    public Rewards[] getRewards() {
-    	if(Completed)
-            return rewards;
-    	return null;
-    }
+
+	public static Map<Integer, Quest> quests = new HashMap<>();
+
+	public Rewards[] rewards;
+	private NPC questGiver;
+	private NPC bossNpc;
+	private Boss boss;
+	public Cutscene[] cutscenes;
+
+	public boolean Completed = false;
+
+	public Quest(Rewards[] rewards, NPC questNpc, Boss boss, Cutscene[] cutscene, boolean completed) {
+		this.boss = boss;
+		this.questGiver = questNpc;
+		if(boss != null)
+		this.bossNpc = NPC.npcs.get(boss.name);
+		this.rewards = rewards;
+		this.Completed = completed;
+	}
+
+	public Boss getBosses() {
+		return boss;
+	}
+
+	public boolean hasBoss() {
+		return (boss != null);
+	}
+
+	public Rewards[] getRewards() {
+		if(Completed)
+			return rewards;
+		return null;
+	}
+
+	public NPC getQuestGiver() {
+		return questGiver;
+	}
+
+	public void setQuestGiver(NPC npc) {
+		this.questGiver = npc;
+	}
+
+	public NPC getBossNpc() {
+		return bossNpc;
+	}
+
+	public void setBossNpc(NPC boss) {
+		bossNpc = boss;
+	}
 }
