@@ -8,6 +8,10 @@ import me.jacob.macdougall.enemies.Boss;
 import me.jacob.macdougall.npcs.*;
 
 public class Quest {
+	
+	// Item fetching quest
+	// Monster hunting quest
+	// Boss killing quest
 
 	public static Map<Integer, Quest> quests = new HashMap<>();
 
