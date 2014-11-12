@@ -12,6 +12,7 @@ public class Quest {
 	// Item fetching quest
 	// Monster hunting quest
 	// Boss killing quest
+	// previous quest completion
 
 	public static Map<Integer, Quest> quests = new HashMap<>();
 
