@@ -284,12 +284,15 @@ public class Writer {
 		BufferedWriter bw;
 		try {
 			bw = new BufferedWriter(new FileWriter(location));
-
+			
 			for(int i = 0; i < Quest.quests.size(); i++) {
-				for(Boss boss : Quest.quests.get(i).bosses)
-					bw.write(boss.name);
-				for(NPC npc : Quest.quests.get(i).npcs)
-					bw.write(npc.name);
+				Quest quest = Quest.quests.get(i);
+					// Bosses
+					bw.write(quest.getBosses().name);
+					
+					// Npcs
+					bw.write(quest.getQuestGiver().name);
+					bw.write(quest.getBossNpc().name);
 				for(Rewards reward : Quest.quests.get(i).rewards)
 					bw.write(reward.name);
 			}
