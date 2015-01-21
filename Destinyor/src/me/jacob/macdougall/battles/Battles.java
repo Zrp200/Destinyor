@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.util.Random;
 
 import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.enemies.Enemy;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.magic.Spells;
@@ -50,12 +51,12 @@ public class Battles {
 		bRender.renderTime(g, players);
 	}
 
-	public void render(Player[] players, Screen screen, Enemy[] entities) {
+	public void render(Player[] players, Screen screen, Enemies[] entities) {
 		bRender.render(players, screen, entities, bInput);
 	}
 
-	public void assignTarget(Mouse mouse, Enemy[] entities) {
-		bInput.assingTarget(mouse, entities);
+	public void assignTarget(Mouse mouse, Enemies[] enemies) {
+		bInput.assingTarget(mouse, enemies);
 	}
 
 	public void turn(Enemy[] entities) {
@@ -71,7 +72,7 @@ public class Battles {
 
 		int i = 0;
 		int x = 32;
-		int y = 24;
+		int y = 16;
 		int j;
 
 		Enemy enemy;
@@ -108,6 +109,10 @@ public class Battles {
 		}
 		return e;
 	}
+	
+	public static Enemies[] setEnemies(Enemies[] enemies) {
+		return null;
+	}
 
 	public static void enterCombat() {
 
@@ -121,7 +126,7 @@ public class Battles {
 			if(move == randomBattles && Move.steps >= 10) {
 				randomBattles = randomGen.nextInt(90) + 10;
 				UI.menu = UI.Fight;
-				Destinyor.Refresh();
+				//Destinyor.Refresh();
 				Move.steps = 0;
 				Battles.enemiesCreated = false;
 				move = 10;
@@ -136,17 +141,17 @@ public class Battles {
 
 	
 
-	public void calculateDamage(Enemy[] entities, Move move) {
+	public void calculateDamage(Enemies[] enemies, Move move) {
 		if(spell != null && spell.inUse) {
-			spellHandler(spell.player, entities);
+			spellHandler(spell.player, enemies);
 		}
 	}
 
-	public static void spellHandler(Player player, Enemy[] entities) {
+	public static void spellHandler(Player player, Enemies[] enemies) {
 
 		Spell: {
 			if(player.getSpells(Pointer.spell) != null) {
-				for(Enemy enemy : entities) {
+				for(Enemies enemy : enemies) {
 					if(player.getTarget() != null && player.getTarget().alive()) {
 						if(player.getSpells(Pointer.spell).effect == Spells.Requires_Combo)
 							spell = player.getSpells(Pointer.spell);

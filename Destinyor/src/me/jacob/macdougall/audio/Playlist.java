@@ -52,7 +52,7 @@ public class Playlist {
 			}
 		}
 		song = songs.get(nextSong);
-		Destinyor.Song = song.getName();
+		Destinyor.song = song.getName();
 		song.open();
 		song.playSound();
 	}

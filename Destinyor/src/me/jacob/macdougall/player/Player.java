@@ -1,8 +1,8 @@
 package me.jacob.macdougall.player;
 
-import me.jacob.macdougall.DebugWriter;
 import me.jacob.macdougall.Time;
 import me.jacob.macdougall.enemies.Dummy;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.enemies.Enemy;
 import me.jacob.macdougall.graphics.GraphicsGetter;
 import me.jacob.macdougall.items.Equipment;
@@ -13,51 +13,41 @@ import me.jacob.macdougall.quests.Quest;
 import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
-import me.jacob.macdougall.battles.PlayerBattle;
 
 import java.awt.Graphics;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class Player extends Dummy {
 
 	// Static means that all instances of the class will have the same value. Only values relating to movement should be static as only one character moves.
-	public static Map<String, Player> players = new HashMap<>();
-	public static Map<Integer, String> names = new HashMap<>();
+	public static List<Player> players = new ArrayList<>();
 	
 	// The inventory should also be static as all players have access to it, same with gold.
 	public static Map<Integer, Items> inventory = new HashMap<>();
+	public static List<Quest> questLog = new ArrayList<>();
 	
-	public Map<Integer, Spells> spells = new HashMap<>();
-	
-	private Map<String, Integer> status = new HashMap<>();
-
-	public static int[] levelup = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
+	//public Map<Integer, Spells> spells = new HashMap<>();
 
 	public Quest quest;
-	
-	public Random random = new Random();
 	
 	/**
 	 * This hp is for the save files, because it won't be modified by easy difficultly and won't get taken down during battles
 	 */
-	public int HP; // This hp is for save files, because it won't be modified by easy difficultly, also used for leveling up
+	//private int HP; // This hp is for save files, because it won't be modified by easy difficultly, also used for leveling up
 
-	public int accuracy = 100;
-	public int chanceToMiss = 0;
-	public int rand = 0;
+	@SuppressWarnings("unused")
+	private int accuracy = 100;
 
 	private int threat = 100;
-
-	public static int temp = -1;
-	public static String combatName = "";
 	
 	public Element[] Resistance;
 
 	public static boolean Attackable = false;
-
-	public boolean attacked = false;;
 
 	// Map X and Y and Level
 	public static int X = 6, Y = 7;
@@ -72,7 +62,7 @@ public class Player extends Dummy {
 	// Direction Controller
 	public static int dir = Direction_Down;
 
-	private Enemy target = null;
+	private Enemies target = null;
 
 	public static final Bitmap[][] frames = SpriteChecker.frames;
 
@@ -82,11 +72,11 @@ public class Player extends Dummy {
 	}
 
 	public Player(String name, String gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, boolean inParty, Spells[] spells, Equipment[] items) {
-		super(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, X, Y, spells, items);
+		super(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, X, Y, spells, items, 0, 0, 0, 0, null);
 		
-		HP = hp;
+		//HP = hp;
 
-		this.spells.put(0, Spells.Attack);
+		//this.spells.put(0, Spells.Attack);
 
 		if(spells != null) {
 			for(int s = 0; s < spells.length; s++)
@@ -98,25 +88,19 @@ public class Player extends Dummy {
 			}
 		}
 
-		this.spells.put(1, Spells.get("Fire Ball"));
+		this.spells.put(0, Spells.get("Fire Ball"));
 
 		this.inParty = inParty;
-
-		put("stat.level", getLvl());
-		put("stat.exp", getExp());
-		put("stat.hp", getHp());
-		put("stat.str", getStr());
-		put("stat.skl", getSkl());
-		put("stat.spd", getSpd());
-		put("stat.luk", getLuk());
-		put("stat.def", getDef());
-		put("stat.gold", getGold());
-		names.put(Player.players.size(), name);
 	}
-
-	public static Player[] getPlayers() {
+	
+	/**
+	 * 
+	 * @return an array containing up to 4 players who are in the party. Will return an array that is 4 big.<br>
+	 * if there are not 4 players in the party, than it will return an array with null values.
+	 */
+	protected static Player[] getPlayers() {
 		int p = 0;
-		for(Player player : players.values()) {
+		for(Player player : Player.players) {
 			if(player.inParty) {
 				p++;
 			}
@@ -124,15 +108,21 @@ public class Player extends Dummy {
 				p = 4;
 			}
 		}
-		Player[] player = new Player[4];
-		for(int i = 0; i < players.size(); i++) {
-			if(Player.players.get(names.get(i)).inParty) {
-				player[i] = Player.players.get(names.get(i));
+		Player[] players = new Player[4];
+		int i = 0;
+		for(Player player : Player.players) {
+			if(player.inParty && i <= 4) {
+				players[i] = player;
+				i++;
 			}
 		}
-		return player;
+		return players;
 	}
-
+	
+	/**
+	 * 
+	 * @return all players that is in the party
+	 */
 	public static Player[] getActualPlayers() {
 		Player[] player = Player.getPlayers();
 		Player[] players;
@@ -149,24 +139,21 @@ public class Player extends Dummy {
 		}
 		return players;
 	}
-
-	public static void addPlayer(String key, Player player) {
-		players.put(key, player);
+	
+	public static Player getActualPlayer(int player) {
+		return getActualPlayers()[player];
+	}
+	
+	/**
+	 * 
+	 * @return the main character
+	 */
+	public static Player getMainCharacter() {
+		return getActualPlayer(0);
 	}
 
-	public static Player getPlayer(String key) {
-		return players.get(key);
-	}
-
-	private void put(String key, int value) {
-		status.put(key, value);
-		if(status.get(key) < 0) {
-			status.put(key, 0);
-		}
-	}
-
-	public int get(String key) {
-		return status.get(key) == null ? 0 : status.get(key);
+	public static void addPlayer(Player player) {
+		players.add(player);
 	}
 
 	public Spells getSpells(int i) {
@@ -183,7 +170,8 @@ public class Player extends Dummy {
 		//                DebugWriter.println("Leveling Up: " + Name);
 		//            }
 	}
-
+	
+	@Override
 	public void render(Screen screen) {
 		int x = 0, y = 0;
 		x = (int) (Screen.getWidth() / 2);
@@ -194,7 +182,6 @@ public class Player extends Dummy {
 		}
 
 		screen.render(frames[Move.dir][Move.frame], x, y);
-
 	}
 
 	public void renderUI(Screen screen, int co, int no) {
@@ -202,17 +189,17 @@ public class Player extends Dummy {
 		if(Move.frame >= frames[Direction_Down].length) {
 			Move.frame = 0;
 		}
-		screen.render(frames[Direction_Down][Move.frame], 448, 32 + co);
+		screen.render(frames[Direction_Down][Move.frame], 448, 24 + co);
 		if(Time.frameTimer(10)) {
 			Move.frame++;
 		}
-		GameFont.render(getName(), screen, (448 - 18), ((32 * 10) - 18) + no);
+		GameFont.render(getName(), screen, (420), ((32 * 9) - 18) + no);
 
 	}
 
 	public void renderTime(Graphics g, int no) {
 		int x = GraphicsGetter.getAbsoluteX(472);
-		int y = GraphicsGetter.getAbsoluteY((302 - 2) + (no * 12));
+		int y = GraphicsGetter.getAbsoluteY((271) + (no * 12));
 		int width = GraphicsGetter.getWidth(turnTimer / 20);
 		int width2 = GraphicsGetter.getWidth(turnTimer / 20);
 		int height = GraphicsGetter.getHeight(6);
@@ -220,58 +207,29 @@ public class Player extends Dummy {
 		g.fillRect(x, y, width2, height);
 	}
 
-	public void attack(Enemy enemy) {
-		int damage = 0;
-		if(!miss(enemy)) {
-			damage = random.nextInt(PlayerBattle.pAttack(this, enemy));
-			if(damage < 1) {
-				damage = 1;
-			}
-			enemy.setHp(enemy.getHp() - damage);
-		}
-		Player.combatName = this.getName();
-		Player.temp = damage;
-		turnTimer = 0;
-		attacked = false;
-	}
+//	public void attack(Enemies enemies) {
+//		int damage = 0;
+//		if(!miss(enemies)) {
+//			damage = random.nextInt(PlayerBattle.pAttack(this, enemies));
+//			if(damage < 1) {
+//				damage = 1;
+//			}
+//			enemies.setStatRelative(Enemies.HEALTH_POINTS, -damage);
+//		}
+//		PlayerBattle.setAttacking(this, enemies, damage);
+//		turnTimer = 0;
+//		attacked = false;
+//	}
+	
+	
 
 	public void useSpell(int spell, Enemy enemy) {
 		if(!miss(enemy)) {
-			enemy.setHp(-spells.get(spell).damage);
-		}
-	}
-	
-	// Spells will miss
-	public boolean miss(Enemy enemy) {
-		// ensures rand can't be negative, incase I add negative Luk modifers
-		DebugWriter.removeln(getName() + ": Chance to miss was 1 out of " + rand);
-		rand = (int) (getLuk() + (getLuk() * skillcheck(enemy)) * 1);
-		DebugWriter.println(getName() + ": Chance to miss was 1 out of " + rand);
-		chanceToMiss = random.nextInt(rand);
-		if(chanceToMiss <= 0) {
-			return true;
-		} else {
-			return false;
+			enemy.setStat(Enemies.HEALTH_POINTS, -spells.get(spell).damage);
 		}
 	}
 
-	/**
-	 * calculates the amount of bonus damage.
-	 * It is based on
-	 * the enemies skill level and the current attacking players skill level.
-	 * The damage is multiplied by enemy.skl % player.skl
-	 * @param enemy
-	 * @return
-	 */
-	public float skillcheck(Enemy enemy) {
-		int crit = 0;
-		if(this.getSkl() > enemy.getSkl()) {
-			crit = enemy.getSkl() % this.getSkl();
-		}
-		return crit;
-	}
-
-	public Equipment Equipment(int key) {
+	public Equipment getEquipment(int key) {
 		if(this.equipped.get(key) == null) {
 			return null;
 		} else {
@@ -306,8 +264,8 @@ public class Player extends Dummy {
 	}
 
 	/**
-	 * Retuns a the first player who can attack or who will be the first to attack
-	 * @return
+	 * 
+	 * @return the first player who can attack or who will be the first to attack
 	 */
 	public static Player getNextAttackPlayer() {
 		if(getPlayerAttack() != null) {
@@ -316,7 +274,7 @@ public class Player extends Dummy {
 			Player player = null;
 
 			if(getActualPlayers() != null) {
-				player = getActualPlayers()[0];
+				player = getMainCharacter();
 			}
 
 			for(int i = 0; i < getActualPlayers().length; i++) {
@@ -330,19 +288,59 @@ public class Player extends Dummy {
 	}
 
 	public int getThreat() {
-		return (int) (threat + getStr() + getWis() + getSkl() - (getHp() * 0.10f));
+		return (int) (threat + getStat(Player.STRENGTH) + getStat(Player.SKILL) + getStat(Player.WISDOM) - (getStat(Player.HEALTH_POINTS) * 0.10f));
 	}
 
 	public void setThreat(int threat) {
 		this.threat = threat;
 	}
 
-	public void setTarget(Enemy enemy) {
+	public void setTarget(Enemies enemy) {
 		target = enemy;
 	}
 
-	public Enemy getTarget() {
+	public Enemies getTarget() {
 		return target;
+	}
+	
+	public void putInParty(boolean inParty) {
+		this.inParty = inParty;
+	}
+	
+	public boolean isInParty() {
+		return inParty;
+	}
+	
+	public void writeStats(BufferedWriter bw) throws IOException {
+		bw.write("Player Name = " + getName());
+		bw.newLine();
+		bw.write("Player Gender = " + getGender());
+		bw.newLine();
+		bw.write("Player Level = " + getStat(Player.LEVEL));
+		bw.newLine();
+		bw.write("Player Experience = " + getStat(Player.EXPERIENCE));
+		bw.newLine();
+		bw.write("Player Health = " + getMaxStat(Player.HEALTH_POINTS));
+		bw.newLine();
+		bw.write("Player Strength = " + getMaxStat(Player.STRENGTH));
+		bw.newLine();
+		bw.write("Player Skill = " + getMaxStat(Player.SKILL));
+		bw.newLine();
+		bw.write("Player Speed = " + getMaxStat(Player.SPEED));
+		bw.newLine();
+		bw.write("Player Luck = " + getMaxStat(Player.LUCK));
+		bw.newLine();
+		bw.write("Player Defence = " + getMaxStat(Player.DEFENCE));
+		bw.newLine();
+		bw.write("Player Wisdom = " + getMaxStat(Player.WISDOM));
+		bw.newLine();
+		bw.write("Player Gold = " + getStat(Player.GOLD));
+		bw.newLine();
+		bw.write("Player Resistances = ");
+		bw.newLine();
+		bw.write("Player Spells = ");
+		bw.newLine();
+		bw.write("inParty = " + isInParty());
 	}
 
 }

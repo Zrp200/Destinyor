@@ -1,15 +1,17 @@
 package me.jacob.macdougall.files;
 
 import me.jacob.macdougall.DebugWriter;
+import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.enemies.Boss;
 import me.jacob.macdougall.enemies.Enemy;
 import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.magic.Element;
 import me.jacob.macdougall.magic.Spells;
-//import me.jacob.macdougall.npcs.Boss;
 import me.jacob.macdougall.npcs.NPC;
 import me.jacob.macdougall.npcs.body.Entities;
 import me.jacob.macdougall.npcs.body.Limb;
 import me.jacob.macdougall.player.Player;
+import me.jacob.macdougall.world.LevelMap;
 
 import graphic.engine.window.Resolution;
 
@@ -17,14 +19,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Reader {
-
-	private static List<String> PlayerKeys = new ArrayList<>();
-	protected static boolean Override = false;
-	protected static boolean Debug = false;
 
 	public static void ReadEnemies(String location) {
 		BufferedReader br;
@@ -81,10 +77,10 @@ public class Reader {
 				Resistances = stats[12];
 				getSpells = stats[13].trim();
 				pos = stats[14].trim().split(",");
-
-				for(int i = 0; i < Element.getElements().length; i++) {
-					if(Resistances.equals(Element.getElement(i).getElement())) {
-						Resistance = Element.getElement(i);
+				
+				for(Element element : Element.getElements()) {
+					if(Resistances.equals(element)) {
+						Resistance = element;
 						break;
 					}
 				}
@@ -98,7 +94,7 @@ public class Reader {
 						spells = null;
 				}
 
-				DebugWriter.println("Reader.ReadEnemies: " + Name);
+				DebugWriter.println("Menu: Reading: Enemies: " + Name);
 				Enemy.enemies.put(Name, new Enemy(Name, Frame, LVL, Exp, HP, Str, Skl, Spd, Luk, Def, Wis, Gold, Resistance, spells, Integer.parseInt(pos[0].trim()), Integer.parseInt(pos[1].trim()), Integer.parseInt(pos[2].trim()), Integer.parseInt(pos[3].trim())));
 				DebugWriter.println("Menu: Adding: " + Name);
 			}
@@ -107,11 +103,12 @@ public class Reader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		br = null;
 	}
 
 	public static void ReadNpcs(String location) {
 		BufferedReader br;
-		String[] Stats = { "Name = ", "Frames = ", "X = ", "Y = ", "Dialouge Location = " };
+		String[] Stats = { "Name = ", "Frames = ", "X = ", "Y = ", "Dialouge Location = ", "Level = " };
 
 		try {
 			br = new BufferedReader(new FileReader(new File(location)));
@@ -123,7 +120,9 @@ public class Reader {
 			String Name;
 			String Frame;
 			String dialouge;
+			int level;
 			String endNpc = br.readLine();
+			
 
 			while (endNpc != null) {
 				br.skip(Stats[0].length());
@@ -136,6 +135,8 @@ public class Reader {
 				y = Integer.parseInt(br.readLine().trim());
 				br.skip(Stats[4].length());
 				dialouge = br.readLine();
+				br.skip(Stats[5].length());
+				level = Integer.parseInt(br.readLine());
 
 				if(dialouge.contains(".txt")) {
 					dialouge = ReadDialouge(DestinyorFiles.DestinyorFolder + DestinyorFiles.fileSplit + "Dialouges" + DestinyorFiles.fileSplit + dialouge);
@@ -143,15 +144,16 @@ public class Reader {
 
 				endNpc = br.readLine();
 
-				NPC.npcs.put(NPC.npcs.size(), new NPC(Name, Frame, x, y, dialouge, true));
+				NPC.npcs.add(new NPC(Name, Frame, x, y, dialouge, true, LevelMap.maps.get(level)));
 
-				DebugWriter.println("Reader.ReadNpcs: " + Name);
+				DebugWriter.println("Menu: Reading: Npcs: " + Name);
 			}
 
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		br = null;
 	}
 
 	public static String ReadCutscenes(String location) {
@@ -183,13 +185,13 @@ public class Reader {
 			}
 
 			br.close();
-
+			br = null;
 			for(String tt : temptext) {
 				text += tt;
 			}
 
 			return text;
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -224,11 +226,11 @@ public class Reader {
 			}
 
 			br.close();
-
+			br = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		return dialouge;
 	}
 
@@ -241,7 +243,7 @@ public class Reader {
 			br = new BufferedReader(new FileReader(location));
 			br.mark("@Override".length());
 			if(br.readLine().equals("@Override")) {
-				Override = true;
+				Destinyor.Override = true;
 				DebugWriter.println("Overriding");
 			} else {
 				br.reset();
@@ -249,9 +251,9 @@ public class Reader {
 			br.mark("@Debug".length());
 
 			if(br.readLine().equals("@Debug")) {
-				Debug = true;
-				DebugWriter.println("Debug");
-				DebugWriter.w++;
+				Destinyor.Debug = true;
+				DebugWriter.println("Debugging");
+				//DebugWriter.w++;
 			} else {
 				br.reset();
 			}
@@ -268,6 +270,7 @@ public class Reader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		br = null;
 	}
 
 	public static void ReadPlayer(String location) {
@@ -299,6 +302,7 @@ public class Reader {
 			level = Integer.parseInt(br.readLine());
 			br.skip("X & Y = ".length());
 			String xy = br.readLine().trim();
+			xy = xy.replace(" ", "");
 			String[] XY = xy.split(",");
 			x = Integer.parseInt(XY[0]);
 			y = Integer.parseInt(XY[1]);
@@ -310,7 +314,6 @@ public class Reader {
 			while (nullChecker != null) {
 				br.skip(length[0].length());
 				name = br.readLine();
-				PlayerKeys.add(name);
 				br.skip(length[1].length());
 				gender = br.readLine();
 				br.skip(length[2].length());
@@ -341,8 +344,8 @@ public class Reader {
 
 				br.skip(length[14].length());
 				inParty = Boolean.parseBoolean(br.readLine());
-				Player.addPlayer(name, new Player(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, inParty, null, null));
-				DebugWriter.println("Adding: " + name);
+				Player.addPlayer(new Player(name, gender, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, inParty, null, null));
+				DebugWriter.println("Menu: Adding: " + name);
 				nullChecker = br.readLine();
 			}
 
@@ -351,7 +354,7 @@ public class Reader {
 			e.printStackTrace();
 			System.exit(1);
 		}
-
+		br = null;
 	}
 
 	public static void ReadSpells(String location) {
@@ -385,6 +388,7 @@ public class Reader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		br = null;
 	}
 
 	/**
@@ -434,6 +438,7 @@ public class Reader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		br = null;
 	}
 
 	public static void readEntities(String location) {
@@ -474,6 +479,62 @@ public class Reader {
 
 			br.close();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		br = null;
+	}
+	
+	public static void readBosses(String location) {
+		BufferedReader br;
+		
+		String nullChecker = "";
+
+		String[] Stats = { "Name = ", "Frame = ", "Level = ", "Experience = ", "Health = ", "Strength = ", "Skill = ", "Speed = ", "Luck = ", "Defense = ", "Wisdom = ", "Gold = ", "Resistance = ", "Condition = ", "X&Y = ", "Level = " };
+
+		String[] stats;
+		
+		try {
+			br = new BufferedReader(new FileReader(location));
+			
+			nullChecker = br.readLine();
+			br.readLine();
+
+				while (nullChecker != null) {
+
+					stats = new String[Stats.length];
+
+					for(int i = 0; i < Stats.length; i++) {
+						br.skip(Stats[i].length());
+						stats[i] = br.readLine();
+					}
+					
+					stats[1] = stats[1].replace(", ", ",");
+					String[] frame = stats[1].split(",");
+					int[] frames = new int[frame.length];
+					for(int i = 0; i < frames.length; i++)
+						frames[i] = Integer.parseInt(frame[i]);
+					
+					int[] stat = new int[10];
+					for(int i = 2; i < stat.length; i++) {
+						stat[i - 2] = Integer.parseInt(stats[i]);
+					}
+					
+					stats[14] = stats[14].replace(", ", ",");
+					String[] xy = stats[14].split(",");
+					
+					int x = Integer.parseInt(xy[0]);
+					int y = Integer.parseInt(xy[1]);
+					
+					Boss boss = new Boss(stats[0], 
+							frames[0], frames[1], frames[2], frames[3], stat[0], stat[1], stat[2], stat[3], stat[4], stat[5], stat[6], stat[7], stat[8], stat[9],
+							Element.get(stats[12]), null, x, y, LevelMap.maps.get(Integer.parseInt(stats[15])));
+					System.out.println(boss.getName());
+					nullChecker = br.readLine();
+
+				}
+			
+			br.close();
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -544,8 +605,4 @@ public class Reader {
 	//                    e.printStackTrace();
 	//                }
 	//        }
-
-	public static List<String> PlayerKeys() {
-		return PlayerKeys;
-	}
 }

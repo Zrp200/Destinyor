@@ -9,14 +9,17 @@ import javax.swing.JFrame;
 
 import graphic.engine.screen.Screen;
 import graphic.engine.screen.Art;
+import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.world.Tile;
 
 public class Debug extends Canvas {
 
 	private static final long serialVersionUID = 8341857801876146189L;
+	
+	private static boolean refresh = false;
 
-	private Screen screen;
-
+	protected static Screen screen;
+	
 	public void render() {
 		BufferStrategy strategy = this.getBufferStrategy();
 		if(strategy == null) {
@@ -30,7 +33,14 @@ public class Debug extends Canvas {
 
 		Graphics g = strategy.getDrawGraphics();
 
+		if(refresh) {
+			g.clearRect(0, 0, 1024, 768);
+			UI.REFRESH(screen);
+			refresh = false;
+		}
+		
 		g.drawImage(screen.image, 224, 32, null);
+		
 
 		g.setColor(Color.GREEN);
 		drawBoxes(g);
@@ -47,16 +57,21 @@ public class Debug extends Canvas {
 			g.drawString(j + "", (j * 32) + 14 + 224, 28);
 		}
 
-		// g.drawImage(bi, 128 + 64, 32, null);
-
 		g.dispose();
 		strategy.show();
 	}
-
+	
+	/**
+	 * Old code, should be deleted eventually
+	 */
 	public void spritesheet() {
 		Tile.renderSpritesheet(screen);
 	}
-
+	
+	/**
+	 * Draw the boxes for the sprite sheet
+	 * @param g
+	 */
 	public void drawBoxes(Graphics g) {
 		for(int i = 0; i < Art.getSpritesheet().length; i++) {
 			for(int j = 0; j < Art.getSpritesheet()[i].length; j++) {
@@ -65,6 +80,9 @@ public class Debug extends Canvas {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public Debug() {
 		if(Destinyor.Debug) {
 			JFrame frame2 = new JFrame("Debug");
@@ -78,6 +96,10 @@ public class Debug extends Canvas {
 			screen = new Screen(Art.getSpritesheet().length * 32, Art.getSpritesheet()[0].length * 32);
 			this.setBackground(Color.BLACK);
 		}
+	}
+	
+	public static void Refresh() {
+		refresh = true;
 	}
 
 }

@@ -16,11 +16,11 @@ public class PlayerEquipment {
 	int currentEquipment = 0;
 	int p = 6;
 
-	Player player = Player.getActualPlayers()[p - 6];
+	Player player = (p-6 >= 0 && p-6 <= 4) ? Player.getActualPlayers()[p - 6] : Player.getActualPlayers()[0];
 
 	public void renderEquipment(Screen screen) {
 		p = UI.menu;
-		player = Player.getActualPlayers()[p - 6];
+		player = (p-6 >= 0 && p-6 <= 4) ? Player.getActualPlayers()[p - 6] : Player.getActualPlayers()[0];
 		int px = 30;
 		int py = 0;
 		int x = 6;
@@ -31,8 +31,8 @@ public class PlayerEquipment {
 		if(player != null) {
 
 			//Equipment item = (Equipment) Player.inventory.get(currentEquipment);
-			if(player.hasEquipment() && player.Equipment(currentEquipment) != null) {
-				Equipment item = player.Equipment(currentEquipment);
+			if(player.hasEquipment() && player.getEquipment(currentEquipment) != null) {
+				Equipment item = player.getEquipment(currentEquipment);
 
 				GameFont.render("Name: " + item.name, screen, 12, 288);
 				GameFont.render("Equipped: " + item.equipped, screen, 12, 288 + 16);
@@ -45,8 +45,8 @@ public class PlayerEquipment {
 			if(UI.menu >= 6 && UI.menu <= 9 && UI.menu < Player.getActualPlayers().length + 6) {
 				for(int i = 0; i < Equipment.items.size(); i++) {
 					GameFont.render(player.getName(), screen, px, py);
-					if(player.equipped.size() > 0 && player.Equipment(i) != null) {
-						player.Equipment(i).render(screen, x, y + 12 * (i + 1));
+					if(player.equipped.size() > 0 && player.getEquipment(i) != null) {
+						player.getEquipment(i).render(screen, x, y + 12 * (i + 1));
 						//if(!player.Equipment(i).name.equals("null")) {
 						//y += 0;
 						//}
@@ -62,14 +62,10 @@ public class PlayerEquipment {
 	public void updateEquipment() {
 		if(UI.menu >= 6 && UI.menu <= 9 && UI.menu < Player.getActualPlayers().length + 6) {
 			p = UI.menu;
-			player = Player.getActualPlayers()[p - 6];
-			//System.out.println(currentEquipment);
+			player = (p-6 >= 0 && p-6 <= 4) ? Player.getActualPlayers()[p - 6] : Player.getActualPlayers()[0];
 			
 			if(player != null) {
-				//System.out.println();
 				if(Time.getKeyTimer(10, false)) {
-					//System.out.println();
-					//System.out.println(Keys.MoveUp());
 					if(Keys.MoveUp()) {
 						currentEquipment--;
 						Time.resetKeyTimer();

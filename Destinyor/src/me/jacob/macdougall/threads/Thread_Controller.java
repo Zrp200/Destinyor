@@ -31,7 +31,6 @@ public abstract class Thread_Controller {
 	protected static Screen screen;
 	protected static NPC_Thread nThread;
 	protected static Loading_Thread lThread;
-	protected static Cutscene_Thread cThread;
 	protected static Audio_Thread aThread;
 	protected Thread NPCThread;
 	protected Thread LoadingThread;
@@ -66,11 +65,6 @@ public abstract class Thread_Controller {
 		nThread.start();
 	}
 
-	public static void startCutscene() {
-		cThread = new Cutscene_Thread();
-		cThread.start();
-	}
-
 	public static void startLoading() {
 		lThread = new Loading_Thread();
 		lThread.start();
@@ -82,18 +76,6 @@ public abstract class Thread_Controller {
 
 	public static void stopLoading() {
 		lThread.stop();
-	}
-
-	public static void pauseCutscene() {
-		cThread.pause();
-	}
-
-	public static void resumeCutscene() {
-		cThread.resume();
-	}
-
-	public static void renderCutscene() {
-		cThread.render();
 	}
 
 	public static void startAudio() {

@@ -2,7 +2,7 @@ package me.jacob.macdougall.magic;
 
 import java.util.Random;
 
-import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.player.Player;
 
@@ -24,7 +24,7 @@ public class Combo_Spell extends Spells {
 	}
 	
 	@Override
-	public void attack(Player player, Enemy enemy) {
+	public void attack(Player player, Enemies enemy) {
 		if(combo == null) {
 		comboLength = rand.nextInt(9) + 1;
 		combo = new int[comboLength];
@@ -74,7 +74,7 @@ public class Combo_Spell extends Spells {
 			}
 		}
 		this.damage = damage * answer;
-		enemy.setHp(enemy.getHp() - (this.damage + player.getWis()));
+		enemy.setStatRelative(Enemies.HEALTH_POINTS, -(this.damage + player.getStat(Player.WISDOM)));
 		this.inUse = false;
 		}
 	}

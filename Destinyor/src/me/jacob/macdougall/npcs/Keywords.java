@@ -36,7 +36,7 @@ public class Keywords {
 					args = args.replaceAll(names, Player.getActualPlayers()[i].getName());
 				}
 				if(args.contains(genders)) {
-					args = args.replaceAll(genders, Player.getPlayers()[0].getGender().equalsIgnoreCase("male") ? "boy" : "girl");
+					args = args.replaceAll(genders, Player.getMainCharacter().getGender().equalsIgnoreCase("male") ? "boy" : "girl");
 				}
 			}
 		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {

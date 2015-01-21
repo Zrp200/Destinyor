@@ -12,11 +12,9 @@ import me.jacob.macdougall.items.Items;
 import me.jacob.macdougall.magic.Element;
 import me.jacob.macdougall.magic.Spells;
 
-public class Enemy extends Dummy {
+public class Enemy extends Enemies {
 
 	public Element Resistance;
-
-	public boolean attacking = false;
 
 	public static Map<String, Enemy> enemies = new HashMap<>();
 	public static Map<Integer, String> names = new HashMap<>();
@@ -25,19 +23,12 @@ public class Enemy extends Dummy {
 	public static boolean battle = false;
 
 	public int X = 0, Y = 0, X1 = 0, Y1 = 0;
-	protected static int frameInterval = 250, fr = 0;
-
-	protected long frameTimer = System.currentTimeMillis();
-
-	protected Bitmap[] frames;
 
 	protected boolean removed = false;
 
 	private Items[] item;
 
 	public int damage = 0;
-
-	private static Random randomEnemy = new Random();
 
 	public int enemy;
 
@@ -63,7 +54,7 @@ public class Enemy extends Dummy {
 	 * @param ySpawn
 	 */
 	public Enemy(String name, String frame, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, Element Resistance, Spells[] spells, int xPos, int xSpawn, int yPos, int ySpawn) {
-		super(name, null, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, 0, 0, spells, null);
+		super(name, null, lvl, exp, hp, str, skl, spd, luk, def, wis, gold, 0, 0, spells, null, 0, 0, 0, 0, null);
 		names.put(names.size(), name);
 		this.spells.put(0, Spells.Attack);
 		if(spells != null)
@@ -106,7 +97,7 @@ public class Enemy extends Dummy {
 		this.Y = enemy.Y;
 		this.X1 = enemy.X1;
 		this.Y1 = enemy.Y1;
-		this.frames = enemy.frames;
+		this.setFrames(frames);
 	}
 
 	public static Enemy[] getEntities() {
@@ -139,24 +130,10 @@ public class Enemy extends Dummy {
 	//			return null;
 	//		}
 	//	}
-
+	
+	@Override
 	public void render(Screen screen) {
 		screen.render(frames[fr], x, y);
-	}
-
-	public void tick() {
-		if(System.currentTimeMillis() - frameTimer > 2 * frameInterval) {
-			frameTimer = System.currentTimeMillis();
-		}
-		if(System.currentTimeMillis() - frameTimer > frameInterval && frames != null) {
-			if(fr >= frames.length - 1) {
-				fr = 0;
-			} else {
-				fr++;
-			}
-
-			frameTimer += frameInterval;
-		}
 	}
 
 	public Items death() {
@@ -171,7 +148,7 @@ public class Enemy extends Dummy {
 
 	public static Enemy getRandomEntity() {
 
-		int rand = randomEnemy.nextInt(getEntities().length);
+		int rand = random.nextInt(getEntities().length);
 		return Enemy.newInstance(names.get(rand));
 	}
 

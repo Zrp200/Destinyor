@@ -1,5 +1,6 @@
 package me.jacob.macdougall.gui;
 
+import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 import graphic.engine.window.Resolution;
 
@@ -7,6 +8,8 @@ public class GUI_Objects {
 	
 	protected int x, y;
 	protected int width, height;
+	protected String desc;
+	protected boolean isEnabled = true;
 	
 	/**
 	 * Default GUI Object
@@ -113,5 +116,25 @@ public class GUI_Objects {
 			}
 		}
 		return false;
+	}
+	
+	public String getDesc() {
+		return desc;
+	}
+	
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	
+	public void displayDesc(Screen screen) {
+		GameFont.render(desc, screen, x + width, y);
+	}
+	
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 }

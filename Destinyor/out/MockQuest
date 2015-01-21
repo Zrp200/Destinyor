@@ -1,0 +1,29 @@
+Quest
+
+name
+X & Y start Pos
+X & Y end Pos
+Level
+||
+startNpc
+endNpc
+{
+Rewards = {
+
+		}
+Bosses = {
+
+		}
+Cutscene File = default.txt
+}
+
+
+name
+QuestGiver npc
+Rewards = {
+
+}
+boss
+cutscenes = {
+
+}

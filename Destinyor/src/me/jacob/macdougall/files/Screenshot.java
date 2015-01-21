@@ -11,6 +11,12 @@ public class Screenshot {
 	
 	private int id = 0;
 	
+	private String path;
+	
+	public String getPath() {
+		return path;
+	}
+	
 	public Screenshot(Screen screen) {
 		File image = new File("Screenshot" + id + ".png");
 		try {
@@ -19,6 +25,16 @@ public class Screenshot {
 			e.printStackTrace();
 		}
 		id++;
+	}
+	
+	public Screenshot(Screen screen, String FilePath) {
+		File image = new File(FilePath + DestinyorFiles.fileSplit + "Icon.png");
+		path = FilePath + DestinyorFiles.fileSplit + "Icon.png";
+		try {
+			ImageIO.write(screen.image, "PNG", image);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

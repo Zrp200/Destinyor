@@ -3,7 +3,7 @@ package me.jacob.macdougall.battles;
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Screen;
 import me.jacob.macdougall.Time;
-import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.player.Player;
 
@@ -15,12 +15,12 @@ public class Pointer {
 	public int commands = 0;
 	public int enemy = 0;
 
-	public static final int commandsMax = 1;
+	public static final int commandsMax = 3;
 	public static final int menuMax = 1;
 	public static final int spellMax = 1; // Assing Somewhere
 
-	public static int PointerX = 178;
-	public static int PointerY = 305;
+	public static int PointerX = 140;
+	public static int PointerY = 275;
 
 	public static int ePointerX = 20;
 	public static int ePointerY = 38;
@@ -33,8 +33,8 @@ public class Pointer {
 	}
 
 	public static void reset() {
-		PointerX = 178;
-		PointerY = 305;
+		PointerX = 140;
+		PointerY = 265;
 		ePointerX = 20;
 		ePointerY = 38;
 	}
@@ -46,7 +46,7 @@ public class Pointer {
 			screen.render(Art.getFont()[35][1], PointerX, PointerY);
 	}
 
-	public void point(Player player, Enemy[] enemies) {
+	public void point(Player player, Enemies[] enemies) {
 		switch (menu) {
 			case 0:
 				if(Time.getKeyTimer(10, false)) {
@@ -60,7 +60,7 @@ public class Pointer {
 						if(spell >= 1 && spell <= player.spells.size()) {
 							spell--;
 						} else {
-							spell = 1;
+							spell = 0;
 						}
 						Time.resetKeyTimer();
 					}
@@ -68,7 +68,7 @@ public class Pointer {
 						if(spell >= 1 && spell <= player.spells.size()) {
 							spell++;
 						} else {
-							spell = 1;
+							spell = 0;
 						}
 						Time.resetKeyTimer();
 					}
@@ -80,20 +80,23 @@ public class Pointer {
 					if(Keys.MoveRight()) {
 						Battles.spellHandler(player, enemies);
 						menu = 0;
-						spell = 1;
+						spell = 0;
 						commands = 0;
 					}
 				}
 				break;
 		}
 	}
+	
+	
 
-	public void commands(Player player, Enemy[] enemies) {
+	public void commands(Player player, Enemies[] enemies) {
 		switch (commands) {
 			case 0:
 				if(Keys.Enter() && Time.getKeyTimer(10, false)) {
 					if(checkEnemy(enemies)) {
-						Player.getPlayerAttack().attack(Player.getPlayerAttack().getTarget());
+						int damage = player.attack(player.getTarget(), PlayerBattle.pAttack(player, player.getTarget()));
+						PlayerBattle.setAttacking(player, player.getTarget(), damage);
 						Time.resetKeyTimer();
 					} else {
 						pointEnemy();
@@ -110,16 +113,16 @@ public class Pointer {
 		}
 	}
 
-	public void menuZero(Player player, Enemy[] enemies) {
+	public void menuZero(Player player, Enemies[] enemies) {
 		if(!ep && p) {
 			if(Keys.MoveUp()) {
-				if(commands > 0 && commands < commandsMax) {
+				if(commands > 0 && commands <= commandsMax) {
 					commands--;
-					PointerY -= 10;
+					PointerY -= 20;
 				} else {
-					commands = 0;
-					PointerX = 178;
-					PointerY = 305;
+					commands = 3;
+					PointerX = 140;
+					PointerY = 335;
 				}
 				Time.resetKeyTimer();
 			}
@@ -129,8 +132,8 @@ public class Pointer {
 					PointerY += 20;
 				} else {
 					commands = 0;
-					PointerX = 178;
-					PointerY = 305;
+					PointerX = 140;
+					PointerY = 275;
 				}
 				Time.resetKeyTimer();
 			}
@@ -150,7 +153,7 @@ public class Pointer {
 		p = false;
 	}
 
-	public int getEnemy(Enemy[] enemies) {
+	public int getEnemy(Enemies[] enemies) {
 		if(ep && !BattleInput.targetSelected) {
 			if(Time.getKeyTimer(10, false)) {
 				if(Keys.MoveDown()) {
@@ -179,7 +182,7 @@ public class Pointer {
 		}
 	}
 
-	public boolean checkEnemy(Enemy[] enemies) {
+	public boolean checkEnemy(Enemies[] enemies) {
 		return (Player.getPlayerAttack().getTarget() != null);
 	}
 }

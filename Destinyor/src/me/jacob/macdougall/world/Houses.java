@@ -8,8 +8,7 @@ public class Houses extends Buildings {
 	public int cost;
 	
 	public Houses() {
-		buildings.put(amount, this);
-		amount++;
+		buildings.add(this);
 	}
 	
 	@Override

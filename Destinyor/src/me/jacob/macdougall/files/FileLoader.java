@@ -1,7 +1,6 @@
 package me.jacob.macdougall.files;
 
 import java.io.*;
-import java.util.List;
 
 public class FileLoader {
 
@@ -12,6 +11,65 @@ public class FileLoader {
 		if(!file.exists()) {
 			file.mkdir();
 		}
+	}
+	
+	public static boolean checkIfFolderIsEmpty(String location) {
+		File file = new File(location);
+		
+		if(file.isDirectory()) {
+			if(file.list().length == 0) {
+				return true;
+			}
+			if(file.list().length > 0) {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public static String[] getFilesAndFolders(String location, String files) {
+		if(!checkIfFolderIsEmpty(location)) {
+			File file = new File(location);
+			if(file.isDirectory()) {
+				return fileChecker(file.list(), files);
+			}
+		}
+		return null;
+	}
+	
+	public static String[] fileChecker(String[] files, String check) {
+		String[] list = null;
+		for(String file : files) {
+			if(accept(file, check)) {
+				list = infiniteArray(list, file);
+			}
+		}
+		
+		return list;
+	}
+	
+	private static String[] infiniteArray(String[] array, String object) {
+		if(array != null) {
+			String[] temp = new String[array.length + 1];
+			
+			for(int i = 0; i < array.length; i++) {
+				temp[i] = array[i];
+			}
+			
+			temp[array.length] = object;
+			
+			array = temp;
+		
+		} else {
+			String[] temp = {object};
+			array = temp;
+		}
+		
+		return array;
+	}
+	
+	public static boolean accept(String file, String check) {
+		return file.contains(check);
 	}
 
 	/**
@@ -104,17 +162,5 @@ public class FileLoader {
 
 	public static String readDialouges(String location) {
 		return Reader.ReadDialouge(location);
-	}
-
-	public static boolean Override() {
-		return Reader.Override;
-	}
-
-	public static boolean Debug() {
-		return Reader.Debug;
-	}
-
-	public static List<String> PKeys() {
-		return Reader.PlayerKeys();
 	}
 }

@@ -36,8 +36,8 @@ public class Sound implements LineListener {
 	public String name;
 
 	public boolean loopable = false;
-	// public float audioLevel = -20; // -80 == mute, 0 == normal, 6 == max
-	public float audioLevel = -80;
+	public float audioLevel = -80f; // -80 == mute, 0 == normal, 6 == max
+	//public float audioLevel = -20;
 
 	public void playSound() {
 		DebugWriter.println("Playing: " + soundFile.getName());
@@ -55,9 +55,14 @@ public class Sound implements LineListener {
 		if(clip != null && !clip.isOpen()) {
 			// System.out.println("Opening: " + name);
 			clip.open(audioInputStream);
-			volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			volume.setValue(audioLevel);
-                }
+			try {
+				volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+				volume.setValue(audioLevel);
+			} catch(IllegalArgumentException e) { // If on linux use something else instead
+				System.out.println("IllegalArgumentException has been thrown");
+				//e.printStackTrace();
+			}
+        }
 	}
 
 	public void stopSound() {
@@ -82,9 +87,6 @@ public class Sound implements LineListener {
 				clip.loop(1);
 			}
 		}
-	}
-
-	public void test() {
 	}
 
 	@Override
@@ -115,7 +117,7 @@ public class Sound implements LineListener {
 		try {
 			soundFile = new File(location);
 
-			DebugWriter.println("Adding " + soundFile.getName());
+			DebugWriter.println("Menu: Adding: " + soundFile.getName());
 
 			Line.Info linfo = new Line.Info(Clip.class);
 			line = AudioSystem.getLine(linfo);

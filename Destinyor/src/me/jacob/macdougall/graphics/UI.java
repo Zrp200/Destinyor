@@ -1,11 +1,17 @@
 package me.jacob.macdougall.graphics;
 
+import java.awt.Color;
+
 import graphic.engine.screen.Art;
+import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.Screen;
+import graphic.engine.window.Resolution;
 import me.jacob.macdougall.world.*;
 
 public class UI {
 
+	private static Bitmap refresh = new Bitmap(0, 0);
+	
 	public static final int Map = 0, Fight = 1, Minimap = 2, Inventory = 3,
 			Equipment = 4, Spellbook = 5, Player1 = 6, Player2 = 7,
 			Player3 = 8, Player4 = 9;
@@ -31,7 +37,25 @@ public class UI {
 
 		Border(screen, BorderWidth, BorderHeight);
 
-		BorderEnemyText(screen, BorderWidth, BorderHeight);
+		BorderEnemyText(screen, 4);
+		
+		BorderBattleInfo(screen, 9);
+		CommandsBorderY(screen, 4);
+	}
+	
+	public static void renderDefault(Screen screen) {
+		Border(screen, BorderWidth, BorderHeight);
+	}
+	
+	public static void renderSaves(Screen screen) {
+		renderDefault(screen);
+		BorderSaves(screen, BorderWidth);
+	}
+	
+	private static void BorderSaves(Screen screen, int w) {
+		for(int i = 0; i < w; i++) {
+			screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, (4) * Tile.SIZE);
+		}
 	}
 
 	public static void renderInventory(Screen screen) {
@@ -50,49 +74,24 @@ public class UI {
 	public static void renderEquipment(Screen screen) {
 		REFRESH(screen);
 		BorderMenu(screen, BorderWidth, BorderHeight);
-		BorderP1(screen, BorderWidth, BorderHeight - 4);
-		BorderP2(screen, BorderWidth, BorderHeight - 4);
-		BorderP3(screen, BorderWidth, BorderHeight - 4);
 	}
 
 	private static void BorderMenu(Screen screen, int w, int h) {
 		BorderX(screen, w, h);
 		BorderY(screen, w, h);
-		BorderTextBottom(screen, w, h);
-
+		BorderTextBottom(screen, w);
+		
 	}
-
-	private static void BorderP1(Screen screen, int w, int h) {
-		for(int i = 0; i < w; i++) {
-			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[19][3], 3 * Tile.SIZE, (j + 0) * Tile.SIZE);
-
-			}
+	
+	private static void CommandsBorderY(Screen screen, int h) {
+		for(int j = 0; j < h; j++) {
+			screen.render(Art.getSpritesheet()[18][3], 7 * Tile.SIZE, (j + 8) * Tile.SIZE);
 		}
 	}
 
-	private static void BorderP2(Screen screen, int w, int h) {
+	private static void BorderBattleInfo(Screen screen, int w) {
 		for(int i = 0; i < w; i++) {
-			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[18][3], 8 * Tile.SIZE, (j + 0) * Tile.SIZE);
-			}
-		}
-	}
-
-	private static void BorderP3(Screen screen, int w, int h) {
-		for(int i = 0; i < w; i++) {
-			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[18][3], 12 * Tile.SIZE, (j + 0) * Tile.SIZE);
-			}
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private static void test(Screen screen, int w, int h) {
-		for(int i = 0; i < w; i++) {
-			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[0][0], (i + 0) * Tile.SIZE, 5 * Tile.SIZE);
-			}
+			screen.render(Art.getSpritesheet()[17][3], (i + 7) * Tile.SIZE, 10 * Tile.SIZE);
 		}
 	}
 
@@ -102,23 +101,16 @@ public class UI {
 		BorderTextTop(screen, w, h);
 	}
 
-	private static void BorderTextBottom(Screen screen, int w, int h) {
+	private static void BorderTextBottom(Screen screen, int w) {
 		for(int i = 0; i < w; i++) {
-			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, 16 * Tile.SIZE);
-			}
+			screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, 8 * Tile.SIZE);
 		}
 	}
 
 	private static void BorderX(Screen screen, int w, int h) {
 		for(int i = 0; i < w; i++) {
 			for(int j = 0; j < h; j++) {
-				//Tile.tiles[Tile.tile]
-				//Shadows shadow = new Shadows(Art.getSpritesheet()[17][3]);
-				//tileX.render(screen, (i + 0) * Tile.SIZE, (11 * Tile.SIZE) + 12, Shadows.DOWN);
 				screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, (11 * Tile.SIZE) + 12);
-				//screen.render(Art.getSpritesheet()[16][3], (i + 0) * Tile.SIZE, 8 * Tile.SIZE);
-				//shadow = new Shadows(Art.getSpritesheet()[16][3]);
 				screen.render(Art.getSpritesheet()[16][3], (i + 0) * Tile.SIZE, (-1 * Tile.SIZE) + 6);
 			}
 		}
@@ -129,7 +121,6 @@ public class UI {
 			for(int j = 0; j < h; j++) {
 				screen.render(Art.getSpritesheet()[18][3], (0 * Tile.SIZE), ((j + 0) * Tile.SIZE));
 				screen.render(Art.getSpritesheet()[19][3], (15 * Tile.SIZE) - 3, (j + 0) * Tile.SIZE);
-				//screen.render(Art.getSpritesheet()[19][3], 12 * Tile.SIZE, (j + 9) * Tile.SIZE);
 			}
 		}
 	}
@@ -137,17 +128,15 @@ public class UI {
 	private static void BorderTextTop(Screen screen, int w, int h) {
 		for(int i = 0; i < w; i++) {
 			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, 9 * Tile.SIZE);
+				screen.render(Art.getSpritesheet()[17][3], (i + 0) * Tile.SIZE, 8 * Tile.SIZE);
 			}
 		}
 	}
 
-	private static void BorderEnemyText(Screen screen, int w, int h) {
-		for(int i = 0; i < w; i++) {
+	private static void BorderEnemyText(Screen screen, int h) {
 			for(int j = 0; j < h; j++) {
-				screen.render(Art.getSpritesheet()[18][3], 5 * Tile.SIZE, (j + 9) * Tile.SIZE);
+				screen.render(Art.getSpritesheet()[18][3], 4 * Tile.SIZE, (j + 8) * Tile.SIZE);
 			}
-		}
 	}
 
 	private static void Ground(Screen screen, int w, int h) {
@@ -159,11 +148,13 @@ public class UI {
 	}
 
 	public static void REFRESH(Screen screen) {
-		for(int i = 0; i < LevelMap.FloorWidth; i++) {
-			for(int j = 0; j < LevelMap.FloorHeight; j++) {
-				screen.render(Art.getSpritesheet()[0][7], (i + 0) * Tile.SIZE, (j + 0) * Tile.SIZE);
+		if(refresh.w != Resolution.width() || refresh.h != Resolution.height()) {
+			refresh = new Bitmap(Resolution.width(), Resolution.height());
+			for(int i = 0; i < refresh.pixels.length; i++) {
+				refresh.pixels[i] = Color.BLACK.getRGB();
 			}
 		}
+		screen.render(refresh, 0, 0);
 	}
 
 }

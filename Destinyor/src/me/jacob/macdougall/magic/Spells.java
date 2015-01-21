@@ -3,7 +3,7 @@ package me.jacob.macdougall.magic;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.player.Player;
 
 public class Spells {
@@ -15,23 +15,23 @@ public class Spells {
 	public static Map<String, Spells> spells = new HashMap<>();
         public static Map<Integer, String> names = new HashMap<>();
         
-        public static Spells Attack = new Spells("Attack", Element.get(Element.Physical), 0, 1, 0, "0");
+        public static Spells Attack = new Spells("Attack", Element.get(Element.PHYSICAL), 0, 1, 0, "0");
 	
 	public Element element;
 	public String name;
 	public int damage;
 	public int targets;
 	public int cost;
-        public boolean targeted = false;
-        public boolean UseAbleOutsideCombat = false;
-        public int effect = Normal;
-        public boolean inUse = false;
+    public boolean targeted = false;
+    public boolean UseAbleOutsideCombat = false;
+    public int effect = Normal;
+    public boolean inUse = false;
 
 	public int[] condition;
 	public Effect effects;
 	
 	public Player player;
-	public Enemy enemy;
+	public Enemies enemy;
 	
 	//public int targets = 0;
 	
@@ -70,6 +70,10 @@ public class Spells {
                 names.put(spells.size() + 1, name);
 	}
 	
+	public Spells(String name, Element element, int damage, int targets, int cost) {
+		
+	}
+	
 	protected Spells(Spells spell) {
 		
 	}
@@ -104,7 +108,7 @@ public class Spells {
 		return 0;
 	}
         
-        public void attack(Player player, Enemy enemy) {
+        public void attack(Player player, Enemies enemy2) {
 //            if(entity.Resistance.getElement() != null) {
 //                if(entity.Resistance.getElement().equals(this.element.getElement())) {
 //                    entity.HP = -((this.damage * player.Wis) / 2);
@@ -116,8 +120,8 @@ public class Spells {
 //                }
 //            } else {
         	this.player = player;
-        	this.enemy = enemy;
-            enemy.setHp(enemy.getHp() -(this.damage * player.getWis()));
+        	this.enemy = enemy2;
+        	enemy2.setStatRelative(Enemies.HEALTH_POINTS, -(this.damage * player.getStat(Player.WISDOM)));
             //player.mana = -this.cost;
            // }
         }

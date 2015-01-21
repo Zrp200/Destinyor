@@ -20,6 +20,7 @@ public class DynamicsLoader {
     	loadLimbs();
 		loadTiles();
         loadLevels();
+        loadElements();
         loadObjects();
 	}
     
@@ -121,6 +122,26 @@ public class DynamicsLoader {
 			for(int j = 0; j < tiles.getLength(); j++) {
 				Element e = (Element) tiles.item(j);
 				new Tile(Integer.parseInt(e.getAttribute("id")), e.getAttribute("name"), Integer.parseInt(e.getAttribute("solid")) == 0 ? false : true, e.getAttribute("sprite"));
+			}
+		}
+	}
+	
+	private static void loadElements() {
+		XMLFile objectXML = new XMLFile("/elements.xml");
+		Document doc = objectXML.asDocument();
+		NodeList mapNodes = doc.getElementsByTagName("elements");
+		for(int i = 0; i < mapNodes.getLength(); i++) {
+			Node n = mapNodes.item(i);
+			NodeList defineNodes = ((Element) n).getElementsByTagName("element");
+
+			for(int j = 0; j < defineNodes.getLength(); j++) {
+				Element e = (Element) defineNodes.item(j);
+				me.jacob.macdougall.magic.Element element = new me.jacob.macdougall.magic.Element
+						(e.getAttribute("type"),
+								me.jacob.macdougall.magic.Element.get(e.getAttribute("firstElement")), 
+								me.jacob.macdougall.magic.Element.get(e.getAttribute("secondElement")), 
+								me.jacob.macdougall.magic.Element.get(e.getAttribute("weakness")));
+				me.jacob.macdougall.magic.Element.put(element);
 			}
 		}
 	}

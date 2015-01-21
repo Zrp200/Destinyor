@@ -21,8 +21,12 @@ public class Objects {
 	public String name;
 	public int x;
 	public int y;
+	// X and Y Position of first frame
 	int x1, y1;
-	int f1, f2;
+	// Start position
+	int f1;
+	// Animation length
+	int f2;
 	int[] frames;
 	
 	public Objects(String name, int x, int y, boolean animated, String frame) {
@@ -52,17 +56,19 @@ public class Objects {
 		this.frames = new int[frames.length];
 		for(int i = 0; i < frames.length; i++) {
 			this.frames[i] = Integer.parseInt(frames[i].trim());
+			System.out.println(frames[i]);
 		}
+		System.out.println();
 		x1 = this.frames[0];
-		f1 = this.frames[0];
+		f1 = x1;
 		y1 = this.frames[1];
 		f2 = this.frames[this.frames.length - 1];
 	}
 	
 	public void setFrame(int[] frames) {
 		this.frames = frames;
-		this.x1 = frames[0];
-		this.f1 = frames[1];
+		this.x1 = this.frames[0];
+		f1 = x1;
 		this.y1 = this.frames[1];
 		this.f2 = this.frames[this.frames.length - 1];
 	}
@@ -71,7 +77,7 @@ public class Objects {
 		if(animated) {
 			if(Time.getObjectTimer(30, false))
 			x1++;
-			if(x1 > f2) {
+			if(x1 >= f1+f2) {
 				x1 = f1;
 			}
 			return Art.getSpritesheet()[x1][y1];
@@ -110,7 +116,6 @@ public class Objects {
 	
 	public static Objects newInstance(String name, int x, int y, boolean animated, String frame){
 			if(objects.get(name) != null) {
-				//System.out.println("Adding " + name);
 				Objects object = newInstance(objects.get(name));
 				object.x = x;
 				object.y = y;
@@ -118,7 +123,6 @@ public class Objects {
 				object.setFrame(frame);
 				return object;
 			} else {
-				//System.out.println("Making a new " + name);
 				Objects object = new Objects(name, x, y, animated, frame);
 				objects.put(name, object);
 				return newInstance(object);

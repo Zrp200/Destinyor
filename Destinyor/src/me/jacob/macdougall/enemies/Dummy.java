@@ -2,24 +2,34 @@ package me.jacob.macdougall.enemies;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import me.jacob.macdougall.GameVariables;
+import me.jacob.macdougall.graphics.MassSprites;
 import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.magic.Spells;
 import me.jacob.macdougall.npcs.body.Entities;
 import me.jacob.macdougall.npcs.body.Limb;
 import me.jacob.macdougall.world.LevelMap;
 
-public class Dummy {
+public class Dummy extends MassSprites {
+
+	protected static final Random random = new Random();
 	
+	public static final int LEVEL = 0, EXPERIENCE = 1, HEALTH_POINTS = 2,
+			STRENGTH = 3, SKILL = 4, SPEED = 5, LUCK = 6, DEFENCE = 7,
+			WISDOM = 8, GOLD = -1;
+
 	public Map<Integer, Equipment> equipped = new HashMap<>();
-    public Map<Integer, Spells> spells = new HashMap<>();
-    
+	public Map<Integer, Spells> spells = new HashMap<>();
+
 	LevelMap level;
+	
+	protected int chanceToMiss = 0;
 	
 	protected String name;
 	protected String gender;
-	
+
 	protected int lvl;
 	protected int exp;
 	protected int hp;
@@ -30,17 +40,24 @@ public class Dummy {
 	protected int def;
 	protected int wis;
 	protected int gold;
-	protected int x, y;
-	
+
+	protected int mapLvl;
+	protected int maxExp;
+	protected int maxHp;
+	protected int maxStr;
+	protected int maxSkl;
+	protected int maxSpd;
+	protected int maxLuk;
+	protected int maxDef;
+	protected int maxWis;
+
 	protected int limit = 500;
 	protected int turnTimer = 0;
-	
-	public boolean npc = true;
-	
+
 	private boolean paused = true;
-	
+
 	private Entities entity;
-	
+
 	/**
 	 * 
 	 * @param name
@@ -59,13 +76,20 @@ public class Dummy {
 	 * @param y
 	 * @param spells
 	 * @param equipment
+	 * @param spriteXStart
+	 * @param spriteYStart
+	 * @param spriteXEnd
+	 * @param spriteYEnd
+	 * @param map
 	 */
-	public Dummy(String name, String gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, int x, int y, Spells[] spells, Equipment[] equipment) {
+	public Dummy(String name, String gender, int lvl, int exp, int hp, int str, int skl, int spd, int luk, int def, int wis, int gold, int x, int y, Spells[] spells, Equipment[] equipment, int spriteXStart, int spriteYStart, int spriteXEnd, int spriteYEnd, LevelMap map) {
+		super(x, y, spriteXStart, spriteYStart, spriteXEnd, spriteYEnd, map);
 		this.name = name;
 		this.gender = gender;
 		this.lvl = lvl;
 		this.exp = exp;
 		this.hp = hp;
+		this.maxHp = hp;
 		this.str = str;
 		this.skl = skl;
 		this.spd = spd;
@@ -75,9 +99,6 @@ public class Dummy {
 		this.gold = gold;
 		this.x = x;
 		this.y = y;
-		if(gender != null) {
-			npc = false; // Is player if it has a gender
-		}
 		if(spells != null && spells.length > 0) {
 			for(int i = 0; i < spells.length; i++) {
 				this.spells.put(i, spells[i]);
@@ -89,7 +110,7 @@ public class Dummy {
 			}
 		}
 	}
-	
+
 	/**
 	 * http://stackoverflow.com/questions/5802118/why-we-use-clone-method-in-java
 	 * <br>
@@ -97,6 +118,7 @@ public class Dummy {
 	 * @param dummy
 	 */
 	protected Dummy(Dummy dummy) {
+		super(dummy.getX(), dummy.getY(), 0, 0, 0, 0, null);
 		this.name = dummy.name;
 		this.gender = dummy.gender;
 		this.lvl = dummy.lvl;
@@ -111,31 +133,162 @@ public class Dummy {
 		this.gold = dummy.gold;
 		this.x = dummy.x;
 		this.y = dummy.y;
-		this.npc = dummy.npc;
 		this.spells = dummy.spells;
 		this.equipped = dummy.equipped;
 		this.level = dummy.level;
 		this.entity = dummy.entity;
 		this.limit = dummy.limit;
 	}
+
+	/**
+	 * Returns the specified stat
+	 * @param stat stat to return
+	 * @return
+	 */
+	public int getStat(int stat) {
+		switch (stat) {
+			case LEVEL:
+				return lvl;
+			case EXPERIENCE:
+				return exp;
+			case HEALTH_POINTS:
+				return hp;
+			case STRENGTH:
+				return str;
+			case SKILL:
+				return skl;
+			case SPEED:
+				return spd;
+			case LUCK:
+				return luk;
+			case DEFENCE:
+				return def;
+			case WISDOM:
+				return wis;
+			default:
+				return gold;
+		}
+	}
 	
-	public int getLvl() {
-		return lvl;
+	public int getMaxStat(int stat) {
+		switch (stat) {
+			case STRENGTH:
+				return maxStr;
+			case SKILL:
+				return maxSkl;
+			case SPEED:
+				return maxSpd;
+			case LUCK:
+				return maxLuk;
+			case DEFENCE:
+				return maxDef;
+			case WISDOM:
+				return maxWis;
+			default:
+				return maxHp;
+		}
 	}
-	public void setLvl(int lvl) {
-		this.lvl = lvl;
+
+	/**
+	 * Changes the value of the stat to the amount given
+	 * @param stat stat to change
+	 * @param amount amount to add or remove
+	 */
+	public void setStat(int stat, int amount) {
+		switch (stat) {
+			case LEVEL:
+				lvl = amount;
+				break;
+			case EXPERIENCE:
+				exp = amount;
+				break;
+			case HEALTH_POINTS:
+				hp = amount;
+				break;
+			case STRENGTH:
+				str = amount;
+				break;
+			case SKILL:
+				skl = amount;
+				break;
+			case SPEED:
+				spd = amount;
+				break;
+			case LUCK:
+				luk = amount;
+				break;
+			case DEFENCE:
+				def = amount;
+				break;
+			case WISDOM:
+				wis = amount;
+				break;
+			default:
+				gold = amount;
+				break;
+		}
 	}
-	public int getExp() {
-		return exp;
+
+	public void cureAliments() {
+		hp = maxHp;
+		str = maxStr;
+		skl = maxSkl;
+		spd = maxSpd;
+		luk = maxLuk;
+		def = maxDef;
+		wis = maxWis;
 	}
-	public void setExp(int exp) {
-		this.exp = exp;
+
+	/**
+	 * Applies the amount to the attribute, so at level 1
+	 * setStatRelative(LEVEL, 1)
+	 * sets lvl to 2;
+	 * @param stat stat to change
+	 * @param amount amount to add or remove
+	 */
+	public void setStatRelative(int stat, int amount) {
+		switch (stat) {
+			case LEVEL:
+				lvl += amount;
+				break;
+			case EXPERIENCE:
+				exp += amount;
+				break;
+			case HEALTH_POINTS:
+				hp += amount;
+				break;
+			case STRENGTH:
+				str += amount;
+				break;
+			case SKILL:
+				skl += amount;
+				break;
+			case SPEED:
+				spd += amount;
+				break;
+			case LUCK:
+				luk += amount;
+				break;
+			case DEFENCE:
+				def += amount;
+				break;
+			case WISDOM:
+				wis += amount;
+				break;
+			default:
+				gold += amount;
+				break;
+		}
 	}
-	
-	public int getHp() {
+
+	/**
+	 * Returns the hp of the dummy modified by the difficutly level
+	 * @return
+	 */
+	public int getModifiedHp() {
 		int HP = this.hp;
 		if(GameVariables.getDifficultly() == GameVariables.Difficultly.EASY) {
-			if(this.npc) {
+			if(isNpc()) {
 				HP = (int) (HP * 0.50f);
 			} else {
 				HP = HP * 2;
@@ -143,108 +296,39 @@ public class Dummy {
 		}
 		return HP;
 	}
-	
-	public int getTrueHp() {
-		return hp;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	
-	public void setHp(int hp) {
-		this.hp = hp;
-	}
-	
-	public int getStr() {
-		return str;
-	}
-	
-	public void setStr(int str) {
-		this.str = str;
-	}
-	
-	public int getSkl() {
-		return skl;
-	}
-	
-	public void setSkl(int skl) {
-		this.skl = skl;
-	}
-	
-	public int getSpd() {
-		return spd;
-	}
-	
-	public void setSpd(int spd) {
-		this.spd = spd;
-	}
-	
-	public int getLuk() {
-		return luk;
-	}
-	
-	public void setLuk(int luk) {
-		this.luk = luk;
-	}
-	
-	public int getDef() {
-		return def;
-	}
-	
-	public void setDef(int def) {
-		this.def = def;
-	}
-	
-	public int getWis() {
-		return wis;
-	}
-	
-	public void setWis(int wis) {
-		this.wis = wis;
-	}
-	
-	public int getGold() {
-		return gold;
-	}
-	
-	public void setGold(int gold) {
-		this.gold = gold;
-	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * 
 	 * @return the gender if it is a player, otherwise returns an empty string
 	 */
 	public String getGender() {
-		if(npc) {
-			return "";
-		} else {
-			return gender;
-		}
+		return gender;
 	}
-	
-	public void setXandY(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
+
 	public void setLevel(LevelMap level) {
 		this.level = level;
 	}
-	
+
 	public void setLevel(int level) {
 		this.level = LevelMap.maps.get(level);
 	}
-	
+
 	public boolean alive() {
-            return (getHp() > 0);
+		return (getStat(HEALTH_POINTS) > 0);
 	}
-	
+
 	public boolean hasEquipment() {
 		return !this.equipped.isEmpty();
 	}
-	
+
 	public Equipment[] armour() {
 		Equipment[] e = new Equipment[equipped.size()];
 		int i = 0;
@@ -256,7 +340,7 @@ public class Dummy {
 		}
 		return e;
 	}
-	
+
 	/**
 	 * Returns an array containing all armours, no nulls or weapons.
 	 * @return Returns any equipment that is equipped, that is a armour. (Defined by Equipment.isArmour())
@@ -276,14 +360,14 @@ public class Dummy {
 			j = 0;
 			for(Equipment equipment : e) {
 				if(equipment != null) {
-				equip[j] = equipment;
-				j++;
+					equip[j] = equipment;
+					j++;
 				}
 			}
 		}
 		return equip;
 	}
-	
+
 	/**
 	 * Gets all equipment, creates null spaces where there a weapon doesn't exist, however there still is equipment
 	 * @return
@@ -299,7 +383,7 @@ public class Dummy {
 		}
 		return e;
 	}
-	
+
 	/**
 	 * Returns an array containing all weapons, no nulls or armours.
 	 * @return Returns any equipment that is equipped, that is a weapon. (Defined by Equipment.isWeapon())
@@ -319,22 +403,22 @@ public class Dummy {
 			j = 0;
 			for(Equipment equipment : e) {
 				if(equipment != null) {
-				equip[j] = equipment;
-				j++;
+					equip[j] = equipment;
+					j++;
 				}
 			}
 		}
 		return equip;
 	}
-	
+
 	/**
 	 * Uses advance return
 	 * @return if(ta >= limit) return true, else return false
 	 */
 	public boolean canAttack() {
-            return (turnTimer >= limit && hp > 0);
+		return (turnTimer >= limit && hp > 0);
 	}
-	
+
 	/**
 	 * Continues the turn timer
 	 */
@@ -343,37 +427,91 @@ public class Dummy {
 			turnTimer++;
 		paused = false;
 	}
-	
+
 	/**
 	 * Pauses the turn timer
 	 */
 	public void pause() {
 		paused = true;
 	}
-	
+
 	public int getTurnTimer() {
 		return turnTimer;
 	}
-	
+
 	public int getLimit() {
 		return limit;
 	}
-	
+
 	public void resetTurnTimer() {
 		turnTimer = 0;
 	}
-	
+
 	public Entities getEntityType() {
 		return entity;
 	}
-	
+
 	public Limb[] getLimbs() {
 		return (Limb[]) entity.limbs.toArray();
 	}
-	
-	public static Dummy newInstance(Dummy dummy) {
+
+	protected static Dummy newInstance(Dummy dummy) {
 		Dummy d = new Dummy(dummy);
-		
 		return d;
 	}
+
+	protected Dummy newInstance() {
+		Dummy d = new Dummy(this);
+		return d;
+	}
+
+	public boolean isNpc() {
+		return (gender == null || gender.equals(""));
+	}
+	
+	public int attack(Dummy dummy, int maxDamage) {
+		int damage = 0;
+		if(!miss(dummy)) {
+			damage = random.nextInt(maxDamage);
+			if(damage < 1) {
+				damage = 1;
+			}
+			dummy.setStatRelative(Dummy.HEALTH_POINTS, -damage);
+		}
+		//PlayerBattle.setAttacking(this, enemies, damage);
+		resetTurnTimer();
+		return damage;
+	}
+	
+	public boolean miss(Dummy dummy) {
+		int rand = 0;
+		rand = (int) (getStat(Dummy.LUCK) + (getStat(Dummy.LUCK) * skillcheck(dummy)) * 1);
+		// If you can't hit the target you get a 50/50 chance to hit
+		if(rand == 0 || rand == 1) {
+			rand = 2;
+		}
+		chanceToMiss = random.nextInt(rand);
+		if(chanceToMiss <= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * calculates the amount of bonus damage.
+	 * It is based on the enemies skill level and the current attacking players skill level.
+	 * The damage is multiplied by enemy.skl % player.skl
+	 * @param enemies
+	 * @return
+	 */
+	public float skillcheck(Dummy dummy) {
+		int crit = 0;
+		if(this.getStat(Dummy.SKILL) > dummy.getStat(Dummy.SKILL)) {
+			crit = dummy.getStat(Dummy.SKILL) % this.getStat(Dummy.SKILL);
+		}
+		return crit;
+	}
+	
+	
 }

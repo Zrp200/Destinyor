@@ -75,7 +75,7 @@ public class ResolutionButton {
 
 	public void setRes(int x, int y) {
 		if(rOn && Time.getKeyTimer(10, false)) {
-			Destinyor.Refresh();
+			//Destinyor.Refresh();
 			for(int i = 0; i < selected(amount).length; i++) {
 				Buttons button = buttons.get(Resolution.Resolutions[selected(amount)[i]]);
 				if(button.inBox(x, y)) {
@@ -94,7 +94,7 @@ public class ResolutionButton {
 
 	public void setWindow(int x, int y) {
 		if(wOn && Time.getKeyTimer(5, false)) {
-			Destinyor.Refresh();
+			//Destinyor.Refresh();
 			if(buttons.get("Window").inBox(x, y)) {
 				Window = "Window";
 				menu.buttons.get(2)[4].setName(Window);
@@ -141,14 +141,14 @@ public class ResolutionButton {
 		Resolution.setHeight(height);
 		game.setSize(width, height);
 		game.setLocation(game.getLocation());
-		game.frame.setSize(width, height);
-		game.frame.setLocation(game.frame.getLocation());
+		Destinyor.frame.setSize(width, height);
+		Destinyor.frame.setLocation(Destinyor.frame.getLocation());
 		Resolution.Fullscreen = Window;
 		if(!Window.equalsIgnoreCase(DefaultWindow)) {
 			Destinyor.setSettings();
 			mustRestart = true;
 		}
-		Destinyor.Refresh();
+		//Destinyor.Refresh();
 		Menus.menu = Menus.getLastMenuState();
 	}
 

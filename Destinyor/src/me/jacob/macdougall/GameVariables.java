@@ -10,8 +10,6 @@ public class GameVariables {
 	private static Difficultly d;
 	private static Render render;
 
-	// private static Shadows shadow;
-
 	public static boolean isFpsLimit() {
 		return (FPSLimit > 1);
 	}

@@ -1,19 +1,17 @@
 package me.jacob.macdougall.npcs;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
-import me.jacob.macdougall.items.Equipment;
+import me.jacob.macdougall.items.Items;
 import me.jacob.macdougall.world.Houses;
 
 public class ShopKeeper extends NPC {
     
     public int x,y;
     public int gold;
-    public Map<Integer, Equipment> inventory = new HashMap<>();
+    public List<Items> inventory = new ArrayList<>();
     
-    public int n = -1;
-    public int dialouge = 0;
     public Houses store;
     
     public ShopKeeper() {
@@ -21,8 +19,8 @@ public class ShopKeeper extends NPC {
     }
     
     public void browsing() {
-        if(this.n > 1) {
-            
+        if(this.dL > 1) {
+            // Open the browsing dialouge
         }
     }
     

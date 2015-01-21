@@ -46,8 +46,8 @@ public class Cities extends MassSprites {
 	 * @param y1 Y1
 	 * @param y2 Y2
 	 */
-	public Cities(String name, int x, int y, int gold, int x1, int x2, int y1, int y2, int level1, int level2, int pX, int pY) {
-		super(x, y, x1, x2, y1, y2, LevelMap.maps.get(level1));
+	public Cities(String name, int x, int y, int gold, int x1, int x2, int y1, int y2, int level1, int level2) {
+		super(x, y, x1, y1, x2, y2, LevelMap.maps.get(level1));
 		this.map = LevelMap.maps.get(level1);
 		this.gold = gold;
 		this.level1 = level1;
@@ -55,9 +55,23 @@ public class Cities extends MassSprites {
 	}
 	
 	public void goToTown(Destinyor game) {
-		if(Player.X == x && Player.Y == y) {
+		if(Player.X == x && Player.Y == y && LevelMap.level == level1) {
 			game.changeLevel(level2);
 		}
+	}
+	
+	public void returnFromTown(Destinyor game) {
+		if(Player.X == x && Player.Y == y && LevelMap.level == level2) {
+			game.changeLevel(level1);
+		}
+	}
+	
+	public boolean inX() {
+		return (Player.X >= x && Player.X <= x1);
+	}
+	
+	public boolean inY() {
+		return (Player.Y >= y && Player.Y <= y1);
 	}
 	
 	public int getEconomy() {
@@ -65,9 +79,9 @@ public class Cities extends MassSprites {
 		int economy = gold;
 		
 		if(!npcs.isEmpty())
-		for(NPC n : npcs.values()) {
-			economy += n.gold;
-		}
+		//for(NPC n : npcs.values()) {
+			//economy += n.gold;
+		//}
 		
 		if(!stores.isEmpty())
 		for(ShopKeeper n : stores.values()) {

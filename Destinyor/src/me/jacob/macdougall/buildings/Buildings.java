@@ -1,11 +1,10 @@
 package me.jacob.macdougall.buildings;
 
-import java.util.Map;
-import java.util.HashMap;
-
+import java.util.ArrayList;
+import java.util.List;
 public abstract class Buildings {
 	public static int amount = 0;
-    public static Map<Integer, Buildings> buildings = new HashMap<>();
+    public static List<Buildings> buildings = new ArrayList<>();
     
     public int x, y;
     public int width, height;

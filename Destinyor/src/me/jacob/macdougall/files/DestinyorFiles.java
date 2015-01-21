@@ -17,16 +17,24 @@ public class DestinyorFiles {
     public static final String DestinyorHome = DestinyorFolder + fileSplit;
     public static final String EXT = ".destinyor";
     
+    public static String DestinyorDialougesFolder = DestinyorFolder + fileSplit + "Dialouges";
+    public static String DestinyorCutsceneFolder = DestinyorFolder + fileSplit + "Cutscenes";
+    public static String DestinyorModFolder = DestinyorFolder + fileSplit + "mod";
+    public static String DestinyorSaveFolder = DestinyorFolder + fileSplit + "Saves";
+    public static String DestinyorFileFolder = DestinyorFolder + fileSplit + "Game Files";
+    public static String DestinyorQuestFolder = DestinyorFolder + fileSplit + "Quests";
+    
     public static String DestinyorCharacters = DestinyorFolder + fileSplit + "Characters" + EXT;
     public static String DestinyorEnemies = DestinyorFolder + fileSplit + "Enemies" + EXT;
     public static String DestinyorSettings = DestinyorFolder + fileSplit + "settings" + ".ini";
     public static String DestinyorSpells = DestinyorFolder + fileSplit + "Spells" + EXT;
     public static String DestinyorNpcs = DestinyorFolder + fileSplit + "Npcs" + EXT;
     public static String DestinyorItems = DestinyorFolder + fileSplit + "Items" + EXT;
-    public static String DestinyorDialougesFolder = DestinyorFolder + fileSplit + "Dialouges";
-    public static String DestinyorCutsceneFolder = DestinyorFolder + fileSplit + "Cutscenes";
-    public static String DestinyorModFolder = DestinyorFolder + fileSplit + "mod";
     public static String DestinyorEntities = DestinyorFolder + fileSplit + "Entities" + EXT;
+    public static String DestinyorBosses = DestinyorFolder + fileSplit + "Bosses" + EXT;
+    //public static String DestinyorQuests = DestinyorQuestFolder + fileSplit;
+    
+    
     
     public static String DestinyorSpriteSheet = "/icon0.png";
     public static String DestinyorCharacter1Sheet = "/Character1.png";

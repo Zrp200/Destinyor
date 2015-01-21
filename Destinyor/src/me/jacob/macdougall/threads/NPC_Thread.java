@@ -2,9 +2,10 @@ package me.jacob.macdougall.threads;
 
 import me.jacob.macdougall.battles.AIBattle;
 import me.jacob.macdougall.battles.Battles;
+import me.jacob.macdougall.cutscenes.Cutscene;
+import me.jacob.macdougall.cutscenes.NPCs;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.npcs.NPC;
-import me.jacob.macdougall.npcs.RandomNPCs;
 
 public class NPC_Thread extends Thread_Controller implements Runnable {
 
@@ -40,58 +41,44 @@ public class NPC_Thread extends Thread_Controller implements Runnable {
 	protected void update() {
 		if(UI.menu == 0 || UI.menu == 2) {
 
-			for(NPC n : NPC.npcs.values()) {
-				n.tick();
-				if(n.inRange()) {
-					n.Speaking();
-					if(n.speaking) {
-						npc = n;
+			if(!Cutscene.playing) {
+				for(NPC n : NPC.npcs) {
+					n.tick();
+					if(n.inRange()) {
+						n.Speaking();
+						if(n.isSpeaking()) {
+							npc = n;
+						}
 					}
 				}
-			}
-			for(RandomNPCs n : RandomNPCs.randomNpcs.values()) {
-				n.tick();
-				if(n.inRange()) {
-					n.Speaking();
-					if(n.speaking) {
-						npc = n;
+			} else {
+				if(cutscene != Cutscene.cutscenes.get(Cutscene.getName))
+				cutscene = Cutscene.cutscenes.get(Cutscene.getName);
+				cutscene.update();
+				for(NPCs n : cutscene.npc.values()) {
+					n.tick();
+					if(n.isSpeaking()) {
+						cNpc = n;
 					}
+				}
+				if(cutscene.finished) {
+					cutscene.stopCutscene();
 				}
 			}
 
 		}
-		//        if(UI.FightOn) {
-		//        	if(Battles.enemiesCreated)
-		//        	for(int i = 0; i < Destinyor.enemies.length; i++) {
-		//				Destinyor.enemies[i].tick();
-		//			}
-		//        }
 
-		if(UI.menu == 1) {
+		if(UI.menu == UI.Fight) {
 			if(!Battles.enemiesCreated) {
-				//audio.startMusic = true;
 
 				AIBattle.enemies = Battles.SetEnemies();
-				//AIBattle.enemies = enemies;
-				//Destinyor.enemies = enemies;
 				Battles.enemiesCreated = true;
 			}
 			AIBattle.update();
-			//battle.EnemyAI(Player.getActualPlayers(), enemies);
-			//battle.calculateDamage(input, entities, move);
 			for(int i = 0; i < AIBattle.enemies.length; i++) {
 				AIBattle.enemies[i].tick();
 			}
 		}
-		//        if(UI.FightOn) {
-		//			if(!Battles.enemiesCreated) {
-		//				enemies = Battles.SetEnemies();
-		//				Battles.enemiesCreated = true;
-		//			}
-		//			for(int i = 0; i < enemies.length; i++) {
-		//				enemies[i].tick();
-		//			}
-		//        }
 	}
 
 	@Override
@@ -121,7 +108,7 @@ public class NPC_Thread extends Thread_Controller implements Runnable {
 
 			// FPS Timer
 			if(System.currentTimeMillis() - fps_Timer > 1000) {
-				System.out.printf("\n Npc_Thread: %d fps, %d updates", fps, update);
+				//System.out.printf("\n Npc_Thread: %d fps, %d updates", fps, update);
 				fps = 0;
 				update = 0;
 				fps_Timer += 1000;

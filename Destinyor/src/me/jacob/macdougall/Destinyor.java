@@ -5,9 +5,9 @@
 
 /* To Do:
  * Fix Destinyor game code to make it look pretty and easier to find and change methods and variables // this.setMinPriority(); // HAHA GOOD JOKE!
- * Implement Music fully sorta done
- * Implement SoundEffects working on it.
- * Implement Spells fully
+ * Implement Music fully // sorta done
+ * Implement SoundEffects // working on it.
+ * Implement Spells fully 
  * Fix menu for all resolution // TWO YEARS LATER AND IT IS DONE!
  * Get more fps // this.setMinPriority();
  * Add random npc save file // this.setMinPriority();
@@ -30,9 +30,9 @@
  * Create effect txt file
  * Restructre all the Map<> Variables aka add a Name<String> = new HashMap<>();
  * Change all the reader files to a simple for(int i = 0; i < x lines of code; i++) { br.skip(Stats[i].length); statHolder[i] = br.readLine(); }
- * add txt mod file for limbs
+ * add txt mod file for limbs // DONE
  * add txt file for keys
- * add moddable keys aka remapable WORKING ON IT SHEESH
+ * add moddable keys aka remapable WORKING ON IT SHEESH // It's 3 months since you've had the ability too!
  * 
  * it should be attack stat +plus weapon attack - armour and defense right
  * Armour effects psyical damage as well as magic, weapons do not, but can have a wis+ stat.
@@ -57,6 +57,17 @@
  * The set methods in Art take up 434,864 bytes of data
  * 
  * Heavy armour will have an effect on tp generation
+ * JacobIT: Izak, should the player be aloud to distbrute stat points or will it be automatic?
+Ninizak: the games about fate n shit so
+Ninizak: what if we
+Ninizak: have like
+Ninizak: an option of like
+Ninizak: offense defense and whatever
+Ninizak: and youd pick one
+Ninizak: and that would sort of influence your levels
+Ninizak: so if you had it set to offense itd boost attacking stats primarilly
+JacobIT: Okay.
+
  */
 
 package me.jacob.macdougall;
@@ -114,47 +125,47 @@ public class Destinyor extends Canvas implements Runnable {
 	public static boolean Override = false;
 	public static boolean Debug = false;
 
-	private static boolean Refresh = false;
-
-	public static void Refresh() {
-		Refresh = true;
-	}
+//	private static boolean Refresh = false;
+//
+//	public static void Refresh() {
+//		Refresh = true;
+//	}
 
 	public static boolean menu = false;
-
-	public static boolean FPSLock = true;
 
 	public static int FramesPerSecond;
 	public static int UpdatesPerSecond;
 
-	public static String Song = "";
+	public static String song = "";
 
-	private Thread thread;
-	public JFrame frame;
+	private static LevelMap map;
+
+	private static Thread thread;
+	public static JFrame frame;
 
 	// Input Objects
-	private InputHandler input;
-	private Mouse mouse;
-	private Move move;
-	private Battles battle;
+	private static InputHandler input;
+	private static Mouse mouse;
+	private static Move move;
+	private static Battles battle;
 
 	// Graphic Objects
-	private Minimap minimap;
-	private Debug debug;
-	private Screen screen;
+	private static Minimap minimap;
+	private static Debug debug;
+	private static Screen screen;
 
 	// Entities Objects
-	private Player player;
 
 	// Other Objects
-	private LevelMap map;
-	private Menus menus;
+
+	private static Menus menus;
+
 	private Cutscene cutscene;
 	private Cities city1;
 	private PlayerInventory pInv;
 	private PlayerEquipment pEquip;
 
-	private final Clock clock = new Clock();
+	private static final Clock clock = new Clock();
 
 	private boolean running = false;
 
@@ -165,11 +176,13 @@ public class Destinyor extends Canvas implements Runnable {
 		Playlist playlist = new Playlist(1, music2);
 
 		GameVariables.setDifficultly(GameVariables.Difficultly.NORMAL);
+		
 	}
 
 	public void init() {
 		screen = new Screen(1024 / 2, 768 / 2);
-
+		
+		map = LevelMap.maps.get(1);
 		input = new InputHandler(this);
 		battle = new Battles();
 		menus = new Menus(this, input);
@@ -180,14 +193,14 @@ public class Destinyor extends Canvas implements Runnable {
 			debug = new Debug();
 		}
 
-		map = LevelMap.maps.get(1);
+		
 		minimap = new Minimap(this);
 
-		city1 = new Cities("Default", 12, 12, 100, 2, 5, 16, 19, 1, 2, 1, 1);
+		city1 = new Cities("Default", 12, 12, 100, 2, 5, 16, 19, 1, 2);
 
 		move = new Move(map);
 		Menus.movement();
-		player = Player.getActualPlayers()[0];
+
 		Thread_Controller.setNpc(move);
 
 		// Start making random npcs
@@ -203,10 +216,14 @@ public class Destinyor extends Canvas implements Runnable {
 				y = random.nextInt(LevelMap.FloorHeight);
 			}
 		}
+		
+		//NPC npc = new NPC("Boss", "", 9, 9, "Hello I am here to test boss battles", false);
+		//NPC.npcs.add(npc);
+		
 
-		for(NPC n : NPC.npcs.values()) {
-			n.init(map);
-		}
+		//		for(NPC n : NPC.npcs) {
+		//			//n.init(map);
+		//		}
 
 		Player.putItInTheBag(Equipment.get("Sword").newInstance());
 		Player.putItInTheBag(Equipment.get("Shield").newInstance());
@@ -214,11 +231,10 @@ public class Destinyor extends Canvas implements Runnable {
 		Player.putItInTheBag(Equipment.get("Leg Plate").newInstance());
 		Player.putItInTheBag(Equipment.get("Boots").newInstance());
 		Player.putItInTheBag(Equipment.get("Gloves").newInstance());
-		//Player.putItInTheBag(Equipment.get("Mitts").newInstance());
 
 		for(int i = 0; i < Player.inventory.size(); i++) {
 			if(Player.inventory.get(i).equippable)
-				player.Equip((Equipment) Player.inventory.get(i));
+				Player.getMainCharacter().Equip((Equipment) Player.inventory.get(i));
 			System.out.println(Player.inventory.get(i).name);
 		}
 
@@ -229,17 +245,8 @@ public class Destinyor extends Canvas implements Runnable {
 
 		cutscene = new Cutscene(DestinyorFiles.DestinyorCutsceneFolder + DestinyorFiles.fileSplit + "default.txt");
 
-		Thread_Controller.startCutscene();
-		Thread_Controller.pauseCutscene();
-	}
-
-	public static void RemoveDebug() {
-		for(int i = 0; i < DebugWriter.strings.size(); i++) {
-			if(DebugWriter.getln(i).contains("Menu:")) {
-				DebugWriter.removeln(DebugWriter.getln(i));
-				i--;
-			}
-		}
+		//		Thread_Controller.startCutscene();
+		//		Thread_Controller.pauseCutscene(); 
 	}
 
 	private void RenderSpellBook(Player player) {
@@ -268,34 +275,47 @@ public class Destinyor extends Canvas implements Runnable {
 		menus.render(screen);
 	}
 
+	public void renderSave() {
+		map.render(screen, -Camera.cX, -Camera.cY);
+		Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
+		for(NPC n : NPC.npcs) {
+			if(n.inRange()) {
+				n.render(screen);
+			}
+		}
+		Player.getMainCharacter().render(screen);
+	}
+	
 	private void RenderMaps() {
 		Player.Attackable = true; // Makes Sure Player Can be Attacked By Enemy
 		map.render(screen, -Camera.cX, -Camera.cY);
 		Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
 		if(UI.menu == 0 || UI.menu == 2 && !Destinyor.menu) {
-			for(NPC n : NPC.npcs.values()) {
-				if(n.inRange() && n.render) {
-					n.render(screen);
-					if(n.speaking) {
-						Dialouge.setText(n.dialouge, n.dialougeLocation);
-					}
+			if(!Cutscene.playing) {
+				for(NPC n : NPC.npcs) {
+					if(n.inRange()) {
+						n.render(screen);
+						if(n.isSpeaking()) {
+							n.speak();
+						}
 
+					}
+				}
+			} else {
+				if(Thread_Controller.cNpc != null) {
+					if(Thread_Controller.cNpc.isSpeaking()) {
+						UI.TextBox(screen);
+						Thread_Controller.cNpc.speak();
+					}
+				}
+				for(NPCs n : cutscene.npc.values()) {
+					n.render(screen);
 				}
 			}
-			for(RandomNPCs n : RandomNPCs.randomNpcs.values()) {
-				if(n.inRange() && n.render) {
-					n.render(screen);
-					if(n.speaking) {
-						Dialouge.setText(n.dialouge, n.dialougeLocation);
-					}
-
-				}
-			}
-
 			Time.getObjectTimer(30, true);
 			city1.render(screen);
 		}
-		player.render(screen);
+		Player.getMainCharacter().render(screen);
 	}
 
 	// Starts Game
@@ -333,9 +353,9 @@ public class Destinyor extends Canvas implements Runnable {
 			if(UI.menu == UI.Equipment || (UI.menu >= UI.Player1 && UI.menu <= UI.Player4))
 				pEquip.renderEquipment(screen);
 			if(UI.menu == UI.Spellbook)
-				RenderSpellBook(player);
+				RenderSpellBook(Player.getMainCharacter());
 			if(Cutscene.playing)
-				Thread_Controller.renderCutscene();
+				RenderMaps();
 			if(Dialouge.isEmpty())
 				UI.TextBox(screen);
 			Dialouge.render(screen);
@@ -343,6 +363,8 @@ public class Destinyor extends Canvas implements Runnable {
 			UI.REFRESH(screen); // Draw black none null screen
 			menus.render(screen);
 		}
+		
+		
 
 		// Draw Screen onto Frame
 		Graphics g = strategy.getDrawGraphics();
@@ -360,7 +382,7 @@ public class Destinyor extends Canvas implements Runnable {
 		g.setColor(Color.GREEN);
 		g.setFont(new Font("Arial", Font.BOLD, 16));
 		g.drawString("Fps: " + String.valueOf(FramesPerSecond) + ", " + "Ups: " + String.valueOf(UpdatesPerSecond), 1, 16);
-		g.drawString(Song, this.getWidth() - (Song.length() * 9), 16);
+		g.drawString(song, this.getWidth() - (song.length() * 9), 16);
 
 		if(Debug) {
 			g.drawString("Player X Pos = " + Player.X + ", Player Y Pos = " + Player.Y, 1, 33); // Displays Player x and y position
@@ -374,18 +396,26 @@ public class Destinyor extends Canvas implements Runnable {
 		// Finalize & Dispose
 		g.dispose();
 		strategy.show();
+		//if(Refresh) {
+			UI.REFRESH(screen);
+			//Refresh = false;
+		//}
 	}
 
 	// Updates Game Logic
 	private void update() {
 		Time.tick();
 		clock.tick();
-
+		
+		Saves.update(mouse, screen, this);
+		
 		for(Key key : Key.keys.values()) {
 			key.tick();
 		}
 
 		move.Movement();
+
+		
 
 		city1.goToTown(this);
 		//sb.update(mouse);
@@ -395,11 +425,6 @@ public class Destinyor extends Canvas implements Runnable {
 		menus.mouseChecker(mouse, Resolution.width(), Resolution.height());
 		menus.inputChecker();
 		cutscene.startCutscene();
-
-		if(Refresh) {
-			UI.REFRESH(screen);
-			Refresh = false;
-		}
 
 		if(Keys.Escape()) {
 			menus.checkMenu();
@@ -492,8 +517,8 @@ public class Destinyor extends Canvas implements Runnable {
 		FileChecker fc = new FileChecker();
 		FileLoader.CreateFile(DestinyorFiles.DestinyorSettings);
 		FileLoader.ReadFromFiles(DestinyorFiles.DestinyorSettings);
-		Override = FileLoader.Override();
-		Debug = FileLoader.Debug();
+		FileLoader.CreateFolder(DestinyorFiles.DestinyorSaveFolder);
+		
 		// http://www.innerbody.com/anatomy/integumentary for limbs
 
 		Dimension Res = new Dimension(Resolution.width(), Resolution.height());
@@ -503,48 +528,40 @@ public class Destinyor extends Canvas implements Runnable {
 		Art.setButtons("/button.png", 120, 20, game);
 		Art.setMap(DestinyorFiles.DestinyorMap, 512, 512, game);
 		Art.setScrollbars("/Scrollbar.png", 10, 20, game);
-
+		Saves.loadSaves();
+		Element.setElements();
 		DynamicsLoader.init();
-
-		//		for(int i = 0; i < Limb.getLength(); i++) {
-		//			System.out.println(Limb.getLimb(i).getName());
-		//		}
 		
-		//Writer.WriteDefault(DestinyorFiles.DestinyorEntities, "Entities", Default.getEntities(), null);
+		for(Element element : Element.getElements()) {
+			System.out.println(element.getElement());
+		}
 		
-//		for(Entities entity : Entities.entities.values()) {
-//			//entity = Entities.entities.get("Human");
-//			System.out.println(entity.name);
-//			for(Limb limb : entity.getLimbs()) {
-//				System.out.println(limb.getName());
-//			}
-//			System.out.println();
-//		}
-		
+		Destinyor.map = LevelMap.maps.get(1);
 
 		FileLoader.CreateFolder(DestinyorFiles.DestinyorDialougesFolder);
 		FileLoader.CreateFolder(DestinyorFiles.DestinyorCutsceneFolder);
 		Writer.writeCutscene(DestinyorFiles.DestinyorCutsceneFolder);
-		
+
 		Default.SetEntities();
 		Default.setEnemies();
 		Default.setSpells();
 		Default.setNpcs();
 		Default.SetItems();
+		Default.setBosses();
 
-		Element.setElements();
+		Writer.WriteDefault(DestinyorFiles.DestinyorBosses, "Bosses", Default.getBosses(), Default.getBossFormat());
+		Reader.readBosses(DestinyorFiles.DestinyorBosses);
+
+		
 
 		Thread_Controller.startLoading();
 
-		//FileLoader.CreateFile(DestinyorFiles.DestinyorItems);
-		
-
 		Destinyor.waitForLoading();
-		
+
 		Reader.readEntities(DestinyorFiles.DestinyorEntities);
 		FileLoader.ReadFromFiles(DestinyorFiles.DestinyorItems);
-		
-		game.mouse = new Mouse();
+
+		Destinyor.mouse = new Mouse();
 
 		game.setSize(Res);
 
@@ -575,12 +592,9 @@ public class Destinyor extends Canvas implements Runnable {
 		frame.setVisible(true);
 		frame.requestFocus();
 		frame.requestFocusInWindow();
-		game.addMouseListener(game.mouse.new MouseHandler());
-		game.addMouseMotionListener(game.mouse.new MouseHandler());
-		game.addMouseWheelListener(game.mouse.new MouseHandler());
-
-		//		System.out.println("Destinyor.main(): " + Resolution.width() + " x " + Resolution.height() + " = " + Res);
-		//		System.out.println("Destinyor.main(): " + game.getSize());
+		game.addMouseListener(Destinyor.mouse.new MouseHandler());
+		game.addMouseMotionListener(Destinyor.mouse.new MouseHandler());
+		game.addMouseWheelListener(Destinyor.mouse.new MouseHandler());
 
 		if(Res != game.getSize() || Res != frame.getSize()) {
 			if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) {
@@ -595,7 +609,7 @@ public class Destinyor extends Canvas implements Runnable {
 
 		// Starts Game
 		game.init();
-		game.frame = frame;
+		Destinyor.frame = frame;
 		game.start();
 
 		if(Debug) {
@@ -606,7 +620,7 @@ public class Destinyor extends Canvas implements Runnable {
 	// Testing only, in move class/file // ENGLISH?
 	public static void ChangeScreenToUI() {
 		if(Keys.PageDown()) {
-			Destinyor.Refresh();
+			//Destinyor.Refresh();
 			UI.menu = UI.Fight;
 		}
 	}
@@ -614,16 +628,9 @@ public class Destinyor extends Canvas implements Runnable {
 	// Testing only, in move class/file // ENGLISH?
 	public static void ChangeScreenToMap() {
 		if(Keys.Home()) {
-			Destinyor.Refresh();
+			//Destinyor.Refresh();
 			UI.menu = UI.Map;
 		}
-	}
-
-	public void Save() {
-		//		if(Keys.Escape()) {
-		//			FileLoader.WriteToFiles(DestinyorFiles.DestinyorCharacters);
-		//			System.out.println("Saving");
-		//		}
 	}
 
 	public static void waitForLoading() {
@@ -668,7 +675,7 @@ public class Destinyor extends Canvas implements Runnable {
 	}
 
 	public void changeLevel(int level) {
-		Refresh = true;
+		//Refresh = true;
 		map = LevelMap.maps.get(level);
 		minimap = new Minimap(this);
 	}
@@ -679,6 +686,10 @@ public class Destinyor extends Canvas implements Runnable {
 		do {
 			t1 = System.currentTimeMillis();
 		} while (t1 - t0 < n);
+	}
+
+	public static LevelMap getCurrentLevel() {
+		return map;
 	}
 
 }

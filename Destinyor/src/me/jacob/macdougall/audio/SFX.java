@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class SFX {
 
-	// SoundEffects will be called sfx in later versions
-
 	public static Map<String, SFX> sfxs = new HashMap<>();
 	public static Map<Integer, String> names = new HashMap<>();
 

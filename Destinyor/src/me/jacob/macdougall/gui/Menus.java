@@ -7,31 +7,33 @@ import graphic.engine.window.Resolution;
 
 import input.engine.keyboard.InputHandler;
 import input.engine.mouse.Mouse;
+import me.jacob.macdougall.DebugWriter;
 import me.jacob.macdougall.Destinyor;
+import me.jacob.macdougall.GameVariables;
 import me.jacob.macdougall.Time;
 import me.jacob.macdougall.audio.Sound;
+import me.jacob.macdougall.files.Saves;
 import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.player.Move;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menus {
 
 	public static final int NONE = -1, MAIN = 0, MENU = 1, OPTIONS = 2,
-			BATTLES = 3;
+			BATTLES = 3, SAVES = 4;
 
-	public int[] centre = { 256, 192 };
+	public List<Buttons[]> buttons = new ArrayList<>();
 
-	public Map<Integer, Buttons[]> buttons = new HashMap<>();
-
-	public String[][] names = { { "Start", "Options", "Save", "Exit" }, { "Resume", "Options", "Save", "Exit" },
+	public String[][] names = { { "New Game", "Resume Game", "Load Game", "Options", "Exit" }, { "Resume", "Options", "Save", "Load", "Exit" },
 	//{ "Resolution" }
 	};
 
 	public String resolution = Resolution.width() + " * " + Resolution.height();
 
-	public Map<Integer, Buttons> button = new HashMap<>();
+	public List<Buttons> button = new ArrayList<>();
+	public List<TextBox> textboxes = new ArrayList<>();
 
 	// -1 no menu currently open, 0 main, 1 esc, 2 options, 3 battles
 	public static int menu = 0;
@@ -62,25 +64,27 @@ public class Menus {
 		for(int i = 0; i < names.length; i++) {
 			menus[i] = new Buttons[names[i].length];
 			for(int j = 0; j < names[i].length; j++) {
-				button.put(button.size(), new Buttons(names[i][j], 192, 128 + j * 30));
+				button.add(new Buttons(names[i][j], 192, (112) + j * 30));
 				menus[i][j] = button.get(button.size() - 1);
 			}
-			buttons.put(i, menus[i]);
+			buttons.add(menus[i]);
 		}
 
-		button.put(button.size(), new Buttons("Resolution", 10, 32));
+		button.add(new Buttons("Resolution", 10, 32));
 
-		button.put(button.size(), new Buttons(rButton.resolution, 10 + 120, 32));
+		button.add(new Buttons(rButton.resolution, 10 + 120, 32));
 
-		button.put(button.size(), new Buttons("Accept", 32, 32 + 120));
+		button.add(new Buttons("Accept", 32, 32 + 120));
 
-		button.put(button.size(), new Buttons("Display Mode: ", 512 - 250, 32));
+		button.add(new Buttons("Display Mode: ", 512 - 250, 32));
 
-		button.put(button.size(), new Buttons(Resolution.Fullscreen, 512 - 130, 32));
+		button.add(new Buttons(Resolution.Fullscreen, 512 - 130, 32));
 
 		Buttons[] buttons3 = { button.get(button.size() - 5), button.get(button.size() - 4), button.get(button.size() - 3), button.get(button.size() - 2), button.get(button.size() - 1) };
 
-		buttons.put(buttons.size(), buttons3);
+		buttons.add(buttons3);
+		
+		textboxes.add(new TextBox(100, 100, 120, 20, Art.getButtons()[0][0]));
 	}
 
 	public void checkMenu() {
@@ -92,7 +96,7 @@ public class Menus {
 
 	public void render(Screen screen) {
 
-		if(menu > NONE) {
+		if(menu > NONE && menu < buttons.size()) {
 			int i = 0;
 			for(Buttons b : buttons.get(menu)) {
 				if(b != null) {
@@ -113,8 +117,12 @@ public class Menus {
 				break;
 			case OPTIONS:
 				rButton.render(screen);
+				textboxes.get(0).render(screen);
 				break;
 			case BATTLES:
+				break;
+			case SAVES:
+				Saves.renderSaveScreen(screen);
 				break;
 		}
 		if(rButton.mustRestart) {
@@ -131,49 +139,133 @@ public class Menus {
 		pressed = mouse.getPressed();
 
 		if(pressed != null) {
-			for(int i = 0; i < button.size(); i++) {
-				if(button.get(i).inBox(pressed[0], pressed[1])) {
-					switch (i) {
-						case 0:
-							isOn = false;
-							mainMenu = false;
-							menu = -1;
-							mouse.resetMouseWheel();
-							movement();
-							break;
+			switch(menu) {
+				case MAIN: 
+					mainMenu(mouse); 
+					break;
+				case MENU:
+					pauseMenu(mouse);
+					break;
+				case OPTIONS:
+					optionsMenu(mouse);
+					break;
+			}
+			if(menu == MAIN) {
+				mainMenu(mouse);
+			}
+			if(menu == MENU) {
+				
+			}
+			if(menu == OPTIONS) {
+				
+				
+			}
+		}
+	}
+	
+	public void mainMenu(Mouse mouse) {
+		for(int i = 0; i < button.size(); i++) {
+			if(button.get(i).inBox(pressed[Mouse.X], pressed[Mouse.Y])) {
+				switch (i) {
+					case 0:
+						isOn = false;
+						mainMenu = false;
+						menu = -1;
+						mouse.resetMouseWheel();
+						movement();
+						DebugWriter.RemoveDebug("Menu: ");
+						break;
 
-						case 1:
-							menu = 2;
-							break;
+					case 1:
+						// Load from the biggest numbered save
+						break;
 
-						case 2:
-							break;
-
-						case 3:
-							for(Sound sounds : Sound.sounds.values()) {
-								sounds.stopSound();
-								sounds.close();
-							}
-							System.exit(0);
-							break;
-					}
+					case 2:
+						// Open load screen
+						break;
+					
+					case 3:
+						menu = OPTIONS;
+						break;
+						
+					case 4:
+						for(Sound sounds : Sound.sounds.values()) {
+							sounds.stopSound();
+							sounds.close();
+						}
+						System.exit(0);
+						break;
 				}
 			}
-			if(menu == 2) {
-				rButton.setRes(pressed[0], pressed[1]);
-				rButton.setWindow(pressed[0], pressed[1]);
-				rButton.setSelected(mouse);
-				if(buttons.get(menu)[1].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
-					rButton.rClick();
-					Time.resetKeyTimer();
-					Destinyor.Refresh();
-				} else if(buttons.get(menu)[2].inBox(pressed[0], pressed[1])) {
-					rButton.accept(game);
-				} else if(buttons.get(menu)[4].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
-					rButton.wClick();
-					Time.resetKeyTimer();
+		}
+	}
+	
+	public void pauseMenu(Mouse mouse) {
+		for(int i = 0; i < button.size(); i++) {
+			if(button.get(i).inBox(pressed[Mouse.X], pressed[Mouse.Y])) {
+				switch (i) {
+					case 0:
+						isOn = false;
+						mainMenu = false;
+						menu = -1;
+						mouse.resetMouseWheel();
+						movement();
+						DebugWriter.RemoveDebug("Menu: ");
+						break;
+
+					case 1:
+						menu = OPTIONS;
+						break;
+
+					case 2:
+						menu = SAVES;
+						break;
+						
+					case 3:
+						break;
+						
+					case 4:
+						for(Sound sounds : Sound.sounds.values()) {
+							sounds.stopSound();
+							sounds.close();
+						}
+						System.exit(0);
+						break;
 				}
 			}
+		}
+	}
+	
+	public void optionsMenu(Mouse mouse) {
+		textboxes.get(0).update(mouse);
+		if(textboxes.get(0).focused)
+			return;
+		if(textboxes.get(0).input != "") {
+			boolean numbers = true;
+			for(char numCheck : textboxes.get(0).input.toCharArray()) {
+				if(!Character.isDigit(numCheck))
+				{
+					numbers = false;
+					break;
+				}
+			}
+			if(numbers) {
+				GameVariables.setFPSLimit(Integer.parseInt(textboxes.get(0).input));
+			}
+			
+		}
+		rButton.setRes(pressed[0], pressed[1]);
+		rButton.setWindow(pressed[0], pressed[1]);
+		rButton.setSelected(mouse);
+		if(buttons.get(menu)[1].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
+			rButton.rClick();
+			Time.resetKeyTimer();
+			//Destinyor.Refresh();
+		} else if(buttons.get(menu)[2].inBox(pressed[0], pressed[1])) {
+			rButton.accept(game);
+		} else if(buttons.get(menu)[4].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
+			rButton.wClick();
+			Time.resetKeyTimer();
 		}
 	}
 
@@ -193,11 +285,13 @@ public class Menus {
 			}
 		}
 		if(menu != NONE) {
-			if(buttonSelected > buttons.get(menu).length - 1) {
-				buttonSelected = 0;
-			}
-			if(buttonSelected < 0) {
-				buttonSelected = buttons.get(menu).length - 1;
+			if(menu < buttons.size() && buttons.get(menu) != null) {
+				if(buttonSelected > buttons.get(menu).length - 1) {
+					buttonSelected = 0;
+				}
+				if(buttonSelected < 0) {
+					buttonSelected = buttons.get(menu).length - 1;
+				}
 			}
 		}
 	}
@@ -208,13 +302,15 @@ public class Menus {
 				isOn = false;
 				mainMenu = false;
 				menu = NONE;
+				DebugWriter.RemoveDebug("Menu: ");
 				break;
-			case 1:
+			case 1: break;
+			case 2: break;
+			case 3:
 				menu = OPTIONS;
 				break;
-			case 2:
-				break;
-			case 3:
+			case 4: break;
+			case 5:
 				for(Sound sounds : Sound.sounds.values()) {
 					sounds.stopSound();
 					sounds.close();

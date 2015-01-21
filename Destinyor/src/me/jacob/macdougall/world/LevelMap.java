@@ -42,7 +42,7 @@ public class LevelMap {
 	public void render(Screen screen, int x, int y) {
 		int X = (int) (Screen.getWidth()  / 2.0);
 		int Y = (int) (Screen.getHeight() / 2.0);
-		Destinyor.Refresh();
+		//Destinyor.Refresh();
 		MapX_Pos = x + X;
 		MapY_Pos = y + Y;
 		

@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.npcs.NPC;
-import me.jacob.macdougall.npcs.RandomNPCs;
 import me.jacob.macdougall.player.Camera;
 import me.jacob.macdougall.player.Player;
 import me.jacob.macdougall.world.LevelMap;
@@ -47,12 +46,12 @@ public class Minimap {
 			g.drawRect(Player.X * scale, Player.Y * scale, scale, scale);
 			g.fillRect(Player.X * scale, Player.Y * scale, scale, scale);
 			g.setColor(Color.BLUE);
-			for(NPC n : NPC.npcs.values()) {
+			for(NPC n : NPC.npcs) {
 				n.renderMinimap(g, scale);
 			}
-			for(RandomNPCs n : RandomNPCs.randomNpcs.values()) {
-				n.renderMinimap(g, scale);
-			}
+//			for(RandomNPCs n : RandomNPCs.randomNpcs) {
+//				n.renderMinimap(g, scale);
+//			}
 		}
 	}
 	

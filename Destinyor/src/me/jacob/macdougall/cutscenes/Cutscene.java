@@ -8,10 +8,7 @@ import me.jacob.macdougall.input.Keys;
 import me.jacob.macdougall.npcs.NPC;
 import me.jacob.macdougall.player.Move;
 import me.jacob.macdougall.player.Player;
-import me.jacob.macdougall.threads.Thread_Controller;
 import me.jacob.macdougall.world.LevelMap;
-
-import input.engine.keyboard.InputHandler;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -42,7 +39,7 @@ public class Cutscene {
 	public boolean finished = false;
 	public static boolean playing = false;
 	public boolean isQuest = false;
-	private NPCs cNpc;
+	public NPCs cNpc;
 	public int cI = 0;
 	private int cJ = 0;
 	private int dx = 0;
@@ -133,7 +130,7 @@ public class Cutscene {
 					directions.put(j, 0);
 					dir[j] = 2;
 					ddf++;
-					nDialouge = FileLoader.readDialouges(DestinyorFiles.DestinyorDialougesFolder + "\\" + stuff[i][j]);
+					nDialouge = FileLoader.readDialouges(DestinyorFiles.DestinyorDialougesFolder + DestinyorFiles.fileSplit + stuff[i][j]);
 				}
 
 				if(stuff[i][j].contains("x = ")) {
@@ -145,10 +142,10 @@ public class Cutscene {
 				}
 
 				if(nX == 0)
-					nX = NPC.getNpc(names[i], 0).getX();
+					nX = NPC.getNpc(names[i]).getX();
 
 				if(nY == 0)
-					nY = NPC.getNpc(names[i], 0).getY();
+					nY = NPC.getNpc(names[i]).getY();
 			}
 
 			direction = new int[3][];
@@ -183,13 +180,13 @@ public class Cutscene {
 			dyf = 0;
 			ddf = 0;
 			NPCs Npc;
-			NPC parent = NPC.getNpc(names[i], 0);
-			Npc = new NPCs(names[i] + npcs, parent.sFrame, nX, nY, nDialouge, npcs, parent.getID());
+			NPC parent = NPC.getNpc(names[i]);
+			Npc = new NPCs(names[i], parent.getStringFrame(), nX, nY, nDialouge);
+			Npc.changeLevel(LevelMap.maps.get(level));
 			npc.put(npc.size(), Npc);
 			Npc.direction = direction;
 
 			Npc.dir = dir;
-			Npc.init(parent.getMap());
 			dir = null;
 			direction = null;
 			nX = 0;
@@ -197,41 +194,35 @@ public class Cutscene {
 			npcs++;
 		}
 		cutscenes.put(name, this);
-		DebugWriter.println("Adding Cutscene: " + name + " At: " + x + ", " + y);
+		DebugWriter.println("Menu: Adding: Cutscene: " + name + " At: " + x + ", " + y);
 	}
 
 	public void startCutscene() {
-		if(Player.X == x && Player.Y == y && LevelMap.level == level && !finished && !isQuest) {
+		if(!isQuest) {
+			if(Player.X == x && Player.Y == y && LevelMap.level == level && !finished) {
 
+				if(!playing) {
+					DebugWriter.println("Starting Cutscene: " + name + " At: " + x + ", " + y);
+					playing = true;
+					getName = this.name;
+					Move.canMove = false;
+					Time.resetCutsceneTimer();
+				}
+			}
+		}
+	}
+	
+	public void startQuestCutscene() {
+		if(Player.X == x && Player.Y == y && LevelMap.level == level && !finished) {
 			if(!playing) {
 				DebugWriter.println("Starting Cutscene: " + name + " At: " + x + ", " + y);
-				for(NPCs n : this.npc.values()) {
-					n.stopDrawing();
-				}
 				playing = true;
-				Thread_Controller.resumeCutscene();
 				getName = this.name;
 				Move.canMove = false;
 				Time.resetCutsceneTimer();
 			}
 		}
 	}
-
-//	public void startCutscene(Player player) {
-//		if(Player.X == x && Player.Y == y && LevelMap.level == level && !finished && isQuest) {
-//			if(!playing) {
-//				DebugWriter.println("Starting Cutscene: " + name + " At: " + x + ", " + y);
-//				for(NPCs n : this.npc.values()) {
-//					n.stopDrawing();
-//				}
-//				playing = true;
-//				Thread_Controller.resumeCutscene();
-//				getName = this.name;
-//				Move.canMove = false;
-//				Time.resetCutsceneTimer();
-//			}
-//		}
-//	}
 
 	public void update() {
 		if(cNpc != null) {
@@ -243,36 +234,34 @@ public class Cutscene {
 				return;
 			}
 
-			if(Keys.Enter() && cNpc.speaking && Time.getKeyTimer(10, false)) {
+			if(Keys.Enter() && cNpc.isSpeaking() && Time.getKeyTimer(10, false)) {
 				cNpc.stopSpeaking();
 				dd++;
 				cJ++;
 				Time.resetKeyTimer();
 			}
-			if(!Keys.Enter() && cNpc.speaking) {
+			if(!Keys.Enter() && cNpc.isSpeaking()) {
 				return;
 			}
 		}
 		//       an if loop that is similar to a for loop, without the return
 
 		if(this.cI < names.length) {
-
-			// cNpc = npc.get(names[cI] + cI);
+			
 			cNpc = npc.get(cI);
 
 			if(this.cJ < cNpc.dir.length) {
-
-				if(cNpc.dir[cJ] == 0) {
-					moveX(cNpc.direction[cNpc.dir[cJ]][dx]);
-				} else if(cNpc.dir[cJ] == 1) {
-					moveY(cNpc.direction[cNpc.dir[cJ]][dy]);
-				} else if(cNpc.dir[cJ] == 2) {
-					cNpc.Speaking(dd);
+				
+				switch(cNpc.dir[cJ]) {
+					case 0: moveX(cNpc.direction[cNpc.dir[cJ]][dx]); break;
+					case 1: moveY(cNpc.direction[cNpc.dir[cJ]][dy]); break;
+					case 2: cNpc.Speaking(dd); break;
 				}
-
-				if(cNpc.Moving || cNpc.speaking) {
+				
+				if(cNpc.Moving || cNpc.isSpeaking()) {
 					return;
 				}
+				
 			}
 			dx = 0;
 			dy = 0;
@@ -286,14 +275,14 @@ public class Cutscene {
 	}
 
 	public void moveX(int x) {
-		cNpc.setX(x);
+		cNpc.setXRelative(x);
 		cNpc.Moving = true;
 		dx++;
 		Time.resetCutsceneTimer();
 	}
 
 	public void moveY(int y) {
-		cNpc.setY(y);
+		cNpc.setYRelative(y);
 		cNpc.Moving = true;
 		dy++;
 		Time.resetCutsceneTimer();
@@ -304,7 +293,6 @@ public class Cutscene {
 		playing = false;
 		delete();
 		Move.canMove = true;
-		Thread_Controller.pauseCutscene();
 	}
 
 	public void delete() {
@@ -312,55 +300,5 @@ public class Cutscene {
 			n.delete();
 		}
 	}
-
-	public static void wait(int n) {
-		long t0, t1;
-		t0 = System.currentTimeMillis();
-		do {
-			t1 = System.currentTimeMillis();
-		} while (t1 - t0 < n);
-	}
-
-	public static void waitSpeak(int n, InputHandler input) {
-		long t0, t1;
-		t0 = System.currentTimeMillis();
-		do {
-			t1 = System.currentTimeMillis();
-		} while (t1 - t0 < n || Keys.Enter());
-	}
-
-	//        name = location;
-	//        commands = FileLoader.readCutscenes(location);
-	//        direction = new int[commands.length][];
-	//        
-	//        for(int i = 0; i < commands.length; i++) {
-	//            //stuff[i] = commands[i];
-	//            if(commands[i].contains(".txt")) {
-	//                textHolder = FileLoader.readDialouges(commands[i]);
-	//                direction[i] = 0;
-	//            }
-	//            if(commands[i].contains("x = ")) {
-	//                x = Integer.parseInt(commands[i]);
-	//            }
-	//            if(commands[i].contains("y = ")) {
-	//                y = Integer.parseInt(commands[i]);
-	//            }
-	//            if(commands[i].contains("left")) {
-	//                direction[i] = -1;
-	//            }
-	//            
-	//            if(commands[i].contains("right")) {
-	//                direction[i] = 1;
-	//            }
-	//            
-	//            if(commands[i].contains("up")) {
-	//                direction[i] = -2;
-	//            }
-	//            
-	//            if(commands[i].contains("down")) {
-	//                direction[i] = 2;
-	//            }
-	//        } 
-	//}
 
 }

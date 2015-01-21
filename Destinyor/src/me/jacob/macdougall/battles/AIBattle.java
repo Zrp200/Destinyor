@@ -6,17 +6,19 @@ import java.util.Random;
 
 import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.GameVariables;
-import me.jacob.macdougall.enemies.Enemy;
+import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.player.Player;
 
 public class AIBattle {
 
 	private static final Random random = new Random();
-	public static Enemy[] enemies;
+	public static Enemies[] enemies;
+	
+	private static int defendingPlayer = 0;
 
-	public static void turn(Enemy[] enemies) {
-		for(Enemy enemy : enemies) {
+	public static void turn(Enemies[] enemies2) {
+		for(Enemies enemy : enemies2) {
 			if(enemy.canAttack()) {
 				enemy.pause();
 			} else {
@@ -25,7 +27,7 @@ public class AIBattle {
 		}
 	}
 
-	public static Player getPlayer(Enemy enemy) {// throws EndBattleException {
+	public static Player getPlayer(Enemies enemy) {// throws EndBattleException {
 
 		int[] threat;
 		int t = 0;
@@ -55,7 +57,7 @@ public class AIBattle {
 		} else {
 			rand = getPlayerNormal(threat);
 		}
-
+		defendingPlayer = rand;
 		try {
 			return Player.getActualPlayers()[rand];
 		} catch (IndexOutOfBoundsException e) {
@@ -121,7 +123,7 @@ public class AIBattle {
 		return 0;
 	}
 
-	public static int eAttack(Enemy enemy, Player player) {
+	public static int eAttack(Enemies enemy, Player player) {
 		if(enemy.hasEquipment()) {
 			if(player.hasEquipment()) {
 				return Calculations.attackWithBoth(enemy, player);
@@ -130,33 +132,42 @@ public class AIBattle {
 			}
 		} else {
 			if(player.hasEquipment()) {
-				Calculations.attackWithArmour(enemy, player);
+				return Calculations.attackWithArmour(enemy, player);
 			} else {
-				Calculations.attackWithoutBoth(enemy, player);
+				return Calculations.attackWithoutBoth(enemy, player);
 			}
 		}
-		return 0;
 	}
 
 	public static void update() {
 		turn(enemies);
-		for(Enemy enemy : enemies) {
-			if(enemy.canAttack())
-				eAttack(enemy, AIBattle.getPlayer(enemy));
+		for(Enemies enemy : enemies) {
+			if(enemy.canAttack()) {
+				try {
+					enemy.attack(Player.getActualPlayer(defendingPlayer), eAttack(enemy, getPlayer(enemy)));
+					//Player.getActualPlayer(defendingPlayer).setStatRelative(Player.HEALTH_POINTS, -damage.nextInt(eAttack(enemy, getPlayer(enemy))));
+				} catch(IndexOutOfBoundsException e) {
+					enemy.attack(Player.getActualPlayer(0), eAttack(enemy, getPlayer(enemy)));
+					//Player.getActualPlayer(0).setStatRelative(Player.HEALTH_POINTS, -damage.nextInt(eAttack(enemy, getPlayer(enemy))));
+					
+				}
+				enemy.resetTurnTimer();
+				break;
+			}
 		}
 		win(enemies);
 	}
 
-	public static void win(Enemy[] entities) {
-		boolean[] dead = new boolean[entities.length];
+	public static void win(Enemies[] enemies2) {
+		boolean[] dead = new boolean[enemies2.length];
 
-		for(int i = 0; i < entities.length; i++) {
-			if(!entities[i].alive()) {
+		for(int i = 0; i < enemies2.length; i++) {
+			if(!enemies2[i].alive()) {
 				dead[i] = true;
 			}
-			if(!entities[i].alive()) {
+			if(!enemies2[i].alive()) {
 				if(areAllDead(dead))
-					Dieing(Player.getActualPlayers(), entities);
+					Dieing(Player.getActualPlayers(), enemies2);
 			}
 		}
 	}
@@ -168,16 +179,16 @@ public class AIBattle {
 		return true;
 	}
 
-	public static void Dieing(Player[] players, Enemy[] entities) {
+	public static void Dieing(Player[] players, Enemies[] enemies2) {
 		for(Player player : players) {
-			for(Enemy enemy : entities)
-				player.setExp(player.getExp() + enemy.getExp());
+			for(Enemies enemy : enemies2)
+				player.setStatRelative(Player.EXPERIENCE, enemy.getStat(Enemies.EXPERIENCE));
 			player.levelUp();
 			player.resetTurnTimer();
 			player.pause();
 			player.setTarget(null);
 		}
-		Destinyor.Refresh();
+		//Destinyor.Refresh();
 		UI.menu = UI.Map;
 		Battles.enemiesCreated = false;
 		Battles.endBattle = true;

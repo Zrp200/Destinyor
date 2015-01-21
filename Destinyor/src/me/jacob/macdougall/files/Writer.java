@@ -6,8 +6,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import me.jacob.macdougall.enemies.Boss;
-import me.jacob.macdougall.npcs.NPC;
 import me.jacob.macdougall.player.Player;
 import me.jacob.macdougall.quests.Quest;
 import me.jacob.macdougall.quests.Rewards;
@@ -60,7 +58,7 @@ public class Writer {
 		try {
 			bw = new BufferedWriter(new FileWriter(location));
 
-			String[] stats = { "Name = ", "Frames = ", "X = ", "Y = ", "Dialouge Location = " };
+			String[] stats = { "Name = ", "Frames = ", "X = ", "Y = ", "Dialouge Location = ", "Level = " };
 
 			String Format = "NPCs";
 
@@ -284,12 +282,15 @@ public class Writer {
 		BufferedWriter bw;
 		try {
 			bw = new BufferedWriter(new FileWriter(location));
-
+			
 			for(int i = 0; i < Quest.quests.size(); i++) {
-				for(Boss boss : Quest.quests.get(i).bosses)
-					bw.write(boss.name);
-				for(NPC npc : Quest.quests.get(i).npcs)
-					bw.write(npc.name);
+				Quest quest = Quest.quests.get(i);
+					// Bosses
+					bw.write(quest.getBosses().getName());
+					
+					// Npcs
+					bw.write(quest.getQuestGiver().getName());
+					bw.write(quest.getBosses().getName());
 				for(Rewards reward : Quest.quests.get(i).rewards)
 					bw.write(reward.name);
 			}
@@ -297,6 +298,33 @@ public class Writer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void WriteFetchQuests(String location, String questName) {
+		BufferedWriter bw;
+		try {
+			bw = new BufferedWriter(new FileWriter(location + questName + DestinyorFiles.EXT));
+			
+			bw.write(questName);
+			//bw.write()
+			
+			
+			bw.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void WriteMainQuests(String location) {
+		
+	}
+	
+	public static void WriteBossQuests(String location) {
+		
+	}
+	
+	public static void WriteKillingMonstersQuests(String location) {
+		
 	}
 
 	public static void WriteDefault(String location, String[][] Stats) {
@@ -344,5 +372,40 @@ public class Writer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void writeSaveFile(String location) {
+		BufferedWriter bw;
+		
+		try {
+			bw = new BufferedWriter(new FileWriter(location));
+			
+			bw.write("Level = " + Player.Level);
+			bw.newLine();
+			bw.write("X & Y = " + Player.X + ", " + Player.Y);
+			bw.newLine();
+			
+			for(Player player : Player.players) {
+				bw.newLine();
+				player.writeStats(bw);
+				bw.newLine();
+			}
+			
+			// Do quest
+			
+			// Do items
+			
+			// Do cutscenes
+			
+			// Do Cities
+			
+			bw.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeBossFile(String location) {
+		
 	}
 }
