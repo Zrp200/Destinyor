@@ -291,6 +291,11 @@ public class Writer {
 					// Npcs
 					bw.write(quest.getQuestGiver().getName());
 					bw.write(quest.getBosses().getName());
+					bw.write(quest.getBosses().name);
+					
+					// Npcs
+					bw.write(quest.getQuestGiver().name);
+					bw.write(quest.getBossNpc().name);
 				for(Rewards reward : Quest.quests.get(i).rewards)
 					bw.write(reward.name);
 			}

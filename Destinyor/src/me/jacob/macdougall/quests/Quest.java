@@ -38,6 +38,19 @@ public class Quest {
 		this.rewards = rewards;
 		this.startDialouge = startDialouge;
 		this.endDialouge =  endDialouge;
+	}
+	private NPC bossNpc;
+	private Boss boss;
+	public Cutscene[] cutscenes;
+
+	public boolean Completed = false;
+
+	public Quest(Rewards[] rewards, NPC questNpc, Boss boss, Cutscene[] cutscene, boolean completed) {
+		this.boss = boss;
+		this.questGiver = questNpc;
+		if(boss != null)
+		this.bossNpc = NPC.npcs.get(boss.name);
+		this.rewards = rewards;
 		this.Completed = completed;
 	}
 
@@ -88,5 +101,13 @@ public class Quest {
 		};
 		Dialouge.setText(dialouge, 0);
 		Dialouge.render(screen); // hand in the "/*+*/ /*items.length*/ /*+*/ /*item.name*/ + "s");
+	}
+
+	public NPC getBossNpc() {
+		return bossNpc;
+	}
+
+	public void setBossNpc(NPC boss) {
+		bossNpc = boss;
 	}
 }
