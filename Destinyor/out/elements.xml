@@ -1,9 +1,0 @@
-<elements>
-	<element type = "Poison" firstElement = "Air" secondElement = "Earth" weakness = "Air" />
-	<element type = "Wood" firstElement = "Earth" secondElement = "Water" weakness = "Fire" />
-	<element type = "Sand" firstElement = "Earth" secondElement = "Air" weakness = "Water" />
-	<element type = "Lava" firstElement = "Fire" secondElement = "Earth" weakness = "Water" />
-	<element type = "Mud" firstElement = "Water" secondElement = "Earth" weakness = "Fire" />
-	<element type = "Ice" firstElement = "Water" secondElement = "Air" weakness = "Fire" />
-	<element type = "Steam" firstElement = "Water" secondElement = "Fire" weakness = "Air" />
-</elements>
