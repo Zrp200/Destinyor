@@ -21,30 +21,19 @@ public class Battles {
 	public BattleInput bInput;
 	private final BattleRender bRender;
 	
-	public static boolean attacked = false;
 	public static boolean enemiesCreated = false;
 
 	private final static Random randomGen = new Random();
 	public static int randomBattles = randomGen.nextInt(90) + 10;
 	private static int creatures = 0;
-	protected int eTargets = randomGen.nextInt(Player.getActualPlayers().length);
-
-	public String Pdamager = "";
-	public int Pdamage = 0;
-	public String ptarget = "";
-	public int misses = 0;
 	
 	public static int move = 10;
-
-	protected int tempEDamageHolder;
-
-	protected int limit = 500;
 	
 	protected static Spells spell = null;
 
 	public Battles() {
 		bInput = new BattleInput(PlayerBattle.point);
-		bRender = new BattleRender(this, PlayerBattle.point);
+		bRender = new BattleRender(PlayerBattle.point);
 	}
 
 	public void renderTime(Player[] players, Graphics g) {
@@ -57,13 +46,6 @@ public class Battles {
 
 	public void assignTarget(Mouse mouse, Enemies[] enemies) {
 		bInput.assingTarget(mouse, enemies);
-	}
-
-	public void turn(Enemy[] entities) {
-
-		PlayerBattle.turn();
-
-		AIBattle.turn(entities);
 	}
 
 	public static Enemy[] SetEnemies() {
@@ -109,34 +91,31 @@ public class Battles {
 		}
 		return e;
 	}
-	
-	public static Enemies[] setEnemies(Enemies[] enemies) {
-		return null;
-	}
 
 	public static void enterCombat() {
 
 		//int random1 = randomGen.nextInt(100);
 
-		if(Destinyor.Override) {
+		if(Destinyor.Override)
 			Player.Attackable = false;
-		}
 
-		if(Player.Attackable) {
-			if(move == randomBattles && Move.steps >= 10) {
-				randomBattles = randomGen.nextInt(90) + 10;
-				UI.menu = UI.Fight;
-				//Destinyor.Refresh();
-				Move.steps = 0;
-				Battles.enemiesCreated = false;
-				move = 10;
-			}
-			move++;
-		}
-		if(Move.steps > 100) {
+		if(Player.Attackable)
+			attack();
+		
+		if(Move.steps > 100)
 			Move.steps = 0;
-		}
 
+	}
+	
+	private static void attack() {
+		if(move >= randomBattles && Move.steps >= 10) {
+			randomBattles = randomGen.nextInt(90) + 10;
+			UI.menu = UI.Fight;
+			Move.steps = 0;
+			Battles.enemiesCreated = false;
+			move = 10; // Player must move 10 paces before a random battle will engage
+		}
+		move++;
 	}
 
 	
