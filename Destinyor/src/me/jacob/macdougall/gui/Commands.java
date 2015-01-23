@@ -17,11 +17,13 @@ public class Commands extends GUI_Objects {
 	public Commands(String name, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.name = name;
-		if(Destinyor.Debug) {
-			button = new Bitmap(width, height);
-			for(int i = 0; i < button.pixels.length; i++) {
-				button.pixels[i] = Color.BLACK.getRGB();
-			}
+		if(Destinyor.Debug)
+			debug
+	}
+	private static void debug() {
+		button = new Bitmap(width, height);
+		for(int i = 0; i < button.pixels.length; i++) {
+			button.pixels[i] = Color.BLACK.getRGB();
 		}
 	}
 	
