@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.jacob.macdougall.Time;
+import me.jacob.macdougall.player.Player;
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.Screen;
@@ -86,13 +87,7 @@ public class Objects {
 		}
 	}
 	
-	public static void render(Screen screen, int x, int y, Objects... objects) {
-		for(Objects object : objects) {
-			object.render(screen, x, y);
-		}
-	}
-	
-	private void render(Screen screen, int X, int Y) {
+	public void render(Screen screen, int X, int Y) {
 		screen.render(sprite(), X + x * Tile.SIZE, Y + y * Tile.SIZE);
 	}
 	
@@ -127,6 +122,10 @@ public class Objects {
 				objects.put(name, object);
 				return newInstance(object);
 			}
+	}
+	
+	public boolean inRange() {
+		return (Player.X >= x - 8 && Player.X <= x + 8 && Player.Y >= y - 6 && Player.Y <= y + 6);
 	}
 	
 	

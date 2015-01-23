@@ -1,11 +1,12 @@
 package me.jacob.macdougall.battles;
 
+import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 
 import java.util.Random;
 
-import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.GameVariables;
+import me.jacob.macdougall.Time;
 import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.graphics.UI;
 import me.jacob.macdougall.player.Player;
@@ -14,6 +15,9 @@ public class AIBattle {
 
 	private static final Random random = new Random();
 	public static Enemies[] enemies;
+	
+	private static Enemies attackingEntity = null;
+	private static int damage = 0;
 	
 	private static int defendingPlayer = 0;
 
@@ -26,8 +30,19 @@ public class AIBattle {
 			}
 		}
 	}
+	
+	public static void renderDamage(Screen screen) {
+		if(attackingEntity != null) {
+			if(damage > 0) {
+				GameFont.render(attackingEntity.getName() + " did " + damage + " damage", screen, 240, 330);
+				GameFont.render("to " + Player.getActualPlayer(defendingPlayer).getName(), screen, 240, 340);
+			} else {
+				GameFont.render(attackingEntity.getName() + " missed " + Player.getActualPlayer(defendingPlayer).getName(), screen, 240, 330);
+			}
+		}
+	}
 
-	public static Player getPlayer(Enemies enemy) {// throws EndBattleException {
+	public static Player getPlayer(Enemies enemy) {
 
 		int[] threat;
 		int t = 0;
@@ -143,16 +158,18 @@ public class AIBattle {
 		turn(enemies);
 		for(Enemies enemy : enemies) {
 			if(enemy.canAttack()) {
-				try {
-					enemy.attack(Player.getActualPlayer(defendingPlayer), eAttack(enemy, getPlayer(enemy)));
-					//Player.getActualPlayer(defendingPlayer).setStatRelative(Player.HEALTH_POINTS, -damage.nextInt(eAttack(enemy, getPlayer(enemy))));
-				} catch(IndexOutOfBoundsException e) {
-					enemy.attack(Player.getActualPlayer(0), eAttack(enemy, getPlayer(enemy)));
-					//Player.getActualPlayer(0).setStatRelative(Player.HEALTH_POINTS, -damage.nextInt(eAttack(enemy, getPlayer(enemy))));
-					
+				if(Time.entityTimer(10)) {
+					try {
+						damage = enemy.attack(Player.getActualPlayer(defendingPlayer), eAttack(enemy, getPlayer(enemy)));
+						attackingEntity = enemy;
+					} catch(IndexOutOfBoundsException e) {
+						damage = enemy.attack(Player.getActualPlayer(0), eAttack(enemy, getPlayer(enemy)));
+						attackingEntity = enemy;
+						
+					}
+					enemy.resetTurnTimer();
+					break;
 				}
-				enemy.resetTurnTimer();
-				break;
 			}
 		}
 		win(enemies);

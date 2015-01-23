@@ -116,7 +116,7 @@ public class Destinyor extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String title = "Destinyor";
-	public static final String build = "000.000.002.0";
+	public static final String build = "000.000.003.0";
 
 	public static boolean create = true; // Create the files
 	public static boolean write = false; // Write over the files
@@ -124,12 +124,6 @@ public class Destinyor extends Canvas implements Runnable {
 
 	public static boolean Override = false;
 	public static boolean Debug = false;
-
-//	private static boolean Refresh = false;
-//
-//	public static void Refresh() {
-//		Refresh = true;
-//	}
 
 	public static boolean menu = false;
 
@@ -216,14 +210,6 @@ public class Destinyor extends Canvas implements Runnable {
 				y = random.nextInt(LevelMap.FloorHeight);
 			}
 		}
-		
-		//NPC npc = new NPC("Boss", "", 9, 9, "Hello I am here to test boss battles", false);
-		//NPC.npcs.add(npc);
-		
-
-		//		for(NPC n : NPC.npcs) {
-		//			//n.init(map);
-		//		}
 
 		Player.putItInTheBag(Equipment.get("Sword").newInstance());
 		Player.putItInTheBag(Equipment.get("Shield").newInstance());
@@ -244,9 +230,6 @@ public class Destinyor extends Canvas implements Runnable {
 		Thread_Controller.startNPC();
 
 		cutscene = new Cutscene(DestinyorFiles.DestinyorCutsceneFolder + DestinyorFiles.fileSplit + "default.txt");
-
-		//		Thread_Controller.startCutscene();
-		//		Thread_Controller.pauseCutscene(); 
 	}
 
 	private void RenderSpellBook(Player player) {
@@ -277,7 +260,8 @@ public class Destinyor extends Canvas implements Runnable {
 
 	public void renderSave() {
 		map.render(screen, -Camera.cX, -Camera.cY);
-		Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
+		map.renderObjects(screen);
+		//Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
 		for(NPC n : NPC.npcs) {
 			if(n.inRange()) {
 				n.render(screen);
@@ -289,7 +273,8 @@ public class Destinyor extends Canvas implements Runnable {
 	private void RenderMaps() {
 		Player.Attackable = true; // Makes Sure Player Can be Attacked By Enemy
 		map.render(screen, -Camera.cX, -Camera.cY);
-		Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
+		map.renderObjects(screen);
+		//Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
 		if(UI.menu == 0 || UI.menu == 2 && !Destinyor.menu) {
 			if(!Cutscene.playing) {
 				for(NPC n : NPC.npcs) {
@@ -341,28 +326,48 @@ public class Destinyor extends Canvas implements Runnable {
 			requestFocus();
 			return;
 		}
-
+		
 		// Draw Things with Screen
+		// if is faster than switch in this case
 		if(Menus.menu == Menus.NONE) { // If menu is not on render normal
-			if(UI.menu == UI.Map || UI.menu == UI.Minimap)
-				RenderMaps();
-			if(UI.menu == UI.Fight)
-				RenderUI();
-			if(UI.menu == UI.Inventory)
-				pInv.renderInventory(screen);
-			if(UI.menu == UI.Equipment || (UI.menu >= UI.Player1 && UI.menu <= UI.Player4))
-				pEquip.renderEquipment(screen);
-			if(UI.menu == UI.Spellbook)
-				RenderSpellBook(Player.getMainCharacter());
+			switch(UI.menu) {
+				case UI.Map: RenderMaps(); break;
+				case UI.Minimap: RenderMaps(); break;
+				case UI.Fight: RenderUI(); break;
+				case UI.Inventory: pInv.renderInventory(screen); break;
+				case UI.Equipment: pEquip.renderEquipment(screen); break;
+				case UI.Spellbook: RenderSpellBook(Player.getMainCharacter()); break;
+			}
 			if(Cutscene.playing)
 				RenderMaps();
 			if(Dialouge.isEmpty())
 				UI.TextBox(screen);
 			Dialouge.render(screen);
 		} else {
-			UI.REFRESH(screen); // Draw black none null screen
 			menus.render(screen);
 		}
+
+//		// Draw Things with Screen
+//		if(Menus.menu == Menus.NONE) { // If menu is not on render normal
+//			if(UI.menu == UI.Map || UI.menu == UI.Minimap)
+//				RenderMaps();
+//			if(UI.menu == UI.Fight)
+//				RenderUI();
+//			if(UI.menu == UI.Inventory)
+//				pInv.renderInventory(screen);
+//			if(UI.menu == UI.Equipment || (UI.menu >= UI.Player1 && UI.menu <= UI.Player4))
+//				pEquip.renderEquipment(screen);
+//			if(UI.menu == UI.Spellbook)
+//				RenderSpellBook(Player.getMainCharacter());
+//			if(Cutscene.playing)
+//				RenderMaps();
+//			if(Dialouge.isEmpty())
+//				UI.TextBox(screen);
+//			Dialouge.render(screen);
+//		} else {
+//			UI.REFRESH(screen); // Draw black none null screen
+//			menus.render(screen);
+//		}
 		
 		
 
@@ -371,7 +376,7 @@ public class Destinyor extends Canvas implements Runnable {
 
 		g.drawImage(screen.image, 0, 0, Resolution.width(), Resolution.height(), null);
 
-		if(UI.menu == 1) {
+		if(UI.menu == UI.Fight) {
 			battle.renderTime(Player.getActualPlayers(), g);
 		}
 
@@ -396,10 +401,7 @@ public class Destinyor extends Canvas implements Runnable {
 		// Finalize & Dispose
 		g.dispose();
 		strategy.show();
-		//if(Refresh) {
-			UI.REFRESH(screen);
-			//Refresh = false;
-		//}
+		UI.REFRESH(screen);
 	}
 
 	// Updates Game Logic
@@ -561,8 +563,6 @@ public class Destinyor extends Canvas implements Runnable {
 		Reader.readEntities(DestinyorFiles.DestinyorEntities);
 		FileLoader.ReadFromFiles(DestinyorFiles.DestinyorItems);
 
-		Destinyor.mouse = new Mouse();
-
 		game.setSize(Res);
 
 		if(game.getSize().getWidth() != Res.getWidth() || game.getSize().getHeight() != Res.getHeight()) {
@@ -592,9 +592,7 @@ public class Destinyor extends Canvas implements Runnable {
 		frame.setVisible(true);
 		frame.requestFocus();
 		frame.requestFocusInWindow();
-		game.addMouseListener(Destinyor.mouse.new MouseHandler());
-		game.addMouseMotionListener(Destinyor.mouse.new MouseHandler());
-		game.addMouseWheelListener(Destinyor.mouse.new MouseHandler());
+		Destinyor.mouse = new Mouse(game);
 
 		if(Res != game.getSize() || Res != frame.getSize()) {
 			if(frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) {

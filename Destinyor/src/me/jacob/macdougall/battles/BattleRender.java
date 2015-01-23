@@ -83,7 +83,9 @@ public class BattleRender {
 					break;
 			}
 		}
-
+		
+		AIBattle.renderDamage(screen);
+		
 		// Render Enemies
 		if(entities != null)
 			for(Enemies enemy : entities)

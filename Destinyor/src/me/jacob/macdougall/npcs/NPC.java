@@ -132,6 +132,10 @@ public class NPC {
 		}
 		this.map = map;
 	}
+	
+	public void addToMap() {
+		map.npcs.add(this);
+	}
 
 	public void tick() {
 		if(canMove()) {

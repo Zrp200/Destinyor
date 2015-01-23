@@ -53,7 +53,7 @@ public class Menus {
 	public boolean isOn = true;
 	public int buttonSelected = 0;
 
-	private int[] pressed = new int[2];
+	//private int[] pressed = new int[2];
 
 	public Menus(Destinyor game, InputHandler input) {
 		this.game = game;
@@ -136,9 +136,9 @@ public class Menus {
 			return;
 		}
 
-		pressed = mouse.getPressed();
+		//pressed = mouse.getPressed();
 
-		if(pressed != null) {
+		if(mouse.getPressed() != null) {
 			switch(menu) {
 				case MAIN: 
 					mainMenu(mouse); 
@@ -158,14 +158,13 @@ public class Menus {
 			}
 			if(menu == OPTIONS) {
 				
-				
 			}
 		}
 	}
 	
 	public void mainMenu(Mouse mouse) {
 		for(int i = 0; i < button.size(); i++) {
-			if(button.get(i).inBox(pressed[Mouse.X], pressed[Mouse.Y])) {
+			if(button.get(i).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y))) {
 				switch (i) {
 					case 0:
 						isOn = false;
@@ -202,7 +201,7 @@ public class Menus {
 	
 	public void pauseMenu(Mouse mouse) {
 		for(int i = 0; i < button.size(); i++) {
-			if(button.get(i).inBox(pressed[Mouse.X], pressed[Mouse.Y])) {
+			if(button.get(i).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y))) {
 				switch (i) {
 					case 0:
 						isOn = false;
@@ -254,16 +253,16 @@ public class Menus {
 			}
 			
 		}
-		rButton.setRes(pressed[0], pressed[1]);
-		rButton.setWindow(pressed[0], pressed[1]);
+		rButton.setRes(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y));
+		rButton.setWindow(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y));
 		rButton.setSelected(mouse);
-		if(buttons.get(menu)[1].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
+		if(buttons.get(menu)[1].inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) && Time.getKeyTimer(10, false)) {
 			rButton.rClick();
 			Time.resetKeyTimer();
 			//Destinyor.Refresh();
-		} else if(buttons.get(menu)[2].inBox(pressed[0], pressed[1])) {
+		} else if(buttons.get(menu)[2].inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y))) {
 			rButton.accept(game);
-		} else if(buttons.get(menu)[4].inBox(pressed[0], pressed[1]) && Time.getKeyTimer(10, false)) {
+		} else if(buttons.get(menu)[4].inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) && Time.getKeyTimer(10, false)) {
 			rButton.wClick();
 			Time.resetKeyTimer();
 		}

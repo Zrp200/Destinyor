@@ -69,7 +69,7 @@ public class BattleInput {
 
 			if(enemies.length > 0) {
 				if(enemies[0].alive()) {
-					if(Keys.Enemy1() || commands.get(4).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 0) {
+					if(Keys.Enemy1() || commands.get(4).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) || point.getEnemy(enemies) == 0) {
 						targetSelected = true;
 						Player.getNextAttackPlayer().setTarget(enemies[0]);
 						System.out.println("Targeting 1");
@@ -80,7 +80,7 @@ public class BattleInput {
 
 			if(enemies.length > 1) {
 				if(enemies[1].alive()) {
-					if(Keys.Enemy2() || commands.get(5).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 1) {
+					if(Keys.Enemy2() || commands.get(5).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) || point.getEnemy(enemies) == 1) {
 						targetSelected = true;
 						Player.getNextAttackPlayer().setTarget(enemies[1]);
 						System.out.println("Targeting 2");
@@ -91,7 +91,7 @@ public class BattleInput {
 
 			if(enemies.length > 2) {
 				if(enemies[2].alive()) {
-					if(Keys.Enemy3() || commands.get(6).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 2) {
+					if(Keys.Enemy3() || commands.get(6).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) || point.getEnemy(enemies) == 2) {
 						targetSelected = true;
 						Player.getNextAttackPlayer().setTarget(enemies[2]);
 						System.out.println("Targeting 3");
@@ -102,7 +102,7 @@ public class BattleInput {
 
 			if(enemies.length > 3) {
 				if(enemies[3].alive()) {
-					if(Keys.Enemy4() || commands.get(7).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 3) {
+					if(Keys.Enemy4() || commands.get(7).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) || point.getEnemy(enemies) == 3) {
 						targetSelected = true;
 						Player.getNextAttackPlayer().setTarget(enemies[3]);
 						System.out.println("Targeting 4");
@@ -113,7 +113,7 @@ public class BattleInput {
 
 			if(enemies.length > 4) {
 				if(enemies[4].alive()) {
-					if(Keys.Enemy5() || commands.get(8).inBox(mouse.pressedX, mouse.pressedY) || point.getEnemy(enemies) == 4) {
+					if(Keys.Enemy5() || commands.get(8).inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y)) || point.getEnemy(enemies) == 4) {
 						targetSelected = true;
 						Player.getNextAttackPlayer().setTarget(enemies[4]);
 						System.out.println("Targeting 5");
@@ -122,9 +122,6 @@ public class BattleInput {
 				}
 			}
 		}
-
-		mouse.pressedX = 0;
-		mouse.pressedY = 0;
 	}
 
 }

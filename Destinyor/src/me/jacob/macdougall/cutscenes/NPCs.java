@@ -1,7 +1,6 @@
 package me.jacob.macdougall.cutscenes;
 
 import me.jacob.macdougall.DebugWriter;
-import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.npcs.Keywords;
 import me.jacob.macdougall.npcs.NPC;
 

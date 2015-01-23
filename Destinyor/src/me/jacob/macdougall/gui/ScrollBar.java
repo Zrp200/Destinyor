@@ -35,20 +35,23 @@ public class ScrollBar extends GUI_Objects {
 	}
 
 	public void update(Mouse mouse) {
-		if(inBox(mouse.pressedX, mouse.pressedY)) {
+		if(inBox(mouse.getPressed(Mouse.X), mouse.getPressed(Mouse.Y))) {
 			clicked = true;
+			i = mouse.releasedX;
 		}
 		if(mouse.pressed) {
 			move(i);
 		}
 		if(!mouse.pressed && clicked) {
-			i = mouse.releasedX;
+
 			clicked = false;
 		}
 			
 	}
 	
 	public void move(int i) {
+		
+		
 	}
 	
 	public void moveLeft() {

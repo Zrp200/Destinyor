@@ -6,12 +6,14 @@ import java.util.*;
 
 import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.graphics.Shadows;
+import me.jacob.macdougall.npcs.NPC;
 
 public class LevelMap {
 	
 	public static Map<Integer, LevelMap> maps = new HashMap<>();
 	
-	public Map<Integer, Objects> objects = new HashMap<>();
+	public List<Objects> objects = new ArrayList<>();
+	public List<NPC> npcs = new ArrayList<>();
 	
 	Destinyor game;
 	public static int levelX = 1; // For miniMap
@@ -42,7 +44,6 @@ public class LevelMap {
 	public void render(Screen screen, int x, int y) {
 		int X = (int) (Screen.getWidth()  / 2.0);
 		int Y = (int) (Screen.getHeight() / 2.0);
-		//Destinyor.Refresh();
 		MapX_Pos = x + X;
 		MapY_Pos = y + Y;
 		
@@ -65,45 +66,24 @@ public class LevelMap {
 							if(Tile.tiles[tiles[i][j - 1]] != null && Tile.tiles[tiles[i][j - 1]].solid && Tile.tiles[tiles[i-1][j]] != null && Tile.tiles[tiles[i-1][j]].solid) {
 								shadow = Shadows.LEFT_UP_CORNER;
 							}
-							
-//							if(Tile.tiles[tiles[i][j + 1]] != null && Tile.tiles[tiles[i][j + 1]].solid) {
-//								shadow = Shadows.LEFT_UP_CORNER2;
-//							}
-//						}
-//						if(Tile.tiles[tiles[i][j]].hasShadow) {
-//							shadow = Tile.tiles[tiles[i][j]].shadowInt;
-//						}
-						
-						//if()
-						
-//						if(Tile.tiles[tiles[i+1][j]] != null && Tile.tiles[tiles[i+1][j]].solid) {
-//							shadow = Shadows.RIGHT;
-//						}
-						
-//						if(Tile.tiles[tiles[i][j-1]] != null && Tile.tiles[tiles[i][j-1]].solid) {
-//							shadow = Shadows.UP;
-//						}
 						}
 					Tile.tiles[tiles[i][j]].render(screen, MapX_Pos + i * SIZE, MapY_Pos + j * SIZE, shadow);
-					//Objects.render(screen, MapX_Pos, MapY_Pos, getObjects());
 					shadow = 0;
 				}
 			}
 		}
 	}
 	
-	public Objects[] getObjects() {
-		Objects[] objects = new Objects[this.objects.size()];
-		int o = 0;
-		for(Objects object : this.objects.values()) {
-			objects[o] = object;
-			o++;
-		}
-		return objects;
-	}
-	
 	public void putObjects(Objects object) {
-		objects.put(object.x + object.y, object);
+		objects.add(object);
+	}
+
+	public void renderObjects(Screen screen) {
+		for(Objects object : this.objects) {
+			if(object.inRange()) {
+				object.render(screen, MapX_Pos, MapY_Pos);
+			}
+		}
 	}
 	
 	

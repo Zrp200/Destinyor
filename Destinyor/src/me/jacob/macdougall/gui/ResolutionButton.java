@@ -130,7 +130,13 @@ public class ResolutionButton {
 					}
 				}
 			} else {
-				selected = mouse.getMouseWheel(0, Resolution.Resolutions.length - 1, Resolution.getResolutionInt());
+				selected += mouse.getMouseWheel();
+				if(selected >= Resolution.Resolutions.length) {
+					selected = 0;
+				}
+				if(selected <= -1) {
+					selected = Resolution.Resolutions.length-1;
+				}
 				mouse.setMouseWheelMoved(false);
 			}
 		}

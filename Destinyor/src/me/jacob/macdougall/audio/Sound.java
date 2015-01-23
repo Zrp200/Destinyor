@@ -59,7 +59,7 @@ public class Sound implements LineListener {
 				volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 				volume.setValue(audioLevel);
 			} catch(IllegalArgumentException e) { // If on linux use something else instead
-				System.out.println("IllegalArgumentException has been thrown");
+				DebugWriter.println("Sound: IllegalArgumentException has been thrown");
 				//e.printStackTrace();
 			}
         }

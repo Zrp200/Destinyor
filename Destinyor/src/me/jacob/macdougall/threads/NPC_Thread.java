@@ -88,7 +88,7 @@ public class NPC_Thread extends Thread_Controller implements Runnable {
 
 	@Override
 	public synchronized void run() {
-		int fps = 0, update = 0;
+		//int fps = 0, update = 0;
 		long fps_Timer = System.currentTimeMillis();
 		double unsPerUpdate = 1000000000 / 60;
 		// Last update in nanoseconds
@@ -101,7 +101,7 @@ public class NPC_Thread extends Thread_Controller implements Runnable {
 			// Update queue
 			while (unprocessed >= 1) {
 				// Update
-				update++;
+				//update++;
 				update();
 				unprocessed--;
 			}
@@ -109,8 +109,8 @@ public class NPC_Thread extends Thread_Controller implements Runnable {
 			// FPS Timer
 			if(System.currentTimeMillis() - fps_Timer > 1000) {
 				//System.out.printf("\n Npc_Thread: %d fps, %d updates", fps, update);
-				fps = 0;
-				update = 0;
+				//fps = 0;
+				//update = 0;
 				fps_Timer += 1000;
 
 				try {

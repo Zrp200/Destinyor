@@ -3,7 +3,6 @@ package me.jacob.macdougall.enemies;
 import graphic.engine.screen.Bitmap;
 import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
-import me.jacob.macdougall.Destinyor;
 import me.jacob.macdougall.items.Equipment;
 import me.jacob.macdougall.magic.Spells;
 import me.jacob.macdougall.world.LevelMap;

@@ -1,12 +1,9 @@
 package me.jacob.macdougall.graphics;
 
-import me.jacob.macdougall.Destinyor;
-import me.jacob.macdougall.enemies.Enemies;
 import me.jacob.macdougall.world.LevelMap;
 
 import graphic.engine.screen.Art;
 import graphic.engine.screen.Bitmap;
-import graphic.engine.screen.GameFont;
 import graphic.engine.screen.Screen;
 
 /**
