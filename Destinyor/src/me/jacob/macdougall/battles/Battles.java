@@ -118,25 +118,27 @@ public class Battles {
 
 		//int random1 = randomGen.nextInt(100);
 
-		if(Destinyor.Override) {
+		if(Destinyor.Override)
 			Player.Attackable = false;
-		}
 
-		if(Player.Attackable) {
-			if(move == randomBattles && Move.steps >= 10) {
-				randomBattles = randomGen.nextInt(90) + 10;
-				UI.menu = UI.Fight;
-				//Destinyor.Refresh();
-				Move.steps = 0;
-				Battles.enemiesCreated = false;
-				move = 10;
-			}
-			move++;
-		}
-		if(Move.steps > 100) {
+		if(Player.Attackable)
+			attack;
+
+		if(Move.steps > 100)
 			Move.steps = 0;
-		}
 
+
+	}
+	private static void attack() {
+		if(move == randomBattles && Move.steps >= 10) {
+			randomBattles = randomGen.nextInt(90) + 10;
+			UI.menu = UI.Fight;
+			//Destinyor.Refresh();
+			Move.steps = 0;
+			Battles.enemiesCreated = false;
+			move = 10;
+		}
+		move++;
 	}
 
 	
