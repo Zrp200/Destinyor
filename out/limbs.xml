@@ -1,0 +1,18 @@
+<limbs>
+	<limb name = "Head" />
+	<limb name = "Neck" />
+	<limb name = "Upper Torso" />
+	<limb name = "Left Shoulder" />
+	<limb name = "Right Shoulder" />
+	<limb name = "Left Wing" />
+	<limb name = "Right Wing" />
+	<limb name = "Left Arm" />
+	<limb name = "Right Arm" />
+	<limb name = "Lower Torso" />
+	<limb name = "Left Hand" />
+	<limb name = "Right Hand" />
+	<limb name = "Left Leg" />
+	<limb name = "Right Leg" />
+	<limb name = "Left Foot" />
+	<limb name = "Right Foot" />
+</limbs>

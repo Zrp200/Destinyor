@@ -1,0 +1,31 @@
+<maps>
+	<define>
+		<pixel rgb = "0,0,0" bind = "0" />
+		<pixel rgb = "10,168,192" bind = "1" />
+		<pixel rgb = "140,98,7" bind = "2" />
+		<pixel rgb = "194,194,194" bind = "3" />
+		<pixel rgb = "255,0,255" bind = "4" />
+		<pixel rgb = "255,0,0" bind = "5" />
+		<pixel rgb = "255,255,255" bind = "10" />
+	</define>
+	
+	<map floor = "1">
+	
+	</map>
+	
+	<define>
+		<pixel rgb = "0,0,0" bind = "0" />
+		<pixel rgb = "10,168,192" bind = "1" />
+		<pixel rgb = "140,98,7" bind = "2" />
+		<pixel rgb = "194,194,194" bind = "3" />
+		<pixel rgb = "255,0,255" bind = "4" />
+		<pixel rgb = "255,0,0" bind = "5" />
+		
+		<pixel rgb = "255,255,255" bind = "10" />
+	</define>
+	
+	<map floor = "2">
+	
+	</map>
+	
+</maps>
