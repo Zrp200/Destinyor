@@ -18,9 +18,10 @@ public class Commands extends GUI_Objects {
 		super(x, y, width, height);
 		this.name = name;
 		if(Destinyor.Debug)
-			debug
+			debug();
 	}
-	private static void debug() {
+	
+	private void debug() {
 		button = new Bitmap(width, height);
 		for(int i = 0; i < button.pixels.length; i++) {
 			button.pixels[i] = Color.BLACK.getRGB();

@@ -14,12 +14,10 @@ import graphic.engine.screen.Screen;
 public class BattleRender {
 
 	public static boolean DrawSpells = false;
-
-	private final Battles battle;
+	
 	private final Pointer point;
 
-	public BattleRender(Battles battle, Pointer point) {
-		this.battle = battle;
+	public BattleRender(Pointer point) {
 		this.point = point;
 	}
 
@@ -106,10 +104,6 @@ public class BattleRender {
 							if(enemy == PlayerBattle.getRecentlyAttackedEnemy())
 							GameFont.render(PlayerBattle.getDamage() + "", screen, enemy.getX(), enemy.getY() - 8);
 						}
-					}
-
-					if(enemy.attacking) {
-						GameFont.render(enemy.getName() + " Used " + "Attack: " + enemy.getName() + " did " + battle.tempEDamageHolder + " to " + players[battle.eTargets].getName(), screen, X, Y);
 					}
 				}
 

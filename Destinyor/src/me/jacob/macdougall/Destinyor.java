@@ -261,12 +261,10 @@ public class Destinyor extends Canvas implements Runnable {
 	public void renderSave() {
 		map.render(screen, -Camera.cX, -Camera.cY);
 		map.renderObjects(screen);
-		//Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
-		for(NPC n : NPC.npcs) {
-			if(n.inRange()) {
+		for(NPC n : NPC.npcs)
+			if(n.inRange())
 				n.render(screen);
-			}
-		}
+		
 		Player.getMainCharacter().render(screen);
 	}
 	
@@ -274,18 +272,9 @@ public class Destinyor extends Canvas implements Runnable {
 		Player.Attackable = true; // Makes Sure Player Can be Attacked By Enemy
 		map.render(screen, -Camera.cX, -Camera.cY);
 		map.renderObjects(screen);
-		//Objects.render(screen, map.MapX_Pos, map.MapY_Pos, map.getObjects());
 		if(UI.menu == 0 || UI.menu == 2 && !Destinyor.menu) {
 			if(!Cutscene.playing) {
-				for(NPC n : NPC.npcs) {
-					if(n.inRange()) {
-						n.render(screen);
-						if(n.isSpeaking()) {
-							n.speak();
-						}
-
-					}
-				}
+				npcLoop();
 			} else {
 				if(Thread_Controller.cNpc != null) {
 					if(Thread_Controller.cNpc.isSpeaking()) {
@@ -293,14 +282,22 @@ public class Destinyor extends Canvas implements Runnable {
 						Thread_Controller.cNpc.speak();
 					}
 				}
-				for(NPCs n : cutscene.npc.values()) {
+				for(NPCs n : cutscene.npc.values())
 					n.render(screen);
-				}
 			}
 			Time.getObjectTimer(30, true);
 			city1.render(screen);
 		}
 		Player.getMainCharacter().render(screen);
+	}
+	
+	private static void npcLoop() {
+		for(NPC n : NPC.npcs)
+			if(n.inRange()) {
+				n.render(screen);
+				if(n.isSpeaking())
+					n.speak();
+			}
 	}
 
 	// Starts Game
@@ -346,31 +343,7 @@ public class Destinyor extends Canvas implements Runnable {
 		} else {
 			menus.render(screen);
 		}
-
-//		// Draw Things with Screen
-//		if(Menus.menu == Menus.NONE) { // If menu is not on render normal
-//			if(UI.menu == UI.Map || UI.menu == UI.Minimap)
-//				RenderMaps();
-//			if(UI.menu == UI.Fight)
-//				RenderUI();
-//			if(UI.menu == UI.Inventory)
-//				pInv.renderInventory(screen);
-//			if(UI.menu == UI.Equipment || (UI.menu >= UI.Player1 && UI.menu <= UI.Player4))
-//				pEquip.renderEquipment(screen);
-//			if(UI.menu == UI.Spellbook)
-//				RenderSpellBook(Player.getMainCharacter());
-//			if(Cutscene.playing)
-//				RenderMaps();
-//			if(Dialouge.isEmpty())
-//				UI.TextBox(screen);
-//			Dialouge.render(screen);
-//		} else {
-//			UI.REFRESH(screen); // Draw black none null screen
-//			menus.render(screen);
-//		}
 		
-		
-
 		// Draw Screen onto Frame
 		Graphics g = strategy.getDrawGraphics();
 
@@ -411,9 +384,8 @@ public class Destinyor extends Canvas implements Runnable {
 		
 		Saves.update(mouse, screen, this);
 		
-		for(Key key : Key.keys.values()) {
+		for(Key key : Key.keys.values())
 			key.tick();
-		}
 
 		move.Movement();
 
@@ -534,10 +506,6 @@ public class Destinyor extends Canvas implements Runnable {
 		Element.setElements();
 		DynamicsLoader.init();
 		
-		for(Element element : Element.getElements()) {
-			System.out.println(element.getElement());
-		}
-		
 		Destinyor.map = LevelMap.maps.get(1);
 
 		FileLoader.CreateFolder(DestinyorFiles.DestinyorDialougesFolder);
@@ -565,9 +533,8 @@ public class Destinyor extends Canvas implements Runnable {
 
 		game.setSize(Res);
 
-		if(game.getSize().getWidth() != Res.getWidth() || game.getSize().getHeight() != Res.getHeight()) {
+		if(game.getSize().getWidth() != Res.getWidth() || game.getSize().getHeight() != Res.getHeight())
 			game.setSize(Resolution.width(), Resolution.height());
-		}
 
 		// Frame
 		JFrame frame = new JFrame(title + " " + build);
@@ -617,18 +584,14 @@ public class Destinyor extends Canvas implements Runnable {
 
 	// Testing only, in move class/file // ENGLISH?
 	public static void ChangeScreenToUI() {
-		if(Keys.PageDown()) {
-			//Destinyor.Refresh();
+		if(Keys.PageDown())
 			UI.menu = UI.Fight;
-		}
 	}
 
 	// Testing only, in move class/file // ENGLISH?
 	public static void ChangeScreenToMap() {
-		if(Keys.Home()) {
-			//Destinyor.Refresh();
+		if(Keys.Home())
 			UI.menu = UI.Map;
-		}
 	}
 
 	public static void waitForLoading() {
@@ -647,12 +610,12 @@ public class Destinyor extends Canvas implements Runnable {
 
 	public static void setSettings() {
 		int amount = 3;
-		if(Override) {
+		
+		if(Override)
 			amount++;
-		}
-		if(Debug) {
+		if(Debug)
 			amount++;
-		}
+		
 		String[] Stats = new String[amount];
 		int i = 0;
 		if(Override) {
@@ -673,7 +636,6 @@ public class Destinyor extends Canvas implements Runnable {
 	}
 
 	public void changeLevel(int level) {
-		//Refresh = true;
 		map = LevelMap.maps.get(level);
 		minimap = new Minimap(this);
 	}
