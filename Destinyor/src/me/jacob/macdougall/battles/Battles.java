@@ -122,7 +122,7 @@ public class Battles {
 			Player.Attackable = false;
 
 		if(Player.Attackable)
-			attack
+			attack;
 
 		if(Move.steps > 100)
 			Move.steps = 0;
